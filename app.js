@@ -7,6 +7,28 @@ var bodyParser = require('body-parser');
 var http = require('http');
 
 var index_routes = require('./routes/index.js');
+var example = require('./core/example.js');
+
+var oracledb = require('oracledb');  
+  
+oracledb.getConnection({
+     user: "uosconv",  
+     password: "123123a!",  
+     connectString: "uosconv.c1mptlep5hm6.ap-northeast-2.rds.amazonaws.com:1521/ORCL"  
+}, function(err, oracleConnection) {  
+     if (err) {
+          console.error("oracledb connection err: ", err.message);  
+          return;  
+     }
+     console.log("oracledb connected!");
+
+     global.__oracleDB = oracleConnection;
+
+     // test code
+     example.example({}, function(result) {
+     	console.log(result)
+     });
+});
 
 var app = express();
 
