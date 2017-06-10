@@ -8,6 +8,37 @@ var http = require('http');
 
 var index_routes = require('./routes/index.js');
 
+var oracledb = require('oracledb');  
+  
+oracledb.getConnection({  
+     user: "uosconv",  
+     password: "123123a!",  
+     connectString: "ORCL"  
+}, function(err, connection) {  
+     if (err) {
+          console.error("connection err: ", err.message);  
+          return;  
+     }  
+     connection.execute( "SELECT department_id, department_name FROM departments WHERE department_id = 180", [], function(err, result) {  
+          if (err) {  
+               console.error(err.message);  
+               doRelease(connection);  
+               return;  
+          }  
+          console.log(result.metaData);  
+          console.log(result.rows);  
+          doRelease(connection);  
+     });  
+});  
+  
+function doRelease(connection) {  
+     connection.release(  
+          function(err) {  
+               if (err) {console.error(err.message);}  
+          }  
+     );  
+}  
+
 var app = express();
 
 // view engine setup
