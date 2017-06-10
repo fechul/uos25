@@ -13,12 +13,12 @@ var oracledb = require('oracledb');
 oracledb.getConnection({
      user: "uosconv",  
      password: "123123a!",  
-     connectString: "ORCL"  
+     connectString: "uosconv.c1mptlep5hm6.ap-northeast-2.rds.amazonaws.com:1521/ORCL"  
 }, function(err, connection) {  
      if (err) {
           console.error("connection err: ", err.message);  
           return;  
-     }  
+     }
      console.log("connection: ", connection);
 });
 
