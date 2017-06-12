@@ -8,6 +8,8 @@ var http = require('http');
 
 var index_routes = require('./routes/index.js');
 
+var core = require('./core/core.js');
+
 var oracledb = require('oracledb');
 oracledb.outFormat = oracledb.OBJECT;
 
@@ -20,11 +22,13 @@ var oracleRelease = function (connection) {
       	console.log("oracle released!");
 	});
 };
-  
+
+
 oracledb.getConnection({
-     user: "uosconv",  
-     password: "123123a!",  
+     user: "uosconv",
+     password: "123123a!",
      connectString: "uosconv.c1mptlep5hm6.ap-northeast-2.rds.amazonaws.com:1521/ORCL"  
+
 }, function(err, oracleConnection) {  
      if (err) {
           console.error("oracledb connection err: ", err.message);  
@@ -33,13 +37,22 @@ oracledb.getConnection({
      console.log("oracledb connected!");
 
      global.__oracleDB = oracleConnection;
+     /*테스트*/
+     core.getEmployeeList({
+			BRCH_CD: '000001'
+		 },
+		 function (data) {
+         console.log(data);
+     });
 });
 
 // process.stdin.resume();
 
+
 process.on('SIGINT', function () {
   	oracleRelease(__oracleDB);
   	process.exit();
+
 });
 
 var app = express();
@@ -56,6 +69,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(function(req, res, next) {
+	if(req.session) {
+		req.session.BRCH_CD = '000001';
+		req.session.POS_CD = '00000101';
+	} else {
+		req.session = {};
+		req.session.BRCH_CD = '000001';
+		req.session.POS_CD = '00000101';
+	}
+
+	next();
+});
 
 //routing
 app.use('/', index_routes);

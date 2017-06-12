@@ -10,34 +10,44 @@ var core = require('../core/core.js');
 // 메인페이지 라우팅
 router.get('/', function(req, res, next) {
 	var json = {};
+	console.log("session: ", req.session);
     res.render('main.html', json);
 });
+
+// req.session.BRCH_CD -> 브랜치코드
+// req.session.POS_CD -> POS코드
 
 
 // 판매하기
 router.post('/sell', function(req, res) {
+	req.body.POS_CD = req.session.POS_CD;
+
     core.doSell(req.body, function(result) {
     	res.json(result);
     });
 });
 
 // 판매취소하기
-router.delete('/sell', function(req, res) {
-	core.cancelSell(req.body, function(result) {
-		res.json(result);
-	});
-});
+// router.delete('/sell', function(req, res) {
+// 	core.cancelSell(req.body, function(result) {
+// 		res.json(result);
+// 	});
+// });
 
 // 판매기록가져오기
 router.get('/sell/list', function(req, res) {
-	core.getSellList(function(data) {
+	var POS_CD = req.session.POS_CD;
+
+	core.getSellList({
+		POS_CD: POS_CD
+	}, function(data) {
 		res.json(data);
 	});
 });
 
 // 판매정보확인하기
-router.get('/sell', function(req, res) {
-	core.getSell(req.body, function(data) {
+router.get('/sold_product', function(req, res) {
+	core.getSell(req.query, function(data) {
 		res.json(data);
 	});
 });
@@ -49,7 +59,11 @@ router.get('/sell', function(req, res) {
 
 // 재고목록 가져오기
 router.get('/stock/list', function(req, res) {
-	core.getStockList(function(data) {
+	var BRCH_CD = req.session.BRCH_CD;
+
+	core.getStockList({
+		BRCH_CD: BRCH_CD
+	}, function(data) {
 		res.json(data);
 	});
 });
@@ -61,7 +75,7 @@ router.get('/stock/list', function(req, res) {
 
 // 상품정보 가져오기
 router.get('/product', function(req, res) {
-	core.getProduct(req.body, function(data) {
+	core.getProduct(req.query, function(data) {
 		res.json(data);
 	});
 });
@@ -92,16 +106,20 @@ router.delete('/order', function(req, res) {
 	});
 });
 
-// 주문하기
+// 주문정보 확인하기
 router.get('/order', function(req, res) {
-	core.getOrder(req.body, function(data) {
+	core.getOrder(req.query, function(data) {
 		res.json(data);
 	});
 });
 
-// 주문하기
+// 주문목록 가져오기
 router.post('/order/list', function(req, res) {
-	core.getOrderList(function(data) {
+	var BRCH_CD = req.session.BRCH_CD;
+
+	core.getOrderList({
+		BRCH_CD: BRCH_CD
+	}, function(data) {
 		res.json(data);
 	});
 });
@@ -120,14 +138,18 @@ router.post('/store', function(req, res) {
 
 // 입고목록 가져오기
 router.get('/store/list', function(req, res) {
-	core.getStoreList(function(data) {
+	var BRCH_CD = req.session.BRCH_CD;
+
+	core.getStoreList({
+		BRCH_CD: BRCH_CD
+	}, function(data) {
 		res.json(data);
 	});
 });
 
 // 입고정보 확인하기
 router.get('/store', function(req, res) {
-	core.getStore(req.body, function(data) {
+	core.getStore(req.query, function(data) {
 		res.json(data);
 	});
 });
@@ -186,7 +208,7 @@ router.get('/return/list', function(req, res) {
 
 // 반품정보 확인하기
 router.get('/return', function(req, res) {
-	core.getRefundList(req.body, function(data) {
+	core.getReturn(req.query, function(data) {
 		res.json(data);
 	});
 });
@@ -257,7 +279,11 @@ router.post('/member', function(req, res) {
 
 // 회원목록 가져오기
 router.get('/member/list', function(req, res) {
-	core.getMemberList(function(data) {
+	var BRCH_CD = req.session.BRCH_CD;
+
+	core.getMemberList({
+		BRCH_CD: BRCH_CD
+	},function(data) {
 		res.json(data);
 	});
 });
@@ -271,7 +297,13 @@ router.delete('/member', function(req, res) {
 
 // 마일리지 조회하기
 router.get('/point', function(req, res) {
-	core.getPoint(req.body, function(data) {
+	var PHONNO = req.query.PHONNO;
+	var PW = req.query.PW;
+
+	core.getPoint({
+		PHONNO: PHONNO,
+		PW: PW
+	}, function(data) {
 		res.json(data);
 	});
 });
@@ -306,7 +338,9 @@ router.get('/cvs/list', function(req, res) {
 router.get('/cvs/list/branch', function(req, res) {
 	var BRCH_CD = req.session.BRCH_CD;
 
-	core.getCvsListBranch(BRCH_CD, function(data) {
+	core.getCvsListBranch({
+		BRCH_CD: BRCH_CD
+    }, function(data) {
 		res.json(data);
 	});
 });
@@ -317,10 +351,87 @@ router.get('/cvs/list/branch', function(req, res) {
 */
 
 // 자금내역 가져오기
-router.post('/cvs', function(req, res) {
-	core.addCvs(req.body, function(result) {
+router.get('/branch/money', function(req, res) {
+	core.getBranchMoney(req.query, function(data) {
+		res.json(data);
+	});
+});
+
+
+/*
+	이벤트
+*/
+
+// 이벤트 정보 가져오기
+router.get('/event', function(req, res) {
+	var EVENT_CD = req.query.EVENT_CD;
+    core.getEvent({
+            EVENT_CD: EVENT_CD
+        }
+        , function(data) {
+            res.json(data);
+        });
+});
+
+// 이벤트목록 가져오기
+router.get('/event/list', function(req, res) {
+	core.getEventList(function(data) {
+		res.json(data);
+	});
+});
+
+
+/*
+	지점
+*/
+
+// 지점 정보 가져오기
+router.get('/branch', function(req, res) {
+	var BRCH_CD = req.sesion.BRCH_CD;
+
+	core.getBranch({
+		BRCH_CD: BRCH_CD
+	}
+	, function(data) {
+		res.json(data);
+	});
+});
+
+// 마진 지불하기
+router.post('/margin', function(req, res) {
+	core.payMargin(function(result) {
 		res.json(result);
 	});
+});
+
+
+/*
+	직원
+*/
+
+// 직원 등록하기
+router.post('/employee', function(req, res) {
+	core.addEmployee(req.body, function(result) {
+		res.json(result);
+	});
+});
+
+// 직원 삭제하기
+router.delete('/employee', function(req, res) {
+	core.deleteEmployee(req.body, function(result) {
+		res.json(result);
+	});
+});
+
+// 직원목록 가져오기
+router.get('/employee/list', function(req, res) {
+	var BRCH_CD = req.session.BRCH_CD;
+	core.getEmployeeList({
+		BRCH_CD: BRCH_CD
+		}
+		, function(data) {
+            res.json(data);
+        });
 });
 
 module.exports = router;
