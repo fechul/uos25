@@ -60,7 +60,7 @@ exports.getSell = function(options, callback) {
 	});
 };
 
-// 재고목록 가져오
+// 재고목록 가져오기
 exports.getStockList = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
 

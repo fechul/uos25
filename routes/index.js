@@ -367,8 +367,7 @@ router.get('/event', function(req, res) {
 	var EVENT_CD = req.query.EVENT_CD;
     core.getEvent({
             EVENT_CD: EVENT_CD
-        }
-        , function(data) {
+        }, function(data) {
             res.json(data);
         });
 });
@@ -391,8 +390,7 @@ router.get('/branch', function(req, res) {
 
 	core.getBranch({
 		BRCH_CD: BRCH_CD
-	}
-	, function(data) {
+	}, function(data) {
 		res.json(data);
 	});
 });
@@ -428,8 +426,7 @@ router.get('/employee/list', function(req, res) {
 	var BRCH_CD = req.session.BRCH_CD;
 	core.getEmployeeList({
 		BRCH_CD: BRCH_CD
-		}
-		, function(data) {
+		}, function(data) {
             res.json(data);
         });
 });
