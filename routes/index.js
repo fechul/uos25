@@ -47,7 +47,7 @@ router.get('/sell/list', function(req, res) {
 
 // 판매정보확인하기
 router.get('/sold_product', function(req, res) {
-	core.getSell(req.query, function(data) {
+	core.getSoldProduct(req.query, function(data) {
 		res.json(data);
 	});
 });
