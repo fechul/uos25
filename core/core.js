@@ -1,4 +1,6 @@
 
+var async = require('async');
+
 // test code
 exports.example = function(options, callback) {
 	__oracleDB.execute("SELECT * FROM BRANCH", [], function(err, result) {  
@@ -45,7 +47,7 @@ exports.getSellList = function(options, callback) {
 exports.getSoldProduct = function(options, callback) {
 	var SELL_CD = options.SELL_CD;
 
-	var query = "SELECT A.*, B.PRDT_NAME, C.EVENT_NAME FROM SOLD_PRODUCT A, PRODUCT B, EVENT C WHERE A.PRDT_CD = B.PRDT_CD AND A.EVENT_CD = C.EVENT_CD AND SELL_CD='" + SELL_CD + "'";
+	var query = "SELECT A.*, B.PRDT_NAME, FROM SOLD_PRODUCT A, PRODUCT B WHERE A.PRDT_CD = B.PRDT_CD AND A.SELL_CD='" + SELL_CD + "'";
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -53,9 +55,27 @@ exports.getSoldProduct = function(options, callback) {
 	       console.log("getSell err: ", err);
 	       callback(null);
 	    } else {
-	    	callback({
-	    		LIST: result.rows
-	    	});
+	    	if(result.rows && result.rows.length) {
+	    		async.mapSeries(result.rows, function(sold, async_cb) {
+	    			if(!sold.EVENT_CD) {
+	    				sold.EVENT_NAME = null;
+	    				async_cb();
+	    			} else {
+		    			__oracleDB.execute("SELECT EVENT_NAME FROM EVENT WHERE EVENT_CD='" + sold.EVENT_CD + "'", [], function(_err, _result) {
+		    				sold.EVENT_NAME = _result.rows[0].EVENT_NAME;
+		    				async_cb();
+		    			});
+		    		}
+	    		}, function(async_err) {
+	    			callback({
+			    		LIST: result.rows
+			    	});	
+	    		});
+	    	} else {
+	    		callback({
+		    		LIST: []
+		    	});
+	    	}
 	    }
 	});
 };
@@ -64,7 +84,7 @@ exports.getSoldProduct = function(options, callback) {
 exports.getStockList = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
 
-	var query = "SELECT A.*, B.*, C.CMPNY_NAME, D.EVENT_NAME FROM STOCK A, PRODUCT B, COMPANY C, EVENT D WHERE A.PRDT_CD = B.PRDT_CD AND B.CMPNY_CD = C.CMPNY_CD AND B.EVENT_CD = D.EVENT_CD AND A.BRCH_CD='" + BRCH_CD + "'";
+	var query = "SELECT A.*, B.*, C.CMPNY_NAME FROM STOCK A, PRODUCT B, COMPANY C WHERE A.PRDT_CD = B.PRDT_CD AND B.CMPNY_CD = C.CMPNY_CD AND A.BRCH_CD='" + BRCH_CD + "'";
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -72,9 +92,27 @@ exports.getStockList = function(options, callback) {
 	       console.log("getStockList err: ", err);
 	       callback(null);
 	    } else {
-	    	callback({
-	    		LIST: result.rows
-	    	});
+	    	if(result.rows && result.rows.length) {
+	    		async.mapSeries(result.rows, function(stock, async_cb) {
+	    			if(!stock.EVENT_CD) {
+	    				stock.EVENT_NAME = null;
+	    				async_cb();
+	    			} else {
+		    			__oracleDB.execute("SELECT EVENT_NAME FROM EVENT WHERE EVENT_CD='" + stock.EVENT_CD + "'", [], function(_err, _result) {
+		    				stock.EVENT_NAME = _result.rows[0].EVENT_NAME;
+		    				async_cb();
+		    			});
+		    		}
+	    		}, function(async_err) {
+	    			callback({
+			    		LIST: result.rows
+			    	});	
+	    		});
+	    	} else {
+	    		callback({
+		    		LIST: []
+		    	});
+	    	}
 	    }
 	});
 };
@@ -83,7 +121,7 @@ exports.getStockList = function(options, callback) {
 exports.getProduct = function(options, callback) {
 	var PRDT_CD = options.PRDT_CD;
 
-	var query = "SELECT A.*, B.CMPNY_NAME, C.EVENT_NAME FROM PRODUCT A, COMPANY B, EVENT C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.EVENT_CD = C.EVENT_CD AND A.PRDT_CD='" + PRDT_CD + "'";
+	var query = "SELECT A.*, B.CMPNY_NAME FROM PRODUCT A, COMPANY B WHERE A.CMPNY_CD = B.CMPNY_CD AND A.PRDT_CD='" + PRDT_CD + "'";
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -91,14 +129,27 @@ exports.getProduct = function(options, callback) {
 	       console.log("getProduct err: ", err);
 	       callback(null);
 	    } else {
-	    	callback(result.rows[0]);
+	    	if(result.rows && result.rows.length) {
+	    		var product = result.rows[0];
+    			if(!product.EVENT_CD) {
+    				product.EVENT_NAME = null;
+    				callback(product);
+    			} else {
+	    			__oracleDB.execute("SELECT EVENT_NAME FROM EVENT WHERE EVENT_CD='" + product.EVENT_CD + "'", [], function(_err, _result) {
+	    				product.EVENT_NAME = _result.rows[0].EVENT_NAME;
+	    				callback(product);
+	    			});
+	    		}
+	    	} else {
+	    		callback(null);
+	    	}
 	    }
 	});
 };
 
 // 상품목록 가져오기
 exports.getProductList = function(callback) {
-	var query = "SELECT A.*, B.CMPNY_NAME, C.EVENT_NAME FROM PRODUCT A, COMPANY B, EVENT C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.EVENT_CD = C.EVENT_CD";
+	var query = "SELECT A.*, B.CMPNY_NAME FROM PRODUCT A, COMPANY B WHERE A.CMPNY_CD = B.CMPNY_CD";
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -106,9 +157,27 @@ exports.getProductList = function(callback) {
 	       console.log("getProductList err: ", err);
 	       callback(null);
 	    } else {
-	    	callback({
-	    		LIST: result.rows
-	    	});
+	    	if(result.rows && result.rows.length) {
+	    		async.mapSeries(result.rows, function(product, async_cb) {
+	    			if(!product.EVENT_CD) {
+	    				product.EVENT_NAME = null;
+	    				async_cb();
+	    			} else {
+		    			__oracleDB.execute("SELECT EVENT_NAME FROM EVENT WHERE EVENT_CD='" + product.EVENT_CD + "'", [], function(_err, _result) {
+		    				product.EVENT_NAME = _result.rows[0].EVENT_NAME;
+		    				async_cb();
+		    			});
+		    		}
+	    		}, function(async_err) {
+	    			callback({
+			    		LIST: result.rows
+			    	});	
+	    		});
+	    	} else {
+	    		callback({
+		    		LIST: []
+		    	});
+	    	}
 	    }
 	});
 };
@@ -329,7 +398,7 @@ exports.addMember = function(options, callback) {
 // 회원목록 가져오기
 exports.getMemberList = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
-	var query = "SELECT PHONNO, POINT, JOIN_DATE FROM MEMBER WHERE BRCH_CD = " + BRCH_CD;
+	var query = "SELECT PHONNO, POINT, JOIN_DATE FROM MEMBER WHERE BRCH_CD = '" + BRCH_CD + "'";
 	var DATA ={};
 
     __oracleDB.execute(query, [], function(err, result) {
@@ -398,7 +467,7 @@ exports.getCvsListBranch = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
 	var query = "SELECT T.CVS_CD, PRVD_CMPNY, CVS_NAME, DESCR " +
 				"FROM CVS_TYPE T, CVS C " +
-   				"WHERE C.CVS_CD = T.CVS_CD AND BRCH_CD = " + BRCH_CD;
+   				"WHERE C.CVS_CD = T.CVS_CD AND BRCH_CD = '" + BRCH_CD + "'";
 	var DATA = {};
     __oracleDB.execute(query, [], function(err, result) {
         if (err) {
@@ -454,7 +523,7 @@ exports.getEventList = function(options, callback) {
 // 지점 정보 가져오기
 exports.getBranch = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
-	var query = "SELECT * FROM BRANCH WHERE BRCH_CD = " + BRCH_CD;
+	var query = "SELECT * FROM BRANCH WHERE BRCH_CD = '" + BRCH_CD + "'";
 	var DATA = {};
 
     __oracleDB.execute(query, [], function(err, result) {
@@ -485,7 +554,7 @@ exports.deleteEmployee = function(options, callback) {
 // 직원목록 가져오기
 exports.getEmployeeList = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
-	var query = "SELECT * FROM EMPLOYEE WHERE BRCH_CD = " + BRCH_CD;
+	var query = "SELECT * FROM EMPLOYEE WHERE BRCH_CD = '" + BRCH_CD + "'";
 	var DATA = {};
 
     __oracleDB.execute(query, [], function(err, result) {
