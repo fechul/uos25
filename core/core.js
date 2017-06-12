@@ -26,7 +26,7 @@ exports.doSell = function(options, callback) {
 exports.getSellList = function(options, callback) {
 	var POS_CD = options.POS_CD;
 
-	var query = "SELECT * FROM SELL WHERE POS_CD=" + POS_CD;
+	var query = "SELECT * FROM SELL WHERE POS_CD='" + POS_CD + "'";
 	var DATA = {};
 	
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -34,8 +34,9 @@ exports.getSellList = function(options, callback) {
 	       console.log("getSellList err: ", err);
 	       callback(null);
 	    } else {
-	    	DATA.LIST = result.rows;
-	    	callback(DATA);
+	    	callback({
+	    		LIST: result.rows
+	    	});
 	    }
 	});	
 };
@@ -44,7 +45,7 @@ exports.getSellList = function(options, callback) {
 exports.getSoldProduct = function(options, callback) {
 	var SELL_CD = options.SELL_CD;
 
-	var query = "SELECT A.*, B.PRDT_NAME, C.EVENT_NAME FROM SOLD_PRODUCT A, PRODUCT B, EVENT C WHERE A.PRDT_CD = B.PRDT_CD AND A.EVENT_CD = C.EVENT_CD AND SELL_CD=" + SELL_CD;
+	var query = "SELECT A.*, B.PRDT_NAME, C.EVENT_NAME FROM SOLD_PRODUCT A, PRODUCT B, EVENT C WHERE A.PRDT_CD = B.PRDT_CD AND A.EVENT_CD = C.EVENT_CD AND SELL_CD='" + SELL_CD + "'";
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -52,10 +53,9 @@ exports.getSoldProduct = function(options, callback) {
 	       console.log("getSell err: ", err);
 	       callback(null);
 	    } else {
-
-	    	DATA.LIST = result.rows;
-	    	callback(DATA);
-
+	    	callback({
+	    		LIST: result.rows
+	    	});
 	    }
 	});
 };
@@ -64,7 +64,7 @@ exports.getSoldProduct = function(options, callback) {
 exports.getStockList = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
 
-	var query = "SELECT A.*, B.*, C.CMPNY_NAME, D.EVENT_NAME FROM STOCK A, PRODUCT B, COMPANY C, EVENT D WHERE A.PRDT_CD = B.PRDT_CD AND B.CMPNY_CD = C.CMPNY_CD AND B.EVENT_CD = D.EVENT_CD AND A.BRCH_CD=" + BRCH_CD;
+	var query = "SELECT A.*, B.*, C.CMPNY_NAME, D.EVENT_NAME FROM STOCK A, PRODUCT B, COMPANY C, EVENT D WHERE A.PRDT_CD = B.PRDT_CD AND B.CMPNY_CD = C.CMPNY_CD AND B.EVENT_CD = D.EVENT_CD AND A.BRCH_CD='" + BRCH_CD + "'";
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -72,8 +72,9 @@ exports.getStockList = function(options, callback) {
 	       console.log("getStockList err: ", err);
 	       callback(null);
 	    } else {
-	    	DATA.LIST = result.rows;
-	    	callback(DATA);
+	    	callback({
+	    		LIST: result.rows
+	    	});
 	    }
 	});
 };
@@ -82,7 +83,7 @@ exports.getStockList = function(options, callback) {
 exports.getProduct = function(options, callback) {
 	var PRDT_CD = options.PRDT_CD;
 
-	var query = "SELECT A.*, B.CMPNY_NAME, C.EVENT_NAME FROM PRODUCT A, COMPANY B, EVENT C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.EVENT_CD = B.EVENT_CD AND A.PRDT_CD=" + PRDT_CD;
+	var query = "SELECT A.*, B.CMPNY_NAME, C.EVENT_NAME FROM PRODUCT A, COMPANY B, EVENT C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.EVENT_CD = C.EVENT_CD AND A.PRDT_CD='" + PRDT_CD + "'";
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -90,15 +91,14 @@ exports.getProduct = function(options, callback) {
 	       console.log("getProduct err: ", err);
 	       callback(null);
 	    } else {
-	    	DATA = result.rows[0];
-	    	callback(DATA);
+	    	callback(result.rows[0]);
 	    }
 	});
 };
 
 // 상품목록 가져오기
 exports.getProductList = function(callback) {
-	var query = "SELECT A.*, B.CMPNY_NAME, C.EVENT_NAME FROM PRODUCT A, COMPANY B, EVENT C WHERE A.CMPNY_CD = B.CMPNY AND A.EVENT_CD = C.EVENT_CD";
+	var query = "SELECT A.*, B.CMPNY_NAME, C.EVENT_NAME FROM PRODUCT A, COMPANY B, EVENT C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.EVENT_CD = C.EVENT_CD";
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -106,8 +106,9 @@ exports.getProductList = function(callback) {
 	       console.log("getProductList err: ", err);
 	       callback(null);
 	    } else {
-	    	DATA.LIST = result.rows;
-	    	callback(DATA);
+	    	callback({
+	    		LIST: result.rows
+	    	});
 	    }
 	});
 };
@@ -126,7 +127,7 @@ exports.cancelOrder = function(options, callback) {
 exports.getOrder = function(options, callback) {
 	var ORDER_CD = options.ORDER_CD;
 
-	var query = "SELECT A.PRDT_CD AS PRDT_CD, B.PRDT_NAME AS PRDT_NAME, A.PRDT_CNT AS PRDT_CNT FROM ORDERED_PRODUCT A, PRODUCT B WHERE A.PRDT_CD = B.PRDT_CD AND A.ORDER_CD=" + ORDER_CD;
+	var query = "SELECT A.PRDT_CD AS PRDT_CD, B.PRDT_NAME AS PRDT_NAME, A.PRDT_CNT AS PRDT_CNT FROM ORDERED_PRODUCT A, PRODUCT B WHERE A.PRDT_CD = B.PRDT_CD AND A.ORDER_CD='" + ORDER_CD + "'";
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -134,8 +135,9 @@ exports.getOrder = function(options, callback) {
 	       console.log("getOrder err: ", err);
 	       callback(null);
 	    } else {
-	    	DATA.LIST = result.rows;
-	    	callback(DATA);
+	    	callback({
+	    		LIST: result.rows
+	    	});
 	    }
 	});
 };
@@ -144,7 +146,7 @@ exports.getOrder = function(options, callback) {
 exports.getOrderList = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
 
-	var query = "SELECT * FROM PRODUCT_ORDER WHERE BRCH_CD=" + BRCH_CD;
+	var query = "SELECT * FROM PRODUCT_ORDER WHERE BRCH_CD='" + BRCH_CD + "'";
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -152,8 +154,9 @@ exports.getOrderList = function(options, callback) {
 	       console.log("getOrderList err: ", err);
 	       callback(null);
 	    } else {
-	    	DATA.LIST = result.rows;
-	    	callback(DATA);
+	    	callback({
+	    		LIST: result.rows
+	    	});
 	    }
 	});
 };
@@ -167,7 +170,7 @@ exports.doStore = function(options, callback) {
 exports.getStoreList = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
 
-	var query = "SELECT * FROM STORE WHERE BRCH_CD=" + BRCH_CD;
+	var query = "SELECT * FROM STORE WHERE BRCH_CD='" + BRCH_CD + "'";
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -175,8 +178,9 @@ exports.getStoreList = function(options, callback) {
 	       console.log("getStoreList err: ", err);
 	       callback(null);
 	    } else {
-	    	DATA.LIST = result.rows;
-	    	callback(DATA);
+	    	callback({
+	    		LIST: result.rows
+	    	});
 	    }
 	});
 };
@@ -185,7 +189,7 @@ exports.getStoreList = function(options, callback) {
 exports.getStore = function(options, callback) {
 	var STORE_CD = options.STORE_CD;
 
-	var query = "SELECT A.*, B.CMPNY_NAME, C.PRDT_NAME FROM STORED_PRODUCT A, COMPANY B, PRODUCT C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.PRDT_CD = C.PRDT_CD AND A.STORE_CD = " + STORE_CD;
+	var query = "SELECT A.*, B.CMPNY_NAME, C.PRDT_NAME FROM STORED_PRODUCT A, COMPANY B, PRODUCT C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.PRDT_CD = C.PRDT_CD AND A.STORE_CD = '" + STORE_CD + "'";
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -193,8 +197,9 @@ exports.getStore = function(options, callback) {
 	       console.log("getStore err: ", err);
 	       callback(null);
 	    } else {
-	    	DATA.LIST = result.rows;
-	    	callback(DATA);
+	    	callback({
+	    		LIST: result.rows
+	    	});
 	    }
 	});
 };
@@ -211,7 +216,21 @@ exports.cancelRefund = function(options, callback) {
 
 // 환불기록 가져오기
 exports.getRefundList = function(options, callback) {
+	var POS_CD = options.POS_CD;
+
+	var query = "SELECT * FROM REFUND WHERE POS_CD='" + POS_CD + "'";
+	var DATA = {};
 	
+	__oracleDB.execute(query, [], function(err, result) {  
+	    if (err) {  
+	       console.log("getRefundList err: ", err);
+	       callback(null);
+	    } else {
+	    	callback({
+	    		LIST: result.rows
+	    	});
+	    }
+	});
 };
 
 // 반품하기
@@ -226,12 +245,38 @@ exports.cancelReturn = function(options, callback) {
 
 // 반품기록 가져오기
 exports.getReturnList = function(options, callback) {
+	var BRCH_CD = BRCH_CD;
+
+	var query = "SELECT * FROM RETURN WHERE BRCH_CD='" + BRCH_CD + "'";
+	var DATA = {};
 	
+	__oracleDB.execute(query, [], function(err, result) {  
+	    if (err) {  
+	       console.log("getReturnList err: ", err);
+	       callback(null);
+	    } else {
+	    	callback({
+	    		LIST: result.rows
+	    	});
+	    }
+	});
 };
 
 // 반품정보 확인하기
 exports.getReturn = function(options, callback) {
+	var RET_CD = options.RET_CD;
 
+	var query = "SELECT A.*, B.PRDT_NAME FROM RETURNED_PRODUCT A, PRODUCT B WHERE A.PRDT_CD = B.PRDT_CD AND A.RET_CD='" + RET_CD + "'";
+	var DATA = {};
+	
+	__oracleDB.execute(query, [], function(err, result) {  
+	    if (err) {  
+	       console.log("getReturn err: ", err);
+	       callback(null);
+	    } else {
+	    	callback(result.rows[0]);
+	    }
+	});
 };
 
 // 손실 등록하기
@@ -254,8 +299,9 @@ exports.getLossList = function(options, callback) {
             console.log("getLossList err: ", err);
             callback(null);
         } else {
-            DATA.LIST = result.rows;
-            callback(DATA);
+            callback({
+	    		LIST: result.rows
+	    	});
         }
     });
 };
@@ -291,8 +337,9 @@ exports.getMemberList = function(options, callback) {
             console.log("getMemberList err: ", err);
             callback(null);
         } else {
-            DATA.LIST = result.rows;
-            callback(DATA);
+            callback({
+	    		LIST: result.rows
+	    	});
         }
     });
 };
@@ -313,8 +360,7 @@ exports.getPoint = function(options, callback) {
             console.log("getPoint err: ", err);
             callback(null);
         } else {
-            DATA = result.rows;
-            callback(DATA);
+            callback(result.rows[0]);
         }
     });
 };
@@ -340,8 +386,9 @@ exports.getCvsList = function(options, callback) {
             console.log("getCvsList err: ", err);
             callback(null);
         } else {
-            DATA.LIST = result.rows;
-            callback(DATA);
+            callback({
+	    		LIST: result.rows
+	    	});
         }
     });
 };
@@ -358,8 +405,9 @@ exports.getCvsListBranch = function(options, callback) {
             console.log("getCvsListBranch err: ", err);
             callback(null);
         } else {
-            DATA.LIST = result.rows;
-            callback(DATA);
+            callback({
+	    		LIST: result.rows
+	    	});
         }
     });
 };
@@ -381,8 +429,7 @@ exports.getEvent = function(options, callback) {
             console.log("getEvent err: ", err);
             callback(null);
         } else {
-            DATA = result.rows;
-            callback(DATA);
+            callback(result.rows[0]);
         }
     });
 };
@@ -397,8 +444,9 @@ exports.getEventList = function(options, callback) {
             console.log("getEventList err: ", err);
             callback(null);
         } else {
-            DATA.LIST = result.rows;
-            callback(DATA);
+            callback({
+	    		LIST: result.rows
+	    	});
         }
     });
 };
@@ -414,8 +462,7 @@ exports.getBranch = function(options, callback) {
             console.log("getBranch err: ", err);
             callback(null);
         } else {
-            DATA = result.rows;
-            callback(DATA);
+            callback(result.rows[0]);
         }
     });
 };
@@ -446,8 +493,9 @@ exports.getEmployeeList = function(options, callback) {
             console.log("getEmployeeList err: ", err);
             callback(null);
         } else {
-            DATA.LIST = result.rows;
-            callback(DATA);
+            callback({
+	    		LIST: result.rows
+	    	});
         }
     });
 };
