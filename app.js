@@ -48,12 +48,16 @@ oracledb.getConnection({
 	// });
 
      /*테스트*/
-   //   core.getEmployeeList({
-			// BRCH_CD: '000001'
-		 // },
-		 // function (data) {
-   //       console.log(data);
-   //   });
+     core.getPoint({
+			PHONNO: '01092919986',
+		 	PW: '8520'
+		 },
+		 function (data) {
+     	 console.log("type" , typeof data[0]);
+     	 if(typeof data[0] != undefined)
+     	 	console.log("ok");
+         console.log(data);
+     });
 });
 
 // process.stdin.resume();

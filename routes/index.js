@@ -304,7 +304,19 @@ router.get('/point', function(req, res) {
 		PHONNO: PHONNO,
 		PW: PW
 	}, function(data) {
-		res.json(data);
+        if(typeof data[0] == undefined){
+            res.json({
+				RESULT: false,
+				ERR_CD: 2,
+				DATA: data
+			});
+		} else{
+            res.json({
+				RESULT: true,
+				DATA: data});
+		}
+
+
 	});
 });
 
