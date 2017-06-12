@@ -32,37 +32,51 @@
             </section>
             <section class="right_container">
                 <div class="workspace sell active" name="sell">
-                    <div class="workspace_table_container">
+                    <div class="workspace_sell_table_container">
                         <table id="sell_list">
                         </table>
                     </div>
-                    <div>
+                    <div class="workspace_sell_addon_container">
                         <div class="div_row float_left">
                             <div>
                                 <label>상품코드</label>
-                                <input id="sell_product_id"></input>
+                                <input id="sell_product_id">
                             </div>
                             <div style="float: right;">
                                 <label>판매금액</label>
-                                <input></input>
+                                <input id="sell_price_sum" value=0 disabled>
                             </div>
                         </div>
                         <div class="div_row float_right">
                             <div>
-                                <label>결제금액</label>
-                                <input></input>
+                                <label>포인트사용</label>
+                                <input id="sell_use_point_price" value=0 disabled>
+                            </div>
+                        </div>
+                        <div class="div_row float_right">
+                            <div>
+                                <label>결제하실 금액</label>
+                                <input id="sell_need_pay_price" value=0 disabled>
+                            </div>
+                        </div>
+                        <div class="div_row float_right">
+                            <div>
+                                <label>결제하신 금액</label>
+                                <input id="sell_paid_price" value=0>
                             </div>
                         </div>
                         <div class="div_row float_right">
                             <div>
                                 <label>거스름돈</label>
-                                <input></input>
+                                <input id="sell_change" value=0 disabled>
                             </div>
                         </div>
                         <div class="div_row float_right">
                             <div>
-                                <button class="btn btn-primary">현금 결제</button>
-                                <button class="btn btn-primary">카드 결제</button>
+                                <button id="sell_use_point" class="btn btn-primary">포인트 사용</button>
+                                <button id="sell_save_point" class="btn btn-primary">포인트 적립</button>
+                                <button id="sell_by_cash" class="btn btn-primary">현금 결제</button>
+                                <button id="sell_by_card" class="btn btn-primary">카드 결제</button>
                             </div>
                         </div>
                     </div>
@@ -90,6 +104,126 @@
                 <div class="workspace employee" name="employee">
                 </div>
             </section>
+        </div>
+        <div id="notification_dialog" class="dialog">
+            <dic class="notification_dialog_container">
+                <div class="dialog_header">
+                    알림
+                </div>
+                <div id="notification_dialog_msg">
+                </div>
+                <div class="dialog_footer">
+                    <button id="notification_dialog_close" class="btn btn-primary pull-right close_dialog">닫기</button>
+                </div>
+            </div>
+        </div>
+        <div id="use_point_dialog">
+            <dic class="use_point_dialog_container">
+                <div class="dialog_header">
+                    포인트 사용
+                </div>
+                <div id="use_point_dialog_body">
+                    <div class="div_row float_right">
+                        <div>
+                            <label>회원번호</label>
+                            <input id="use_point_dialog_member_code">
+                        </div>
+                    </div>
+                    <div class="div_row float_right">
+                        <div>
+                            <label>비밀번호</label>
+                            <input type="password" id="use_point_dialog_member_pw">
+                        </div>
+                    </div>
+                    <div class="div_row float_right">
+                        <div>
+                            <button id="use_point_dialog_check_member" class="btn btn-primary btn-sm">회원 확인</button>
+                        </div>
+                    </div>
+                    <div class="div_row float_right">
+                        <div>
+                            <label id="use_point_dialog_check_member_complete" class="point_dialog_member_check_msg">확인완료</label>
+                            <label id="use_point_dialog_check_member_fail" class="point_dialog_member_check_msg">등록되지 않은 회원입니다.</label>
+                        </div>
+                    </div>
+                    <div class="div_row float_right">
+                        <div>
+                            <label>현재 포인트</label>
+                            <input id="use_point_dialog_before_point" val=0 disabled>
+                        </div>
+                    </div>
+                    <div class="div_row float_right">
+                        <div>
+                            <label>사용 포인트</label>
+                            <input id="use_point_dialog_using_point" val=0>
+                        </div>
+                    </div>
+                    <div class="div_row float_right">
+                        <div>
+                            <label>사용 후 포인트</label>
+                            <input id="use_point_dialog_after_point" val=0 disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="dialog_footer">
+                    <button id="use_point_dialog_close" class="btn btn-primary pull-right close_dialog">닫기</button>
+                    <button id="use_point_dialog_confirm" class="btn btn-primary pull-right">확인</button>
+                </div>
+            </div>
+        </div>
+        <div id="save_point_dialog">
+            <dic class="save_point_dialog_container">
+                <div class="dialog_header">
+                    포인트 적립
+                </div>
+                <div id="save_point_dialog_body">
+                    <div class="div_row float_right">
+                        <div>
+                            <label>회원번호</label>
+                            <input id="save_point_dialog_member_code">
+                        </div>
+                    </div>
+                    <div class="div_row float_right">
+                        <div>
+                            <label>비밀번호</label>
+                            <input type="password" id="save_point_dialog_member_pw">
+                        </div>
+                    </div>
+                    <div class="div_row float_right">
+                        <div>
+                            <button id="save_point_dialog_check_member" class="btn btn-primary btn-sm">회원 확인</button>
+                        </div>
+                    </div>
+                    <div class="div_row float_right">
+                        <div>
+                            <label id="save_point_dialog_check_member_complete" class="point_dialog_member_check_msg">확인완료</label>
+                            <label id="save_point_dialog_check_member_fail" class="point_dialog_member_check_msg">등록되지 않은 회원입니다.</label>
+                        </div>
+                    </div>
+                    <div class="div_row float_right">
+                        <div>
+                            <label>현재 포인트</label>
+                            <input id="save_point_dialog_before_point" val=0 disabled>
+                        </div>
+                    </div>
+                    <div class="div_row float_right">
+                        <div>
+                            <label>적립 포인트</label>
+                            <input id="save_point_dialog_saving_point" val=0 disabled>
+                        </div>
+                    </div>
+                    <div class="div_row float_right">
+                        <div>
+                            <label>적립 후 포인트</label>
+                            <input id="save_point_dialog_after_point" val=0 disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="dialog_footer">
+                    <button id="save_point_dialog_close" class="btn btn-primary pull-right close_dialog">닫기</button>
+                    <button id="save_point_dialog_confirm" class="btn btn-primary pull-right">확인</button>
+                </div>
+            </div>
         </div>
     </body>
 	<script src="lib/jquery.js"></script>

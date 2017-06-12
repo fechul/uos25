@@ -93,8 +93,12 @@ table tr:first-child td {
         "sell-left sell-right";*/
 }
 
-.workspace_table_container {
+.workspace_sell_table_container {
     height: 440px
+}
+
+.workspace_sell_addon_container input {
+    text-align: right;
 }
 
 .workspace.sell .left {
@@ -119,4 +123,136 @@ table tr:first-child td {
 
 .div_row.float_right > div {
     float: right;
+}
+
+.dialog_header {
+    height: 35px;
+    background-color: #333;
+    color: white;
+    font-size: 18px;
+    padding: 5px 10px;
+    font-weight: bold;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.dialog_footer {
+    height: 40px;
+    padding: 5px;
+}
+
+.close_dialog {
+    margin-left: 5px;
+}
+
+#notification_dialog {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none;
+}
+
+#notification_dialog.shown {
+    display: inline-flex;
+}
+
+.notification_dialog_container {
+    background-color: white;
+    height: 200px;
+    width: 300px;
+    margin: auto;
+    border-radius: 5px;
+}
+
+#notification_dialog_msg {
+    height: 120px;
+    padding: 10px;
+}
+
+.point_dialog_member_check_msg {
+    display: none;
+}
+
+#use_point_dialog {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none;
+}
+
+#use_point_dialog.shown {
+    display: inline-flex;
+}
+
+.use_point_dialog_container {
+    background-color: white;
+    height: 370px;
+    width: 300px;
+    margin: auto;
+    border-radius: 5px;
+}
+
+.use_point_dialog_header {
+    height: 35px;
+    background-color: #333;
+    color: white;
+    font-size: 18px;
+    padding: 5px 10px;
+    font-weight: bold;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+#use_point_dialog input,
+#save_point_dialog input{
+    text-align: right;
+}
+
+#use_point_dialog_body {
+    height: 290px;
+    padding: 10px;
+}
+
+#save_point_dialog {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none;
+}
+
+#save_point_dialog.shown {
+    display: inline-flex;
+}
+
+.save_point_dialog_container {
+    background-color: white;
+    height: 370px;
+    width: 300px;
+    margin: auto;
+    border-radius: 5px;
+}
+
+.save_point_dialog_header {
+    height: 35px;
+    background-color: #333;
+    color: white;
+    font-size: 18px;
+    padding: 5px 10px;
+    font-weight: bold;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+#save_point_dialog_body {
+    height: 290px;
+    padding: 10px;
 }
