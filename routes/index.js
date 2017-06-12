@@ -37,7 +37,7 @@ router.get('/sell/list', function(req, res) {
 
 // 판매정보확인하기
 router.get('/sell', function(req, res) {
-	core.getSell(req.body, function(data) {
+	core.getSell(req.query, function(data) {
 		res.json(data);
 	});
 });
@@ -61,7 +61,7 @@ router.get('/stock/list', function(req, res) {
 
 // 상품정보 가져오기
 router.get('/product', function(req, res) {
-	core.getProduct(req.body, function(data) {
+	core.getProduct(req.query, function(data) {
 		res.json(data);
 	});
 });
@@ -94,7 +94,7 @@ router.delete('/order', function(req, res) {
 
 // 주문하기
 router.get('/order', function(req, res) {
-	core.getOrder(req.body, function(data) {
+	core.getOrder(req.query, function(data) {
 		res.json(data);
 	});
 });
@@ -127,7 +127,7 @@ router.get('/store/list', function(req, res) {
 
 // 입고정보 확인하기
 router.get('/store', function(req, res) {
-	core.getStore(req.body, function(data) {
+	core.getStore(req.query, function(data) {
 		res.json(data);
 	});
 });
@@ -186,7 +186,7 @@ router.get('/return/list', function(req, res) {
 
 // 반품정보 확인하기
 router.get('/return', function(req, res) {
-	core.getRefundList(req.body, function(data) {
+	core.getRefundList(req.query, function(data) {
 		res.json(data);
 	});
 });
@@ -271,7 +271,7 @@ router.delete('/member', function(req, res) {
 
 // 마일리지 조회하기
 router.get('/point', function(req, res) {
-	core.getPoint(req.body, function(data) {
+	core.getPoint(req.query, function(data) {
 		res.json(data);
 	});
 });
@@ -317,9 +317,75 @@ router.get('/cvs/list/branch', function(req, res) {
 */
 
 // 자금내역 가져오기
-router.post('/cvs', function(req, res) {
-	core.addCvs(req.body, function(result) {
+router.get('/branch/money', function(req, res) {
+	core.getBranchMoney(req.query, function(data) {
+		res.json(data);
+	});
+});
+
+
+/*
+	이벤트
+*/
+
+// 이벤트 정보 가져오기
+router.get('/event', function(req, res) {
+	core.getEvent(req.query, function(data) {
+		res.json(data);
+	});
+});
+
+// 이벤트목록 가져오기
+router.get('/event/list', function(req, res) {
+	core.getEventList(function(data) {
+		res.json(data);
+	});
+});
+
+
+/*
+	지점
+*/
+
+// 지점 정보 가져오기
+router.get('/branch', function(req, res) {
+	var BRCH_CD = req.sesion.BRCH_CD;
+
+	core.getEvent(function(data) {
+		res.json(data);
+	});
+});
+
+// 마진 지불하기
+router.post('/margin', function(req, res) {
+	core.getEventList(function(result) {
 		res.json(result);
+	});
+});
+
+
+/*
+	직원
+*/
+
+// 직원 등록하기
+router.post('/employee', function(req, res) {
+	core.addEmployee(req.body, function(result) {
+		res.json(result);
+	});
+});
+
+// 직원 삭제하기
+router.delete('/employee', function(req, res) {
+	core.deleteEmployee(req.body, function(result) {
+		res.json(result);
+	});
+});
+
+// 직원목록 가져오기
+router.get('/employee/list', function(req, res) {
+	core.getEmployeeList(function(data) {
+		res.json(data);
 	});
 });
 
