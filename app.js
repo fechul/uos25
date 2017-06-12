@@ -7,10 +7,19 @@ var bodyParser = require('body-parser');
 var http = require('http');
 
 var index_routes = require('./routes/index.js');
-var example = require('./core/example.js');
 
 var oracledb = require('oracledb');
 oracledb.outFormat = oracledb.OBJECT;
+
+var oracleRelease = function (connection) {
+    connection.release(function(err) {
+      	if (err) {
+        	console.error(err.message);
+      	}
+
+      	console.log("oracle released!");
+	});
+};
   
 oracledb.getConnection({
      user: "uosconv",  
@@ -24,11 +33,13 @@ oracledb.getConnection({
      console.log("oracledb connected!");
 
      global.__oracleDB = oracleConnection;
+});
 
-     // test code
-     example.example({}, function(result) {
-     	console.log(result)
-     });
+// process.stdin.resume();
+
+process.on('SIGINT', function () {
+  	oracleRelease(__oracleDB);
+  	process.exit();
 });
 
 var app = express();
