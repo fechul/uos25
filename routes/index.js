@@ -10,6 +10,7 @@ var core = require('../core/core.js');
 // 메인페이지 라우팅
 router.get('/', function(req, res, next) {
 	var json = {};
+	console.log("session: ", req.session);
     res.render('main.html', json);
 });
 
@@ -92,14 +93,14 @@ router.delete('/order', function(req, res) {
 	});
 });
 
-// 주문하기
+// 주문정보 확인하기
 router.get('/order', function(req, res) {
 	core.getOrder(req.query, function(data) {
 		res.json(data);
 	});
 });
 
-// 주문하기
+// 주문목록 가져오기
 router.post('/order/list', function(req, res) {
 	core.getOrderList(function(data) {
 		res.json(data);
@@ -186,7 +187,7 @@ router.get('/return/list', function(req, res) {
 
 // 반품정보 확인하기
 router.get('/return', function(req, res) {
-	core.getRefundList(req.query, function(data) {
+	core.getReturn(req.query, function(data) {
 		res.json(data);
 	});
 });
@@ -351,14 +352,14 @@ router.get('/event/list', function(req, res) {
 router.get('/branch', function(req, res) {
 	var BRCH_CD = req.sesion.BRCH_CD;
 
-	core.getEvent(function(data) {
+	core.getBranch(function(data) {
 		res.json(data);
 	});
 });
 
 // 마진 지불하기
 router.post('/margin', function(req, res) {
-	core.getEventList(function(result) {
+	core.payMargin(function(result) {
 		res.json(result);
 	});
 });

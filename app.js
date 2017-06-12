@@ -57,6 +57,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req, res, next) {
+	if(req.session) {
+		req.session.BRCH_CD = '000001';
+		req.session.POS_CD = '00000101';
+	} else {
+		req.session = {};
+		req.session.BRCH_CD = '000001';
+		req.session.POS_CD = '00000101';
+	}
+
+	next();
+});
+
 //routing
 app.use('/', index_routes);
 
