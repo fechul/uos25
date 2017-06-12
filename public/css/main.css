@@ -178,85 +178,9 @@ table tr:first-child td {
     display: none;
 }
 
-#use_point_dialog {
-    background-color: rgba(0, 0, 0, 0.5);
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: none;
-}
-
-#use_point_dialog.shown {
-    display: inline-flex;
-}
-
-.use_point_dialog_container {
-    background-color: white;
-    height: 370px;
-    width: 300px;
-    margin: auto;
-    border-radius: 5px;
-}
-
-.use_point_dialog_header {
-    height: 35px;
-    background-color: #333;
-    color: white;
-    font-size: 18px;
-    padding: 5px 10px;
-    font-weight: bold;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-}
-
-#use_point_dialog input,
-#save_point_dialog input{
-    text-align: right;
-}
-
-#use_point_dialog_body {
-    height: 290px;
-    padding: 10px;
-}
-
-#save_point_dialog {
-    background-color: rgba(0, 0, 0, 0.5);
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: none;
-}
-
-#save_point_dialog.shown {
-    display: inline-flex;
-}
-
-.save_point_dialog_container {
-    background-color: white;
-    height: 370px;
-    width: 300px;
-    margin: auto;
-    border-radius: 5px;
-}
-
-.save_point_dialog_header {
-    height: 35px;
-    background-color: #333;
-    color: white;
-    font-size: 18px;
-    padding: 5px 10px;
-    font-weight: bold;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-}
-
-#save_point_dialog_body {
-    height: 290px;
-    padding: 10px;
+.sell_radio_button_label {
+    margin-left: 5px;
+    font-weight: normal
 }
 
 #sell_member_code,

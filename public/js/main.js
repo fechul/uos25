@@ -74,6 +74,7 @@ var main = {
             if (target == 'sell') {
                 tab.sell.table_data = {};
                 tab.sell.events = {};
+                tab.sell.gifts = {};
                 tab.sell.event_ok = true;
                 tab.sell.table.clear().draw();
                 $('.workspace.sell input').val(0);
@@ -92,12 +93,12 @@ var main = {
         $('#sell_product_id').keyup(function(e) {
             var PRDT_CD = $(this).val();
 
-            var set_data = function() {
+            var set_data = function(DATA) {
                 if (tab.sell.table_data[PRDT_CD]) {
                     tab.sell.table_data[PRDT_CD].PRDT_CNT++;
                     tab.sell.table_data[PRDT_CD].REG_PRICE += tab.sell.table_data[PRDT_CD].PRDT_PRICE;
                 } else {
-                    tab.sell.table_data[PRDT_CD] = get.DATA;
+                    tab.sell.table_data[PRDT_CD] = DATA;
                     tab.sell.table_data[PRDT_CD].PRDT_CNT = 1;
                     tab.sell.table_data[PRDT_CD].REG_PRICE = tab.sell.table_data[PRDT_CD].PRDT_PRICE;
                     tab.sell.table_data[PRDT_CD].DSC_PRICE = 0;
@@ -105,10 +106,11 @@ var main = {
                 }
 
                 var product_data = tab.sell.table_data[PRDT_CD];
-
-                if (product_data.EVENT_CHECK == 'Y') {
+                console.log(product_data);
+                if (product_data.EVENT_CHECK == 'y') {
                     var product_event = tab.sell.events[product_data.EVENT_CD];
-                    if (product_event.MIN_CNT == product_event.REG_CNT) {
+                    console.log(product_event);
+                    if (product_event.MIN_CNT == product_event.RERQ_CNT) {
                         if (product_event.GIFT_CD) {
                             // 증점
                             if (tab.sell.gifts[product_event.GIFT_CD]) {
@@ -116,6 +118,7 @@ var main = {
                             } else {
                                 tab.sell.gifts[product_event.GIFT_CD] = 1;
                             }
+                            tab.sell.table_data[PRDT_CD].SELL_PRICE += product_data.PRDT_PRICE;
                         } else {
                             // 할인
                             tab.sell.table_data[PRDT_CD].DSC_PRICE += product_event.DISCOUNT_PRICE;
@@ -123,7 +126,7 @@ var main = {
                         }
                     } else {
                         // n + n;
-                        var remainder = product_data.current_count % product_event.REG_CNT;
+                        var remainder = product_event.current_count % product_event.RERQ_CNT;
                         if (remainder == 0 || remainder > product_event.MIN_CNT) {
                             tab.sell.table_data[PRDT_CD].DSC_PRICE += product_data.PRDT_PRICE;
                         } else {
@@ -131,13 +134,21 @@ var main = {
                         }
                     }
                 } else {
-                    tab.sell.table_data[PRDT_CD].SELL_PRICE += product_data.PRDT_PRICE;
+                    if (tab.sell.gifts[PRDT_CD]) {
+                        tab.sell.gifts[PRDT_CD]--;
+                        tab.sell.table_data[PRDT_CD].DSC_PRICE += product_data.PRDT_PRICE;
+                        if (tab.sell.gifts[PRDT_CD] == 0) {
+                            delete tab.sell.gifts[PRDT_CD];
+                        }
+                    } else {
+                        tab.sell.table_data[PRDT_CD].SELL_PRICE += product_data.PRDT_PRICE;
+                    }
                 }
 
                 tab.sell.event_ok = true;
 
                 for (var key in tab.sell.events) {
-                    if (tab.sell.events[key].current_count % tab.sell.events[key].REG_CNT != 0) {
+                    if (tab.sell.events[key].current_count % tab.sell.events[key].RERQ_CNT != 0) {
                         tab.sell.event_ok = false;
                         break;
                     }
@@ -158,6 +169,8 @@ var main = {
                 }
                 tab.sell.table.draw();
                 $('#sell_price_sum').val(sell_price_sum);
+
+                $('#sell_need_pay_price').val(sell_price_sum - parseInt($('#sell_use_point_price').val(), 10));
             };
 
             if (e.keyCode == 13) {
@@ -172,6 +185,7 @@ var main = {
                     self.notice.show('서버에서 오류가 발생했습니다.');
                 }).done(function(get) {
                     if (get.RESULT) {
+                        console.log(get);
                         var current_product_count = 0;
 
                         // 제품 추가 시 수량 설정
@@ -180,16 +194,17 @@ var main = {
                         } else {
                             var current_product_count = 1;
                         }
+                        console.log(current_product_count, get.DATA.STOCK_CNT);
 
-                        if (current_product_count <= get.STOCK_CNT) {
+                        if (current_product_count <= get.DATA.STOCK_CNT) {
                             //재고 ok 판매가능
-                            if (get.EVENT_CHECK == 'Y') {
+                            if (get.DATA.EVENT_CHECK == 'y') {
                                 // 이벤트 품목
-                                if (self.events[get.EVENT_CD]) {
+                                if (tab.sell.events[get.DATA.EVENT_CD]) {
                                     // 이미 가지고 있는 이벤트
-                                    tab.sell.events[get.EVENT_CD].current_count++;
+                                    tab.sell.events[get.DATA.EVENT_CD].current_count++;
 
-                                    set_data();
+                                    set_data(get.DATA);
 
                                     draw_table();
                                 } else {
@@ -199,21 +214,21 @@ var main = {
                                         url: 'event',
                                         dataType: 'json',
                                         data: {
-                                            'EVENT_CD':get.EVENT_CD
+                                            'EVENT_CD':get.DATA.EVENT_CD
                                         }
                                     }).fail(function(_get) {
                                         self.notice.show('서버에서 오류가 발생했습니다.');
                                     }).done(function(_get) {
-                                        tab.sell.events[get.EVENT_CD] = _get.DATA;
-                                        tab.sell.events[get.EVENT_CD].current_count = 1;
+                                        tab.sell.events[get.DATA.EVENT_CD] = _get.DATA;
+                                        tab.sell.events[get.DATA.EVENT_CD].current_count = 1;
 
-                                        set_data();
+                                        set_data(get.DATA);
 
                                         draw_table();
                                     });
                                 }
                             } else {
-                                set_data();
+                                set_data(get.DATA);
 
                                 draw_table();
                             }
@@ -225,34 +240,6 @@ var main = {
                     }
                 });
             }
-        });
-
-        $('#sell_use_point').click(function() {
-            $('.point_dialog_member_check_msg').hide();
-            $('#use_point_dialog input').val('');
-            self.dialog.use_point.show();
-        });
-
-        $('#sell_save_point').click(function() {
-            $('.point_dialog_member_check_msg').hide();
-            $('#save_point_dialog input').val('');
-            self.dialog.save_point.show();
-        });
-
-        $('#use_point_dialog_confirm').click(function() {
-            if ($('#sell_member_after_point').val() >= 0) {
-                $('#sell_use_point_price').val($('#use_point_dialog_using_point').val());
-            }
-
-            self.dialog.use_point.hide();
-        });
-
-        $('#use_point_dialog_close').click(function() {
-            self.dialog.use_point.hide();
-        });
-
-        $('#save_point_dialog_close').click(function() {
-            self.dialog.save_point.hide();
         });
 
         $('#sell_member_check_button').click(function() {
@@ -269,17 +256,29 @@ var main = {
             }).fail(function(get) {
                 self.notice.show('서버에서 오류가 발생했습니다.');
             }).done(function(get) {
-                console.log(get);
                 if (get.RESULT) {
+                    var saving_point = 0;
+                    for (var key in tab.sell.table_data) {
+                        if (tab.sell.table_data[key].ONLY_PRDT == 'y') {
+                            saving_point += tab.sell.table_data[key].SELL_PRICE / 10;
+                        }
+                    }
+
+                    $('#sell_use_point_price').removeAttr('disabled');
+                    $('#sell_member_check_fail').hide();
                     $('#sell_member_check_complete').show();
                     $('#sell_member_before_point').val(get.DATA.POINT);
+                    $('#sell_save_point_price').val(saving_point);
                     $('#sell_member_after_point').val(get.DATA.POINT);
                 } else {
-                    if (get.ERR_CD == 1) {
-                        self.notice.show('서버에서 오류가 발생했습니다.');
-                    } else {
-                        $('#sell_member_check_fail').show();
-                    }
+                    // if (get.ERR_CD == 1) {
+                    //     self.notice.show('서버에서 오류가 발생했습니다.');
+                    // } else {
+                    //     $('#sell_member_check_fail').show();
+                    // }
+                    $('#sell_use_point_price').attr('disabled', 'disabled');
+                    $('#sell_member_check_complete').hide();
+                    $('#sell_member_check_fail').show();
                 }
             });
         });
@@ -291,42 +290,6 @@ var main = {
             } else {
                 $('#use_point_dialog_confirm').removeAttr('disabled');
             }
-        });
-
-        $('#save_point_dialog_check_member').click(function() {
-            var json_data = {
-                'PHONNO': parseInt($('#save_point_dialog_member_code').val(), 10),
-                'PW': parseInt($('#save_point_dialog_member_pw').val(), 10)
-            };
-
-            $.ajax({
-                method: 'GET',
-                url: 'point',
-                dataType: 'json',
-                data: json_data
-            }).fail(function(get) {
-                self.notice.show('서버에서 오류가 발생했습니다.');
-            }).done(function(get) {
-                if (get.RESULT) {
-                    var saving_point = 0;
-                    for (var key in tab.sell.table_data) {
-                        if (tab.sell.table_data[key].ONLY_PRDT == 'Y') {
-                            saving_point += tab.sell.table_data[key].SELL_PRICE / 10;
-                        }
-                    }
-
-                    $('#save_point_dialog_check_member_complete').show();
-                    $('#save_point_dialog_before_point').val(get.DATA.POINT);
-                    $('#save_point_dialog_saving_point').val(saving_point);
-                    $('#save_point_dialog_after_point').val(get.DATA.POINT + saving_point);
-                } else {
-                    if (get.ERR_CD == 1) {
-                        self.notice.show('서버에서 오류가 발생했습니다.');
-                    } else {
-                        $('#save_point_dialog_check_member_fail').show();
-                    }
-                }
-            });
         });
 
         $('#use_point_dialog_using_point').keyup(function(e) {

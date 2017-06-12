@@ -3,14 +3,14 @@ var async = require('async');
 
 // test code
 exports.example = function(options, callback) {
-	__oracleDB.execute("SELECT * FROM BRANCH", [], function(err, result) {  
-	    if (err) {  
+	__oracleDB.execute("SELECT * FROM BRANCH", [], function(err, result) {
+	    if (err) {
 	       console.error(err.message);
-	       // doRelease(connection);  
-	       return;  
-	    }  
+	       // doRelease(connection);
+	       return;
+	    }
 	    callback(result.rows);
-	    // doRelease(connection);  
+	    // doRelease(connection);
 	});
 };
 
@@ -30,9 +30,9 @@ exports.getSellList = function(options, callback) {
 
 	var query = "SELECT * FROM SELL WHERE POS_CD='" + POS_CD + "'";
 	var DATA = {};
-	
-	__oracleDB.execute(query, [], function(err, result) {  
-	    if (err) {  
+
+	__oracleDB.execute(query, [], function(err, result) {
+	    if (err) {
 	       console.log("getSellList err: ", err);
 	       callback(null);
 	    } else {
@@ -40,7 +40,7 @@ exports.getSellList = function(options, callback) {
 	    		LIST: result.rows
 	    	});
 	    }
-	});	
+	});
 };
 
 // 판매정보 확인하기
@@ -50,8 +50,8 @@ exports.getSoldProduct = function(options, callback) {
 	var query = "SELECT A.*, B.PRDT_NAME, FROM SOLD_PRODUCT A, PRODUCT B WHERE A.PRDT_CD = B.PRDT_CD AND A.SELL_CD='" + SELL_CD + "'";
 	var DATA = {};
 
-	__oracleDB.execute(query, [], function(err, result) {  
-	    if (err) {  
+	__oracleDB.execute(query, [], function(err, result) {
+	    if (err) {
 	       console.log("getSell err: ", err);
 	       callback(null);
 	    } else {
@@ -69,7 +69,7 @@ exports.getSoldProduct = function(options, callback) {
 	    		}, function(async_err) {
 	    			callback({
 			    		LIST: result.rows
-			    	});	
+			    	});
 	    		});
 	    	} else {
 	    		callback({
@@ -87,8 +87,8 @@ exports.getStockList = function(options, callback) {
 	var query = "SELECT A.*, B.*, C.CMPNY_NAME FROM STOCK A, PRODUCT B, COMPANY C WHERE A.PRDT_CD = B.PRDT_CD AND B.CMPNY_CD = C.CMPNY_CD AND A.BRCH_CD='" + BRCH_CD + "'";
 	var DATA = {};
 
-	__oracleDB.execute(query, [], function(err, result) {  
-	    if (err) {  
+	__oracleDB.execute(query, [], function(err, result) {
+	    if (err) {
 	       console.log("getStockList err: ", err);
 	       callback(null);
 	    } else {
@@ -106,7 +106,7 @@ exports.getStockList = function(options, callback) {
 	    		}, function(async_err) {
 	    			callback({
 			    		LIST: result.rows
-			    	});	
+			    	});
 	    		});
 	    	} else {
 	    		callback({
@@ -121,11 +121,11 @@ exports.getStockList = function(options, callback) {
 exports.getProduct = function(options, callback) {
 	var PRDT_CD = options.PRDT_CD;
 
-	var query = "SELECT A.*, B.CMPNY_NAME FROM PRODUCT A, COMPANY B WHERE A.CMPNY_CD = B.CMPNY_CD AND A.PRDT_CD='" + PRDT_CD + "'";
+	var query = "SELECT A.*, B.CMPNY_NAME, C.STOCK_CNT FROM PRODUCT A, COMPANY B, STOCK C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.PRDT_CD = C.PRDT_CD AND A.PRDT_CD='" + PRDT_CD + "'";
 	var DATA = {};
 
-	__oracleDB.execute(query, [], function(err, result) {  
-	    if (err) {  
+	__oracleDB.execute(query, [], function(err, result) {
+	    if (err) {
 	       console.log("getProduct err: ", err);
 	       callback(null);
 	    } else {
@@ -152,8 +152,8 @@ exports.getProductList = function(callback) {
 	var query = "SELECT A.*, B.CMPNY_NAME FROM PRODUCT A, COMPANY B WHERE A.CMPNY_CD = B.CMPNY_CD";
 	var DATA = {};
 
-	__oracleDB.execute(query, [], function(err, result) {  
-	    if (err) {  
+	__oracleDB.execute(query, [], function(err, result) {
+	    if (err) {
 	       console.log("getProductList err: ", err);
 	       callback(null);
 	    } else {
@@ -171,7 +171,7 @@ exports.getProductList = function(callback) {
 	    		}, function(async_err) {
 	    			callback({
 			    		LIST: result.rows
-			    	});	
+			    	});
 	    		});
 	    	} else {
 	    		callback({
@@ -184,12 +184,12 @@ exports.getProductList = function(callback) {
 
 // 주문하기
 exports.doOrder = function(options, callback) {
-	
+
 };
 
 // 주문 취소하기
 exports.cancelOrder = function(options, callback) {
-	
+
 };
 
 // 주문정보 확인하기
@@ -199,8 +199,8 @@ exports.getOrder = function(options, callback) {
 	var query = "SELECT A.PRDT_CD AS PRDT_CD, B.PRDT_NAME AS PRDT_NAME, A.PRDT_CNT AS PRDT_CNT FROM ORDERED_PRODUCT A, PRODUCT B WHERE A.PRDT_CD = B.PRDT_CD AND A.ORDER_CD='" + ORDER_CD + "'";
 	var DATA = {};
 
-	__oracleDB.execute(query, [], function(err, result) {  
-	    if (err) {  
+	__oracleDB.execute(query, [], function(err, result) {
+	    if (err) {
 	       console.log("getOrder err: ", err);
 	       callback(null);
 	    } else {
@@ -218,8 +218,8 @@ exports.getOrderList = function(options, callback) {
 	var query = "SELECT * FROM PRODUCT_ORDER WHERE BRCH_CD='" + BRCH_CD + "'";
 	var DATA = {};
 
-	__oracleDB.execute(query, [], function(err, result) {  
-	    if (err) {  
+	__oracleDB.execute(query, [], function(err, result) {
+	    if (err) {
 	       console.log("getOrderList err: ", err);
 	       callback(null);
 	    } else {
@@ -232,7 +232,7 @@ exports.getOrderList = function(options, callback) {
 
 // 입고 확정하기
 exports.doStore = function(options, callback) {
-	
+
 };
 
 // 입고목록 가져오기
@@ -242,8 +242,8 @@ exports.getStoreList = function(options, callback) {
 	var query = "SELECT * FROM STORE WHERE BRCH_CD='" + BRCH_CD + "'";
 	var DATA = {};
 
-	__oracleDB.execute(query, [], function(err, result) {  
-	    if (err) {  
+	__oracleDB.execute(query, [], function(err, result) {
+	    if (err) {
 	       console.log("getStoreList err: ", err);
 	       callback(null);
 	    } else {
@@ -261,8 +261,8 @@ exports.getStore = function(options, callback) {
 	var query = "SELECT A.*, B.CMPNY_NAME, C.PRDT_NAME FROM STORED_PRODUCT A, COMPANY B, PRODUCT C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.PRDT_CD = C.PRDT_CD AND A.STORE_CD = '" + STORE_CD + "'";
 	var DATA = {};
 
-	__oracleDB.execute(query, [], function(err, result) {  
-	    if (err) {  
+	__oracleDB.execute(query, [], function(err, result) {
+	    if (err) {
 	       console.log("getStore err: ", err);
 	       callback(null);
 	    } else {
@@ -275,7 +275,7 @@ exports.getStore = function(options, callback) {
 
 // 환불하기
 exports.doRefund = function(options, callback) {
-	
+
 };
 
 // 환불 취소하기
@@ -289,9 +289,9 @@ exports.getRefundList = function(options, callback) {
 
 	var query = "SELECT * FROM REFUND WHERE POS_CD='" + POS_CD + "'";
 	var DATA = {};
-	
-	__oracleDB.execute(query, [], function(err, result) {  
-	    if (err) {  
+
+	__oracleDB.execute(query, [], function(err, result) {
+	    if (err) {
 	       console.log("getRefundList err: ", err);
 	       callback(null);
 	    } else {
@@ -304,12 +304,12 @@ exports.getRefundList = function(options, callback) {
 
 // 반품하기
 exports.doReturn = function(options, callback) {
-	
+
 };
 
 // 반품 취소하기
 exports.cancelReturn = function(options, callback) {
-	
+
 };
 
 // 반품기록 가져오기
@@ -318,9 +318,9 @@ exports.getReturnList = function(options, callback) {
 
 	var query = "SELECT * FROM RETURN WHERE BRCH_CD='" + BRCH_CD + "'";
 	var DATA = {};
-	
-	__oracleDB.execute(query, [], function(err, result) {  
-	    if (err) {  
+
+	__oracleDB.execute(query, [], function(err, result) {
+	    if (err) {
 	       console.log("getReturnList err: ", err);
 	       callback(null);
 	    } else {
@@ -337,9 +337,9 @@ exports.getReturn = function(options, callback) {
 
 	var query = "SELECT A.*, B.PRDT_NAME FROM RETURNED_PRODUCT A, PRODUCT B WHERE A.PRDT_CD = B.PRDT_CD AND A.RET_CD='" + RET_CD + "'";
 	var DATA = {};
-	
-	__oracleDB.execute(query, [], function(err, result) {  
-	    if (err) {  
+
+	__oracleDB.execute(query, [], function(err, result) {
+	    if (err) {
 	       console.log("getReturn err: ", err);
 	       callback(null);
 	    } else {
@@ -350,12 +350,12 @@ exports.getReturn = function(options, callback) {
 
 // 손실 등록하기
 exports.doLoss = function(options, callback) {
-	
+
 };
 
 // 손실 취소하기
 exports.cancelLoss = function(options, callback) {
-	
+
 };
 
 // 손실목록 가져오기
@@ -377,7 +377,7 @@ exports.getLossList = function(options, callback) {
 
 // 폐기하기
 exports.doDiscard = function(options, callback) {
-	
+
 };
 
 // 폐기 취소하기
@@ -392,7 +392,7 @@ exports.getDiscardList = function(options, callback) {
 
 // 회원 등록하기
 exports.addMember = function(options, callback) {
-	
+
 };
 
 // 회원목록 가져오기
@@ -415,7 +415,7 @@ exports.getMemberList = function(options, callback) {
 
 // 회원 삭제하기
 exports.deleteMember = function(options, callback) {
-	
+
 };
 
 // 마일리지 조회하기
@@ -436,12 +436,12 @@ exports.getPoint = function(options, callback) {
 
 // 생활서비스 등록하기
 exports.addCvs = function(options, callback) {
-	
+
 };
 
 // 생활서비스 등록 해제하기
 exports.deleteCvs = function(options, callback) {
-	
+
 };
 
 // 전체 생활서비스 목록 가져오기
@@ -538,17 +538,17 @@ exports.getBranch = function(options, callback) {
 
 // 마진 지불하기
 exports.payMargin = function(options, callback) {
-	
+
 };
 
 // 직원 등록하기
 exports.addEmployee = function(options, callback) {
-	
+
 };
 
 // 직원 삭제하기
 exports.deleteEmployee = function(options, callback) {
-	
+
 };
 
 // 직원목록 가져오기
@@ -568,5 +568,3 @@ exports.getEmployeeList = function(options, callback) {
         }
     });
 };
-
-
