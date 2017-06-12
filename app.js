@@ -8,7 +8,7 @@ var http = require('http');
 
 var index_routes = require('./routes/index.js');
 
-// var core = require('./core/core.js');
+var core = require('./core/core.js');
 
 var oracledb = require('oracledb');
 oracledb.outFormat = oracledb.OBJECT;
@@ -22,7 +22,8 @@ var oracleRelease = function (connection) {
       	console.log("oracle released!");
 	});
 };
-  
+
+
 oracledb.getConnection({
      user: "uosconv",  
      password: "123123a!",  
@@ -36,6 +37,13 @@ oracledb.getConnection({
      console.log("oracledb connected!");
 
      global.__oracleDB = oracleConnection;
+     /*테스트*/
+     core.getEmployeeList({
+			BRCH_CD: '000001'
+		 },
+		 function (data) {
+         console.log(data);
+     });
 });
 
 // process.stdin.resume();
