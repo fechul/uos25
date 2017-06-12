@@ -18,18 +18,53 @@ exports.doSell = function(options, callback) {
 };
 
 // 판매취소하기
-exports.cancelSell = function(options, callback) {
-	
-};
+// exports.cancelSell = function(options, callback) {
+
+// };
 
 // 판매기록 가져오기
 exports.getSellList = function(options, callback) {
+	var POS_CD = options.POS_CD;
+
+	var query = "SELECT * FROM SELL WHERE POS_CD=" + POS_CD;
+	var DATA = {};
 	
+	__oracleDB.execute(query, [], function(err, result) {  
+	    if (err) {  
+	       console.log("getSellList err: ", err);
+	       callback(null);
+	    } else {
+	    	DATA.LIST = result.rows;
+	    	callback(DATA);
+	    }
+	});	
 };
 
 // 판매정보 확인하기
 exports.getSell = function(options, callback) {
-	
+	var SELL_CD = options.SELL_CD;
+
+	var query = "SELECT * FROM SELL WHERE SELL_CD=" + SELL_CD;
+	var DATA = {};
+
+	__oracleDB.execute(query, [], function(err, result) {  
+	    if (err) {  
+	       console.log("getSell err: ", err);
+	       callback(null);
+	    } else {
+	    	DATA = result.rows[0];
+	    	var _query = "SELECT * FROM SOLD_PRODUCT WHERE SELL_CD=" + SELL_CD;
+	    	__oracleDB.execute(query, [], function(_err, _result) {  
+			    if (err) {  
+			       console.log("getSellList err: ", err);
+			       callback(null);
+			    } else {
+			    	DATA.LIST = _result.rows;
+			    	callback(DATA);
+			    }
+			});	
+	    }
+	});	
 };
 
 // 재고목록 가져오
@@ -171,7 +206,7 @@ exports.getPoint = function(options, callback) {
 exports.addCvs = function(options, callback) {
 	
 };
-기
+
 // 생활서비스 등록 해제하기
 exports.deleteCvs = function(options, callback) {
 	

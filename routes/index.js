@@ -14,6 +14,9 @@ router.get('/', function(req, res, next) {
     res.render('main.html', json);
 });
 
+// req.session.BRCH_CD -> 브랜치코드
+// req.session.POS_CD -> POS코드
+
 
 // 판매하기
 router.post('/sell', function(req, res) {
@@ -23,15 +26,19 @@ router.post('/sell', function(req, res) {
 });
 
 // 판매취소하기
-router.delete('/sell', function(req, res) {
-	core.cancelSell(req.body, function(result) {
-		res.json(result);
-	});
-});
+// router.delete('/sell', function(req, res) {
+// 	core.cancelSell(req.body, function(result) {
+// 		res.json(result);
+// 	});
+// });
 
 // 판매기록가져오기
 router.get('/sell/list', function(req, res) {
-	core.getSellList(function(data) {
+	var POS_CD = req.session.POS_CD;
+
+	core.getSellList({
+		POS_CD: POS_CD
+	}, function(data) {
 		res.json(data);
 	});
 });
