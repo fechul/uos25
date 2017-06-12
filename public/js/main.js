@@ -49,9 +49,9 @@ var main = {
         },
     },
     init: function() {
+        this.init_table();
         this.init_common_events();
         this.init_sell_events();
-        this.init_table();
     },
     init_common_events: function() {
         var self = this;
@@ -438,16 +438,16 @@ var main = {
             'autoFill': true
         });
 
-        for (var i = 0; i < 32; i++) {
-            tab.sell.table.row.add({
-                'PRDT_CD': i.toString(),
-                'PRDT_NAME': '1',
-                'EVENT_NAME': '1',
-                'PRDT_CNT': '1',
-                'REG_PRICE': '1',
-                'DSC_PRICE': '1',
-                'SELL_PRICE': '1'
-            }).draw();
-        }
+        // for (var i = 0; i < 32; i++) {
+        //     tab.sell.table.row.add({
+        //         'PRDT_CD': i.toString(),
+        //         'PRDT_NAME': '1',
+        //         'EVENT_NAME': '1',
+        //         'PRDT_CNT': '1',
+        //         'REG_PRICE': '1',
+        //         'DSC_PRICE': '1',
+        //         'SELL_PRICE': '1'
+        //     }).draw();
+        // }
     }
 };

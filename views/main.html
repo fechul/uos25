@@ -37,42 +37,55 @@
                         </table>
                     </div>
                     <div class="workspace_sell_addon_container">
-                        <div class="div_row float_left">
-                            <div>
+                        <div class="div_row">
+                            <div class="float_left">
                                 <label>상품코드</label>
                                 <input id="sell_product_id">
                             </div>
-                            <div style="float: right;">
+                            <div class="float_right">
                                 <label>판매금액</label>
                                 <input id="sell_price_sum" value=0 disabled>
                             </div>
                         </div>
-                        <div class="div_row float_right">
-                            <div>
-                                <label>포인트사용</label>
+                        <div class="div_row">
+                            <div class="float_right">
+                                <label>사용 포인트</label>
                                 <input id="sell_use_point_price" value=0 disabled>
                             </div>
                         </div>
-                        <div class="div_row float_right">
-                            <div>
+                        <div class="div_row">
+                            <div class="float_right">
                                 <label>결제하실 금액</label>
                                 <input id="sell_need_pay_price" value=0 disabled>
                             </div>
                         </div>
-                        <div class="div_row float_right">
-                            <div>
+                        <div class="div_row">
+                            <div class="float_left">
+                                <label>회원번호</label>
+                                <input id="use_point_dialog_member_code">
+                            </div>
+                            <div class="float_left">
+                                <label>비밀번호</label>
+                                <input type="password" id="use_point_dialog_member_pw">
+                            </div>
+                                <div class="float_left">
+                                    <button id="use_point_dialog_check_member" class="btn btn-primary btn-sm">회원 확인</button>
+                                </div>
+                            <div class="float_right">
                                 <label>결제하신 금액</label>
                                 <input id="sell_paid_price" value=0>
                             </div>
                         </div>
-                        <div class="div_row float_right">
-                            <div>
+                        <div class="div_row">
+                            <div class="float_right">
                                 <label>거스름돈</label>
                                 <input id="sell_change" value=0 disabled>
                             </div>
                         </div>
-                        <div class="div_row float_right">
-                            <div>
+                        <div class="div_row">
+                        </div>
+                        <div class="div_row">
+                            <div class="float_right">
                                 <button id="sell_use_point" class="btn btn-primary">포인트 사용</button>
                                 <button id="sell_save_point" class="btn btn-primary">포인트 적립</button>
                                 <button id="sell_by_cash" class="btn btn-primary">현금 결제</button>

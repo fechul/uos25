@@ -94,7 +94,7 @@ table tr:first-child td {
 }
 
 .workspace_sell_table_container {
-    height: 440px
+    height: 400px
 }
 
 .workspace_sell_addon_container input {
@@ -117,12 +117,14 @@ table tr:first-child td {
     height: 40px;
 }
 
-.div_row.float_left > div {
+.div_row > .float_left {
     float: left;
+    margin-right: 10px;
 }
 
-.div_row.float_right > div {
+.div_row > .float_right {
     float: right;
+    margin-left: 10px;
 }
 
 .dialog_header {
@@ -255,4 +257,9 @@ table tr:first-child td {
 #save_point_dialog_body {
     height: 290px;
     padding: 10px;
+}
+
+#use_point_dialog_member_code,
+#use_point_dialog_member_pw {
+    width: 100px
 }
