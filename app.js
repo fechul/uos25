@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var http = require('http');
 
 var index_routes = require('./routes/index.js');
+var example = require('./core/example.js');
 
 var oracledb = require('oracledb');  
   
@@ -14,47 +15,22 @@ oracledb.getConnection({
      user: "uosconv",  
      password: "123123a!",  
      connectString: "uosconv.c1mptlep5hm6.ap-northeast-2.rds.amazonaws.com:1521/ORCL"  
-},
-    function(err, connection)
-    {
-        if (err) {
-            console.error(err.message);
-            return;
-        }
-        connection.execute(
-            // The statement to execute
-            "SELECT * " +
-            "FROM BRANCH_TYPE" ,
 
-            // The "bind value" 180 for the "bind variable" :id
+}, function(err, oracleConnection) {  
+     if (err) {
+          console.error("oracledb connection err: ", err.message);  
+          return;  
+     }
+     console.log("oracledb connected!");
 
+     global.__oracleDB = oracleConnection;
 
-            // Optional execute options argument, such as the query result format
-            // or whether to get extra metadata
-            // { outFormat: oracledb.OBJECT, extendedMetaData: true },
-
-            // The callback function handles the SQL execution results
-            function(err, result)
-            {
-                if (err) {
-                    console.error(err.message);
-                    doRelease(connection);
-                    return;
-                }
-                console.log(result.metaData); // [ { name: 'DEPARTMENT_ID' }, { name: 'DEPARTMENT_NAME' } ]
-                console.log(result.rows);     // [ [ 180, 'Construction' ] ]
-                doRelease(connection);
-            });
+     // test code
+     example.example({}, function   (result) {
+     	console.log(result)
+     });
 });
-function doRelease(connection)
-{
-    connection.close(
-        function(err) {
-            if (err) {
-                console.error(err.message);
-            }
-        });
-}
+
 var app = express();
 
 // view engine setup
