@@ -24,8 +24,8 @@ var oracleRelease = function (connection) {
 };
   
 oracledb.getConnection({
-     user: "uosconv",  
-     password: "123123a!",  
+     user: "uosconv",
+     password: "123123a!",
      connectString: "uosconv.c1mptlep5hm6.ap-northeast-2.rds.amazonaws.com:1521/ORCL"  
 }, function(err, oracleConnection) {  
      if (err) {
