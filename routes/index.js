@@ -59,7 +59,11 @@ router.get('/sold_product', function(req, res) {
 
 // 재고목록 가져오기
 router.get('/stock/list', function(req, res) {
-	core.getStockList(function(data) {
+	var BRCH_CD = req.session.BRCH_CD;
+
+	core.getStockList({
+		BRCH_CD: BRCH_CD
+	}, function(data) {
 		res.json(data);
 	});
 });
@@ -111,7 +115,11 @@ router.get('/order', function(req, res) {
 
 // 주문목록 가져오기
 router.post('/order/list', function(req, res) {
-	core.getOrderList(function(data) {
+	var BRCH_CD = req.session.BRCH_CD;
+
+	core.getOrderList({
+		BRCH_CD: BRCH_CD
+	}, function(data) {
 		res.json(data);
 	});
 });
@@ -130,7 +138,11 @@ router.post('/store', function(req, res) {
 
 // 입고목록 가져오기
 router.get('/store/list', function(req, res) {
-	core.getStoreList(function(data) {
+	var BRCH_CD = req.session.BRCH_CD;
+
+	core.getStoreList({
+		BRCH_CD: BRCH_CD
+	}, function(data) {
 		res.json(data);
 	});
 });

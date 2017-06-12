@@ -57,22 +57,59 @@ exports.getSell = function(options, callback) {
 	    	callback(DATA);
 
 	    }
-	});	
+	});
 };
 
 // 재고목록 가져오
 exports.getStockList = function(options, callback) {
-	
+	var BRCH_CD = options.BRCH_CD;
+
+	var query = "SELECT * FROM STOCK WHERE BRCH_CD=" + BRCH_CD;
+	var DATA = {};
+
+	__oracleDB.execute(query, [], function(err, result) {  
+	    if (err) {  
+	       console.log("getStockList err: ", err);
+	       callback(null);
+	    } else {
+	    	DATA.LIST = result.rows;
+	    	callback(DATA);
+	    }
+	});
 };
 
 // 상품정보기 가져오기
 exports.getProduct = function(options, callback) {
+	var PRDT_CD = options.PRDT_CD;
 
+	var query = "SELECT * FROM PRODUCT WHERE PRDT_CD=" + PRDT_CD;
+	var DATA = {};
+
+	__oracleDB.execute(query, [], function(err, result) {  
+	    if (err) {  
+	       console.log("getProduct err: ", err);
+	       callback(null);
+	    } else {
+	    	DATA = result.rows[0];
+	    	callback(DATA);
+	    }
+	});
 };
 
 // 상품목록 가져오기
-exports.getProductList = function(options, callback) {
-	
+exports.getProductList = function(callback) {
+	var query = "SELECT * FROM PRODUCT";
+	var DATA = {};
+
+	__oracleDB.execute(query, [], function(err, result) {  
+	    if (err) {  
+	       console.log("getProductList err: ", err);
+	       callback(null);
+	    } else {
+	    	DATA.LIST = result.rows;
+	    	callback(DATA);
+	    }
+	});
 };
 
 // 주문하기
@@ -87,12 +124,38 @@ exports.cancelOrder = function(options, callback) {
 
 // 주문정보 확인하기
 exports.getOrder = function(options, callback) {
-	
+	var ORDER_CD = options.ORDER_CD;
+
+	var query = "SELECT A.PRDT_CD AS PRDT_CD, B.PRDT_NAME AS PRDT_NAME, A.PRDT_CNT AS PRDT_CNT FROM ORDERED_PRODUCT A, PRODUCT B WHERE A.PRDT_CD = B.PRDT_CD AND A.ORDER_CD=" + ORDER_CD;
+	var DATA = {};
+
+	__oracleDB.execute(query, [], function(err, result) {  
+	    if (err) {  
+	       console.log("getOrder err: ", err);
+	       callback(null);
+	    } else {
+	    	DATA.LIST = result.rows;
+	    	callback(DATA);
+	    }
+	});
 };
 
 // 주문목록 가져오기
 exports.getOrderList = function(options, callback) {
+	var BRCH_CD = options.BRCH_CD;
 
+	var query = "SELECT * FROM PRODUCT_ORDER WHERE BRCH_CD=" + BRCH_CD;
+	var DATA = {};
+
+	__oracleDB.execute(query, [], function(err, result) {  
+	    if (err) {  
+	       console.log("getOrderList err: ", err);
+	       callback(null);
+	    } else {
+	    	DATA.LIST = result.rows;
+	    	callback(DATA);
+	    }
+	});
 };
 
 // 입고 확정하기
@@ -102,12 +165,38 @@ exports.doStore = function(options, callback) {
 
 // 입고목록 가져오기
 exports.getStoreList = function(options, callback) {
-	
+	var BRCH_CD = options.BRCH_CD;
+
+	var query = "SELECT * FROM STORE WHERE BRCH_CD=" + BRCH_CD;
+	var DATA = {};
+
+	__oracleDB.execute(query, [], function(err, result) {  
+	    if (err) {  
+	       console.log("getStoreList err: ", err);
+	       callback(null);
+	    } else {
+	    	DATA.LIST = result.rows;
+	    	callback(DATA);
+	    }
+	});
 };
 
 // 입고정보 확인하기
 exports.getStore = function(options, callback) {
-	
+	var STORE_CD = options.STORE_CD;
+
+	var query = "SELECT A.*, B.CMPNY_NAME, C.PRDT_NAME FROM STORED_PRODUCT A, COMPANY B, PRODUCT C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.PRDT_CD = C.PRDT_CD AND A.STORE_CD = " + STORE_CD;
+	var DATA = {};
+
+	__oracleDB.execute(query, [], function(err, result) {  
+	    if (err) {  
+	       console.log("getStore err: ", err);
+	       callback(null);
+	    } else {
+	    	DATA.LIST = result.rows;
+	    	callback(DATA);
+	    }
+	});
 };
 
 // 환불하기
