@@ -20,6 +20,8 @@ router.get('/', function(req, res, next) {
 
 // 판매하기
 router.post('/sell', function(req, res) {
+	req.body.POS_CD = req.session.POS_CD;
+
     core.doSell(req.body, function(result) {
     	res.json(result);
     });
@@ -44,7 +46,7 @@ router.get('/sell/list', function(req, res) {
 });
 
 // 판매정보확인하기
-router.get('/sell', function(req, res) {
+router.get('/sold_product', function(req, res) {
 	core.getSell(req.query, function(data) {
 		res.json(data);
 	});

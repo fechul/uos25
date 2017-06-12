@@ -14,7 +14,21 @@ exports.example = function(options, callback) {
 
 // 판매하기
 exports.doSell = function(options, callback) {
-
+	LIST: [{
+	    PRDT_CD: String,
+	    PRDT_CNT: Number,
+	    EVENT_APPLY: String,
+	    EVENT_CD: String,
+	    REG_PRICE: Number,
+	    SELL_PRICE: Number
+	}],
+	AGE: String,
+	SEX: String,
+	TOTAL_SELL_PRICE: Number,
+	PAYMENT_WAY: String,
+	MEMBER_PHONNO: String,
+	MEMBER_USE_POINT: Number,
+	MEMBER_SAVE_POINT: Number
 };
 
 // 판매취소하기
@@ -44,7 +58,7 @@ exports.getSellList = function(options, callback) {
 exports.getSell = function(options, callback) {
 	var SELL_CD = options.SELL_CD;
 
-	var query = "SELECT * FROM SELL WHERE SELL_CD=" + SELL_CD;
+	var query = "SELECT * FROM SOLD_PRODUCT WHERE SELL_CD=" + SELL_CD;
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -52,17 +66,10 @@ exports.getSell = function(options, callback) {
 	       console.log("getSell err: ", err);
 	       callback(null);
 	    } else {
-	    	DATA = result.rows[0];
-	    	var _query = "SELECT * FROM SOLD_PRODUCT WHERE SELL_CD=" + SELL_CD;
-	    	__oracleDB.execute(_query, [], function(_err, _result) {
-			    if (err) {  
-			       console.log("getSellList err: ", err);
-			       callback(null);
-			    } else {
-			    	DATA.LIST = _result.rows;
-			    	callback(DATA);
-			    }
-			});	
+
+	    	DATA.LIST = result.rows;
+	    	callback(DATA);
+
 	    }
 	});	
 };
