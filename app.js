@@ -9,7 +9,8 @@ var http = require('http');
 var index_routes = require('./routes/index.js');
 var example = require('./core/example.js');
 
-var oracledb = require('oracledb');  
+var oracledb = require('oracledb');
+oracledb.outFormat = oracledb.OBJECT;
   
 oracledb.getConnection({
      user: "uosconv",  
