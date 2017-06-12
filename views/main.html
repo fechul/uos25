@@ -32,14 +32,39 @@
             </section>
             <section class="right_container">
                 <div class="workspace sell active" name="sell">
-                    <div class="left">
+                    <div class="workspace_table_container">
                         <table id="sell_list">
                         </table>
-                        <div>
-                            총 판매 금액 : 1111111;
-                        </div>
                     </div>
-                    <div class="right">
+                    <div>
+                        <div class="div_row float_left">
+                            <div>
+                                <label>상품코드</label>
+                                <input id="sell_product_id"></input>
+                            </div>
+                            <div style="float: right;">
+                                <label>판매금액</label>
+                                <input></input>
+                            </div>
+                        </div>
+                        <div class="div_row float_right">
+                            <div>
+                                <label>결제금액</label>
+                                <input></input>
+                            </div>
+                        </div>
+                        <div class="div_row float_right">
+                            <div>
+                                <label>거스름돈</label>
+                                <input></input>
+                            </div>
+                        </div>
+                        <div class="div_row float_right">
+                            <div>
+                                <button class="btn btn-primary">현금 결제</button>
+                                <button class="btn btn-primary">카드 결제</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="workspace refund" name="refund">
