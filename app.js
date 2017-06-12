@@ -47,6 +47,16 @@ oracledb.getConnection({
 	//     }
 	// });
 
+	var query = "SELECT A.*, B.CMPNY_NAME, C.EVENT_NAME FROM PRODUCT A, COMPANY B, EVENT C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.EVENT_CD = C.EVENT_CD";
+
+	__oracleDB.execute(query, [], function(err, result) {  
+	    if (err) {  
+	       console.log("getProductList err: ", err);
+	    } else {
+	    	console.log(result.rows)
+	    }
+	});
+
      /*테스트*/
    //   core.getEmployeeList({
 			// BRCH_CD: '000001'
