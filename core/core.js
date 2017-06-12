@@ -329,7 +329,7 @@ exports.addMember = function(options, callback) {
 // 회원목록 가져오기
 exports.getMemberList = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
-	var query = "SELECT PHONNO, POINT, JOIN_DATE FROM MEMBER WHERE BRCH_CD = " + BRCH_CD;
+	var query = "SELECT PHONNO, POINT, JOIN_DATE FROM MEMBER WHERE BRCH_CD = '" + BRCH_CD + "'";
 	var DATA ={};
 
     __oracleDB.execute(query, [], function(err, result) {
@@ -398,7 +398,7 @@ exports.getCvsListBranch = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
 	var query = "SELECT T.CVS_CD, PRVD_CMPNY, CVS_NAME, DESCR " +
 				"FROM CVS_TYPE T, CVS C " +
-   				"WHERE C.CVS_CD = T.CVS_CD AND BRCH_CD = " + BRCH_CD;
+   				"WHERE C.CVS_CD = T.CVS_CD AND BRCH_CD = '" + BRCH_CD + "'";
 	var DATA = {};
     __oracleDB.execute(query, [], function(err, result) {
         if (err) {
@@ -454,7 +454,7 @@ exports.getEventList = function(options, callback) {
 // 지점 정보 가져오기
 exports.getBranch = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
-	var query = "SELECT * FROM BRANCH WHERE BRCH_CD = " + BRCH_CD;
+	var query = "SELECT * FROM BRANCH WHERE BRCH_CD = '" + BRCH_CD + "'";
 	var DATA = {};
 
     __oracleDB.execute(query, [], function(err, result) {
@@ -485,7 +485,7 @@ exports.deleteEmployee = function(options, callback) {
 // 직원목록 가져오기
 exports.getEmployeeList = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
-	var query = "SELECT * FROM EMPLOYEE WHERE BRCH_CD = " + BRCH_CD;
+	var query = "SELECT * FROM EMPLOYEE WHERE BRCH_CD = '" + BRCH_CD + "'";
 	var DATA = {};
 
     __oracleDB.execute(query, [], function(err, result) {
