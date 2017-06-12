@@ -37,13 +37,23 @@ oracledb.getConnection({
      console.log("oracledb connected!");
 
      global.__oracleDB = oracleConnection;
+
+ //     var query = "SELECT A.*, B.CMPNY_NAME FROM PRODUCT A, COMPANY B";
+ //     __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log(result.rows)
+	//     }
+	// });
+
      /*테스트*/
-     core.getEmployeeList({
-			BRCH_CD: '000001'
-		 },
-		 function (data) {
-         console.log(data);
-     });
+   //   core.getEmployeeList({
+			// BRCH_CD: '000001'
+		 // },
+		 // function (data) {
+   //       console.log(data);
+   //   });
 });
 
 // process.stdin.resume();

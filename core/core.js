@@ -41,10 +41,10 @@ exports.getSellList = function(options, callback) {
 };
 
 // 판매정보 확인하기
-exports.getSell = function(options, callback) {
+exports.getSoldProduct = function(options, callback) {
 	var SELL_CD = options.SELL_CD;
 
-	var query = "SELECT * FROM SOLD_PRODUCT WHERE SELL_CD=" + SELL_CD;
+	var query = "SELECT A.*, B.PRDT_NAME, C.EVENT_NAME FROM SOLD_PRODUCT A, PRODUCT B, EVENT C WHERE A.PRDT_CD = B.PRDT_CD AND A.EVENT_CD = C.EVENT_CD AND SELL_CD=" + SELL_CD;
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -60,11 +60,11 @@ exports.getSell = function(options, callback) {
 	});
 };
 
-// 재고목록 가져오
+// 재고목록 가져오기
 exports.getStockList = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
 
-	var query = "SELECT * FROM STOCK WHERE BRCH_CD=" + BRCH_CD;
+	var query = "SELECT A.*, B.*, C.CMPNY_NAME, D.EVENT_NAME FROM STOCK A, PRODUCT B, COMPANY C, EVENT D WHERE A.PRDT_CD = B.PRDT_CD AND B.CMPNY_CD = C.CMPNY_CD AND B.EVENT_CD = D.EVENT_CD AND A.BRCH_CD=" + BRCH_CD;
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -82,7 +82,7 @@ exports.getStockList = function(options, callback) {
 exports.getProduct = function(options, callback) {
 	var PRDT_CD = options.PRDT_CD;
 
-	var query = "SELECT * FROM PRODUCT WHERE PRDT_CD=" + PRDT_CD;
+	var query = "SELECT A.*, B.CMPNY_NAME, C.EVENT_NAME FROM PRODUCT A, COMPANY B, EVENT C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.EVENT_CD = B.EVENT_CD AND A.PRDT_CD=" + PRDT_CD;
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -98,7 +98,7 @@ exports.getProduct = function(options, callback) {
 
 // 상품목록 가져오기
 exports.getProductList = function(callback) {
-	var query = "SELECT * FROM PRODUCT";
+	var query = "SELECT A.*, B.CMPNY_NAME, C.EVENT_NAME FROM PRODUCT A, COMPANY B, EVENT C WHERE A.CMPNY_CD = B.CMPNY AND A.EVENT_CD = C.EVENT_CD";
 	var DATA = {};
 
 	__oracleDB.execute(query, [], function(err, result) {  
