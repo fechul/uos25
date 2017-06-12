@@ -35,6 +35,15 @@ oracledb.getConnection({
      console.log("oracledb connected!");
 
      global.__oracleDB = oracleConnection;
+
+ //     var query = "SELECT A.*, B.CMPNY_NAME FROM PRODUCT A, COMPANY B";
+ //     __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log(result.rows)
+	//     }
+	// });
 });
 
 // process.stdin.resume();
