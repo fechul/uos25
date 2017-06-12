@@ -7,9 +7,21 @@ var bodyParser = require('body-parser');
 var http = require('http');
 
 var index_routes = require('./routes/index.js');
-var example = require('./core/example.js');
 
-var oracledb = require('oracledb');  
+// var core = require('./core/core.js');
+
+var oracledb = require('oracledb');
+oracledb.outFormat = oracledb.OBJECT;
+
+var oracleRelease = function (connection) {
+    connection.release(function(err) {
+      	if (err) {
+        	console.error(err.message);
+      	}
+
+      	console.log("oracle released!");
+	});
+};
   
 oracledb.getConnection({
      user: "uosconv",  
@@ -24,11 +36,15 @@ oracledb.getConnection({
      console.log("oracledb connected!");
 
      global.__oracleDB = oracleConnection;
+});
 
-     // test code
-     example.example({}, function   (result) {
-     	console.log(result)
-     });
+// process.stdin.resume();
+
+
+process.on('SIGINT', function () {
+  	oracleRelease(__oracleDB);
+  	process.exit();
+
 });
 
 var app = express();
@@ -45,6 +61,19 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(function(req, res, next) {
+	if(req.session) {
+		req.session.BRCH_CD = '000001';
+		req.session.POS_CD = '00000101';
+	} else {
+		req.session = {};
+		req.session.BRCH_CD = '000001';
+		req.session.POS_CD = '00000101';
+	}
+
+	next();
+});
 
 //routing
 app.use('/', index_routes);
