@@ -279,7 +279,11 @@ router.post('/member', function(req, res) {
 
 // 회원목록 가져오기
 router.get('/member/list', function(req, res) {
-	core.getMemberList(function(data) {
+	var BRCH_CD = req.session.BRCH_CD;
+
+	core.getMemberList({
+		BRCH_CD: BRCH_CD
+	},function(data) {
 		res.json(data);
 	});
 });
@@ -293,7 +297,13 @@ router.delete('/member', function(req, res) {
 
 // 마일리지 조회하기
 router.get('/point', function(req, res) {
-	core.getPoint(req.query, function(data) {
+	var PHONNO = req.query.PHONNO;
+	var PW = req.query.PW;
+
+	core.getPoint({
+		PHONNO: PHONNO,
+		PW: PW
+	}, function(data) {
 		res.json(data);
 	});
 });
@@ -328,7 +338,9 @@ router.get('/cvs/list', function(req, res) {
 router.get('/cvs/list/branch', function(req, res) {
 	var BRCH_CD = req.session.BRCH_CD;
 
-	core.getCvsListBranch(BRCH_CD, function(data) {
+	core.getCvsListBranch({
+		BRCH_CD: BRCH_CD
+    }, function(data) {
 		res.json(data);
 	});
 });
@@ -352,9 +364,13 @@ router.get('/branch/money', function(req, res) {
 
 // 이벤트 정보 가져오기
 router.get('/event', function(req, res) {
-	core.getEvent(req.query, function(data) {
-		res.json(data);
-	});
+	var EVENT_CD = req.query.EVENT_CD;
+    core.getEvent({
+            EVENT_CD: EVENT_CD
+        }
+        , function(data) {
+            res.json(data);
+        });
 });
 
 // 이벤트목록 가져오기
@@ -373,7 +389,10 @@ router.get('/event/list', function(req, res) {
 router.get('/branch', function(req, res) {
 	var BRCH_CD = req.sesion.BRCH_CD;
 
-	core.getBranch(function(data) {
+	core.getBranch({
+		BRCH_CD: BRCH_CD
+	}
+	, function(data) {
 		res.json(data);
 	});
 });
@@ -406,9 +425,13 @@ router.delete('/employee', function(req, res) {
 
 // 직원목록 가져오기
 router.get('/employee/list', function(req, res) {
-	core.getEmployeeList(function(data) {
-		res.json(data);
-	});
+	var BRCH_CD = req.session.BRCH_CD;
+	core.getEmployeeList({
+		BRCH_CD: BRCH_CD
+		}
+		, function(data) {
+            res.json(data);
+        });
 });
 
 module.exports = router;

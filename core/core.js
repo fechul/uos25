@@ -14,7 +14,7 @@ exports.example = function(options, callback) {
 
 // 판매하기
 exports.doSell = function(options, callback) {
-	
+
 };
 
 // 판매취소하기
@@ -52,8 +52,10 @@ exports.getSoldProduct = function(options, callback) {
 	       console.log("getSell err: ", err);
 	       callback(null);
 	    } else {
+
 	    	DATA.LIST = result.rows;
 	    	callback(DATA);
+
 	    }
 	});
 };
@@ -244,7 +246,18 @@ exports.cancelLoss = function(options, callback) {
 
 // 손실목록 가져오기
 exports.getLossList = function(options, callback) {
-	
+	var query = "SELECT * FROM LOSS";
+	var DATA = {};
+
+    __oracleDB.execute(query, [], function(err, result) {
+        if (err) {
+            console.log("getLossList err: ", err);
+            callback(null);
+        } else {
+            DATA.LIST = result.rows;
+            callback(DATA);
+        }
+    });
 };
 
 // 폐기하기
@@ -259,7 +272,7 @@ exports.cancelDiscard = function(options, callback) {
 
 // 폐기목록 가져오기
 exports.getDiscardList = function(options, callback) {
-	
+
 };
 
 // 회원 등록하기
@@ -269,7 +282,19 @@ exports.addMember = function(options, callback) {
 
 // 회원목록 가져오기
 exports.getMemberList = function(options, callback) {
-	
+	var BRCH_CD = options.BRCH_CD;
+	var query = "SELECT PHONNO, POINT, JOIN_DATE FROM MEMBER WHERE BRCH_CD = " + BRCH_CD;
+	var DATA ={};
+
+    __oracleDB.execute(query, [], function(err, result) {
+        if (err) {
+            console.log("getMemberList err: ", err);
+            callback(null);
+        } else {
+            DATA.LIST = result.rows;
+            callback(DATA);
+        }
+    });
 };
 
 // 회원 삭제하기
@@ -279,10 +304,22 @@ exports.deleteMember = function(options, callback) {
 
 // 마일리지 조회하기
 exports.getPoint = function(options, callback) {
-
+	var PHONNO = options.PHONNO;
+	var PW = options.PW;
+	var query = "SELECT POINT FROM MEMBER WHERE PHONNO = " + "'" + PHONNO + "'" + " AND PW = " + "'" + PW + "'";
+	var DATA = {};
+    __oracleDB.execute(query, [], function(err, result) {
+        if (err) {
+            console.log("getPoint err: ", err);
+            callback(null);
+        } else {
+            DATA = result.rows;
+            callback(DATA);
+        }
+    });
 };
 
-// 생활서비스 등록하
+// 생활서비스 등록하기
 exports.addCvs = function(options, callback) {
 	
 };
@@ -294,12 +331,37 @@ exports.deleteCvs = function(options, callback) {
 
 // 전체 생활서비스 목록 가져오기
 exports.getCvsList = function(options, callback) {
-	
+
+	var query = "SELECT * FROM CVS_TYPE";
+	var DATA = {};
+
+    __oracleDB.execute(query, [], function(err, result) {
+        if (err) {
+            console.log("getCvsList err: ", err);
+            callback(null);
+        } else {
+            DATA.LIST = result.rows;
+            callback(DATA);
+        }
+    });
 };
 
 // 지점의 생활서비스 목록 가져오기
 exports.getCvsListBranch = function(options, callback) {
-	
+	var BRCH_CD = options.BRCH_CD;
+	var query = "SELECT T.CVS_CD, PRVD_CMPNY, CVS_NAME, DESCR " +
+				"FROM CVS_TYPE T, CVS C " +
+   				"WHERE C.CVS_CD = T.CVS_CD AND BRCH_CD = " + BRCH_CD;
+	var DATA = {};
+    __oracleDB.execute(query, [], function(err, result) {
+        if (err) {
+            console.log("getCvsListBranch err: ", err);
+            callback(null);
+        } else {
+            DATA.LIST = result.rows;
+            callback(DATA);
+        }
+    });
 };
 
 // 자금내역 가져오기
@@ -309,17 +371,53 @@ exports.getBranchMoney = function(options, callback) {
 
 // 이벤트 정보 가져오기
 exports.getEvent = function(options, callback) {
-	
+	var EVENT_CD = options.EVENT_CD;
+	console.log(EVENT_CD);
+	var query = "SELECT * FROM EVENT WHERE EVENT_CD = " + "'" + EVENT_CD + "'";
+	var DATA = {};
+
+    __oracleDB.execute(query, [], function(err, result) {
+        if (err) {
+            console.log("getEvent err: ", err);
+            callback(null);
+        } else {
+            DATA = result.rows;
+            callback(DATA);
+        }
+    });
 };
 
 // 이벤트목록 가져오기
 exports.getEventList = function(options, callback) {
-	
+	var query = "SELECT * FROM EVENT";
+	var DATA = {};
+
+    __oracleDB.execute(query, [], function(err, result) {
+        if (err) {
+            console.log("getEventList err: ", err);
+            callback(null);
+        } else {
+            DATA.LIST = result.rows;
+            callback(DATA);
+        }
+    });
 };
 
 // 지점 정보 가져오기
 exports.getBranch = function(options, callback) {
-	
+	var BRCH_CD = options.BRCH_CD;
+	var query = "SELECT * FROM BRANCH WHERE BRCH_CD = " + BRCH_CD;
+	var DATA = {};
+
+    __oracleDB.execute(query, [], function(err, result) {
+        if (err) {
+            console.log("getBranch err: ", err);
+            callback(null);
+        } else {
+            DATA = result.rows;
+            callback(DATA);
+        }
+    });
 };
 
 // 마진 지불하기
@@ -339,7 +437,19 @@ exports.deleteEmployee = function(options, callback) {
 
 // 직원목록 가져오기
 exports.getEmployeeList = function(options, callback) {
+	var BRCH_CD = options.BRCH_CD;
+	var query = "SELECT * FROM EMPLOYEE WHERE BRCH_CD = " + BRCH_CD;
+	var DATA = {};
 
+    __oracleDB.execute(query, [], function(err, result) {
+        if (err) {
+            console.log("getEmployeeList err: ", err);
+            callback(null);
+        } else {
+            DATA.LIST = result.rows;
+            callback(DATA);
+        }
+    });
 };
 
 
