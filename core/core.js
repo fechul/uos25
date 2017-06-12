@@ -54,7 +54,7 @@ exports.getSell = function(options, callback) {
 	    } else {
 	    	DATA = result.rows[0];
 	    	var _query = "SELECT * FROM SOLD_PRODUCT WHERE SELL_CD=" + SELL_CD;
-	    	__oracleDB.execute(query, [], function(_err, _result) {  
+	    	__oracleDB.execute(_query, [], function(_err, _result) {
 			    if (err) {  
 			       console.log("getSellList err: ", err);
 			       callback(null);
