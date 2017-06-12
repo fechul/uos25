@@ -259,7 +259,9 @@ table tr:first-child td {
     padding: 10px;
 }
 
-#use_point_dialog_member_code,
-#use_point_dialog_member_pw {
+#sell_member_code,
+#sell_member_pw,
+#sell_member_before_point,
+#sell_member_after_point {
     width: 100px
 }

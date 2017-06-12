@@ -240,7 +240,7 @@ var main = {
         });
 
         $('#use_point_dialog_confirm').click(function() {
-            if ($('#use_point_dialog_after_point').val() >= 0) {
+            if ($('#sell_member_after_point').val() >= 0) {
                 $('#sell_use_point_price').val($('#use_point_dialog_using_point').val());
             }
 
@@ -255,10 +255,10 @@ var main = {
             self.dialog.save_point.hide();
         });
 
-        $('#use_point_dialog_check_member').click(function() {
+        $('#sell_member_check_button').click(function() {
             var json_data = {
-                'PHONNO': parseInt($('#use_point_dialog_member_code').val(), 10),
-                'PW': parseInt($('#use_point_dialog_member_pw').val(), 10)
+                'PHONNO': $('#sell_member_code').val(),
+                'PW': $('#sell_member_pw').val()
             };
 
             $.ajax({
@@ -269,24 +269,24 @@ var main = {
             }).fail(function(get) {
                 self.notice.show('서버에서 오류가 발생했습니다.');
             }).done(function(get) {
+                console.log(get);
                 if (get.RESULT) {
-                    $('#use_point_dialog_check_member_complete').show();
-                    $('#use_point_dialog_before_point').val(get.DATA.POINT);
-                    $('#use_point_dialog_using_point').val(0);
-                    $('#use_point_dialog_after_point').val(get.DATA.POINT);
+                    $('#sell_member_check_complete').show();
+                    $('#sell_member_before_point').val(get.DATA.POINT);
+                    $('#sell_member_after_point').val(get.DATA.POINT);
                 } else {
                     if (get.ERR_CD == 1) {
                         self.notice.show('서버에서 오류가 발생했습니다.');
                     } else {
-                        $('#use_point_dialog_check_member_fail').show();
+                        $('#sell_member_check_fail').show();
                     }
                 }
             });
         });
 
         $('#use_point_dialog_using_point').keyup(function(e) {
-            $('#use_point_dialog_after_point').val(parseInt($('#use_point_dialog_before_point').val(), 10) - parseInt($('#use_point_dialog_using_point').val(), 10));
-            if ($('#use_point_dialog_after_point').val() < 0) {
+            $('#sell_member_after_point').val(parseInt($('#sell_member_before_point').val(), 10) - parseInt($('#use_point_dialog_using_point').val(), 10));
+            if ($('#sell_member_after_point').val() < 0) {
                 $('#use_point_dialog_confirm').attr('disabled', 'disabled');
             } else {
                 $('#use_point_dialog_confirm').removeAttr('disabled');
@@ -330,8 +330,8 @@ var main = {
         });
 
         $('#use_point_dialog_using_point').keyup(function(e) {
-            $('#use_point_dialog_after_point').val(parseInt($('#use_point_dialog_before_point').val(), 10) - parseInt($('#use_point_dialog_using_point').val(), 10));
-            if ($('#use_point_dialog_after_point').val() < 0) {
+            $('#sell_member_after_point').val(parseInt($('#sell_member_before_point').val(), 10) - parseInt($('#use_point_dialog_using_point').val(), 10));
+            if ($('#sell_member_after_point').val() < 0) {
                 $('#use_point_dialog_confirm').attr('disabled', 'disabled');
             } else {
                 $('#use_point_dialog_confirm').removeAttr('disabled');
