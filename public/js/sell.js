@@ -24,6 +24,10 @@ var sell = {
         $('.workspace.sell input#sell_member_code').val('');
         $('.workspace.sell input#sell_member_pw').val('');
         $('.point_dialog_member_check_msg').hide();
+        $('input[name=sell_radio_sex]').prop('checked', false);
+        $('input[name=sell_radio_age]').prop('checked', false);
+        $('#sell_member_before_point').val('');
+        $('#sell_member_after_point').val('');
     },
     init_events: function() {
         var self = this;
@@ -95,7 +99,7 @@ var sell = {
 
             } else if ($('#sell_paid_price').val() == 0) {
                 main.notice.show('손님에게 받은 금액을 입력하세요.');
-            } else if (parseInt($('#sell_paid_price').val(), 10) < parseInt($('#sell_price_sum').val(), 10)) {
+            } else if (parseInt($('#sell_paid_price').val(), 10) < parseInt($('#sell_need_pay_price').val(), 10)) {
                 main.notice.show('돈을 적게 받았습니다.');
             } else if (!$('[name=sell_radio_sex]:checked').val()) {
                 main.notice.show('성별을 선택해주세요.');
@@ -104,7 +108,7 @@ var sell = {
             } else if (!self.event_ok) {
                 main.notice.show('이벤트 품목을 맞춰주세요');
             } else {
-                $('#sell_change').val($('#sell_price_sum').val() - $('#sell_paid_price').val());
+                $('#sell_change').val($('#sell_need_pay_price').val() - $('#sell_paid_price').val());
 
                 var json_data = {
                     'AGE': $('[name=sell_radio_age]:checked').val(),
@@ -229,14 +233,14 @@ var sell = {
             } else if (!self.event_ok) {
                 main.notice.show('이벤트 품목을 맞춰주세요');
             } else {
-                $('#sell_paid_price').val($('#sell_price_sum').val());
+                $('#sell_paid_price').val($('#sell_need_pay_price').val());
 
-                $('#sell_change').val($('#sell_price_sum').val() - $('#sell_paid_price').val());
+                $('#sell_change').val($('#sell_need_pay_price').val() - $('#sell_paid_price').val());
 
                 var json_data = {
                     'AGE': $('[name=sell_radio_age]:checked').val(),
                     'SEX': $('[name=sell_radio_sex]:checked').val(),
-                    'TOTAL_SELL_PRICE': parseInt(('#sell_price_sum').val(), 10),
+                    'TOTAL_SELL_PRICE': parseInt($('#sell_price_sum').val(), 10),
                     'PAYMENT_WAY': 'CARD'
                 };
 
