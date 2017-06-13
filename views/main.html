@@ -19,6 +19,7 @@
             </section>
             <section class="left_container">
                 <div class="menu active" target="sell">판매</div>
+                <div class="menu" target="selllist">판매기록</div>
                 <div class="menu" target="refund">환불</div>
                 <div class="menu" target="order">주문</div>
                 <div class="menu" target="order_status">주문현황</div>
@@ -121,6 +122,12 @@
                         </div>
                     </div>
                 </div>
+                <div class="workspace selllist" name="selllist">
+                    <div style="height: 400px;">
+                        <table id="selllist_table">
+                        </table>
+                    </div>
+                </div>
                 <div class="workspace refund" name="refund">
                 </div>
                 <div class="workspace order" name="order">
@@ -172,6 +179,7 @@
 	<script src="lib/jquery.js"></script>
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
     <script src="js/sell.js"></script>
+    <script src="js/selllist.js"></script>
     <script src="js/order.js"></script>
 	<script src="js/main.js"></script>
     <script>

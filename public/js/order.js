@@ -29,7 +29,7 @@ var order = {
                 {
                 'targets': 6,
                 'render': function ( row, type, data, meta ) {
-                    return '<button class="order_add_cart">추가</button>';
+                    return '<button class="btn btn-default btn-sm order_add_cart">추가</button>';
                 }
             }],
             'paging': false,
@@ -55,7 +55,7 @@ var order = {
 
                     'targets': 3,
                     'render': function ( row, type, data, meta ) {
-                        return '<input class="order_table_cnt" value=' + 0 + '>';
+                        return '<input class="btn btn-default btn-sm order_table_cnt" value=' + 0 + '>';
                     }
                 },
                 {
@@ -137,6 +137,7 @@ var order = {
 
             $.post('/order', json_data, function(order) {
                 console.log(order);
+                self.clear();
             })
         });
     }
