@@ -119,18 +119,25 @@ var order = {
         });
 
         $('#do_order').click(function() {
-            console.log(self.table.order.data());
+            var rows = self.table.order.data();
+            var json_data = {
+                LIST: null
+            };
 
-            // $.ajax({
-            //     method: 'POST',
-            //     url: 'order',
-            //     dataType: 'json',
-            //     data: ''
-            // }).fail(function(get) {
-            //     main.notice.show('서버에서 오류가 발생했습니다.');
-            // }).done(function(get) {
-            //     console.log(get);
-            // });
+            var LIST = [];
+
+            for (var i = 0; i < rows.length; i++) {
+                LIST.push({
+                    PRDT_CD: self.table.order.row(i).data().PRDT_CD,
+                    PRDT_CNT: parseInt($('.order_table_cnt').eq(i).val(), 10)
+                });
+            }
+
+            json_data.LIST = JSON.stringify(LIST);
+
+            $.post('/order', json_data, function(order) {
+                console.log(order);
+            })
         });
     }
 };
