@@ -152,6 +152,15 @@ oracledb.getConnection({
 	//     	console.log("포스: ",result.rows)
 	//     }
 	// });
+
+	// var query = "SELECT * FROM STOCK";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("포스: ",result.rows)
+	//     }
+	// });
 });
 
 // process.stdin.resume();
