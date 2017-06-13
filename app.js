@@ -101,7 +101,6 @@ oracledb.getConnection({
 	//     	console.log(result.rows)
 	//     }
 	// });
->>>>>>> 999adc7f7cb6f1e2787c4f9113603be6fd376c5a
 
      /*테스트*/
      core.getPoint({
