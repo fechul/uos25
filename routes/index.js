@@ -369,7 +369,10 @@ router.post('/discard', function(req, res) {
 
 // 폐기목록 가져오기
 router.get('/discard/list', function(req, res) {
-	core.getDiscardList(function(data) {
+	var BRCH_CD = req.session.BRCH_CD;
+	core.getDiscardList({
+		BRCH_CD: BRCH_CD
+	}, function(data) {
 		res.json({
     		RESULT: (data ? true : false),
     		ERR_CD: (data ? null : 1),

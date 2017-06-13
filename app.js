@@ -72,15 +72,15 @@ oracledb.getConnection({
 	//     }
 	// });
 
-	// var query = 'INSERT INTO EMPLOYEE VALUES ("00000120170609000004", "철철박사", "01000000000", "사원", 25, 25, "20170613172732", "000001")';
+	var query = 'INSERT INTO EMPLOYEE VALUES ("00000120170609000004", "철철박사", "01000000000", "사원", 25, 25, "20170613", "000001")';
 
-	// __oracleDB.execute(query, [], function(err, result) {  
-	//     if (err) {  
-	//        console.log("test err: ", err);
-	//     } else {
-	//     	console.log(result)
-	//     }
-	// });
+	__oracleDB.execute(query, [], function(err, result) {  
+	    if (err) {  
+	       console.log("test err: ", err);
+	    } else {
+	    	console.log(result)
+	    }
+	});
 
 	// var query = "SELECT A.*, B.CMPNY_NAME, C.EVENT_NAME FROM PRODUCT A, COMPANY B, EVENT C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.EVENT_CD = C.EVENT_CD";
 

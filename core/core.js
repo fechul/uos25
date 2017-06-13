@@ -467,7 +467,20 @@ exports.doDiscard = function(options, callback) {
 
 // 폐기목록 가져오기
 exports.getDiscardList = function(options, callback) {
+	var BRCH_CD = options.BRCH_CD;
 
+	var query = "SELECT * FROM DISCARD WHERE BRCH_CD='" + BRCH_CD + "'";
+
+	__oracleDB.execute(query, [], function(err, result) {
+        if (err) {
+            console.log("getDiscardList err: ", err);
+            callback(null);
+        } else {
+            callback({
+	    		LIST: result.rows
+	    	});
+        }
+    });
 };
 
 // 회원 등록하기
