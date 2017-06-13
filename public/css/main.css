@@ -3,6 +3,14 @@ body {
   height: 100vh;
 }
 
+td {
+    border-bottom: 1px solid #ccc;
+}
+
+.dataTables_scroll {
+    border: 1px solid #ccc;
+}
+
 .main_container {
     width: 100%;
     height: 100%;
@@ -228,4 +236,21 @@ table tr:first-child td {
 .order_table_cnt {
     width: 35px;
     text-align: right;
+}
+
+.workspace_order_status_detail_table_container {
+    width: 85%;
+    float: left;
+    height: 250px;
+}
+
+.workspace_order_status_right_container {
+    height: 250px;
+    width: 15%;
+    float: right;
+}
+
+.workspace_order_status_right_container button {
+    margin-top: 215px;
+    float: right;
 }

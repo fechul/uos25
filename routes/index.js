@@ -154,7 +154,7 @@ router.get('/order', function(req, res) {
 });
 
 // 주문목록 가져오기
-router.post('/order/list', function(req, res) {
+router.get('/order/list', function(req, res) {
 	var BRCH_CD = req.session.BRCH_CD;
 
 	core.getOrderList({
@@ -174,16 +174,16 @@ router.post('/order/list', function(req, res) {
 */
 
 // 입고 확정하기
-router.post('/store', function(req, res) {
-	req.body.BRCH_CD = req.session.BRCH_CD;
-	core.doStore(req.body, function(result) {
-		res.json({
-    		RESULT: (result ? true : false),
-    		ERR_CD: (result ? null : 1),
-    		DATA: result
-    	});
-	});
-});
+// router.post('/store', function(req, res) {
+// 	req.body.BRCH_CD = req.session.BRCH_CD;
+// 	core.doStore(req.body, function(result) {
+// 		res.json({
+//     		RESULT: (result ? true : false),
+//     		ERR_CD: (result ? null : 1),
+//     		DATA: result
+//     	});
+// 	});
+// });
 
 // 입고목록 가져오기
 router.get('/store/list', function(req, res) {
@@ -218,6 +218,8 @@ router.get('/store', function(req, res) {
 
 // 환불하기
 router.post('/refund', function(req, res) {
+	req.body.BRCH_CD = req.session.BRCH_CD;
+	req.body.POS_CD = req.session.POS_CD;
 	core.doRefund(req.body, function(result) {
 		res.json({
     		RESULT: (result ? true : false),
@@ -260,6 +262,7 @@ router.get('/refund/list', function(req, res) {
 
 // 반품하기
 router.post('/return', function(req, res) {
+	req.body.LIST = JSON.parse(req.body.LIST);
 	req.body.BRCH_CD = req.session.BRCH_CD;
 	core.doReturn(req.body, function(result) {
 		res.json({
