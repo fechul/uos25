@@ -453,7 +453,7 @@ exports.getProductList = function(callback) {
 exports.doOrder = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
 	var LIST = options.LIST;
-	var TOTAL_ORDER_PRICE = 0;
+	var TOTAL_ORDER_PRICE = options.TOTAL_ORDER_PRICE;
 
 	var orderDateFormat = getDateFormat();
 	var timeFormat = getTimeFormat();
@@ -475,32 +475,31 @@ exports.doOrder = function(options, callback) {
 		    		STORE_CD += '000001';
 		    	}
 
-		    	async.map(LIST, function(eachOrder, async_cb) {
-					__oracleDB.execute("SELECT CMPNY_CD FROM PRODUCT WHERE PRDT_CD='" + eachOrder.PRDT_CD + "'", [], function(_err, _result) {
-						var CMPNY_CD = _result.rows[0].CMPNY_CD;
+		    	var storeCreateQuery = "INSERT INTO STORE VALUES ('" + STORE_CD + "', TO_DATE('" + timeFormat + "', 'YYYYMMDDHH24MISS'), '" + ORDER_CD + "')";
+		    	__oracleDB.execute(storeCreateQuery, [], {autoCommit:true}, function(err, result) {
+		    		if(err) {
+		    			console.log('doOrder store push err: ', err);
+		    			callback(null);
+		    		} else {
+		    			async.map(LIST, function(eachOrder, async_cb) {
+							__oracleDB.execute("SELECT CMPNY_CD FROM PRODUCT WHERE PRDT_CD='" + eachOrder.PRDT_CD + "'", [], function(_err, _result) {
+								var CMPNY_CD = _result.rows[0].CMPNY_CD;
 
-						var storeListCreateQuery = "INSERT INTO STORED_PRODUCT VALUES (" + eachOrder.PRDT_CNT + ", '" + STORE_CD + "', '" + CMPNY_CD + "', '" + eachOrder.PRDT_CD + "')";
-						__oracleDB.execute(storeListCreateQuery, [], {autoCommit:true}, function(__err, __result) {
-				    		if(__err) {
-				    			console.log('doOrder store list push err: ', __err);
-				    			async_cb();
-				    		} else {
-				    			async_cb();
-				    		}
-				    	});
-					});
-				}, function(async_err) {
-					var storeCreateQuery = "INSERT INTO STORE VALUES ('" + STORE_CD + "', TO_DATE('" + timeFormat + "', 'YYYYMMDDHH24MISS'), '" + ORDER_CD + "')";
-			    	__oracleDB.execute(storeCreateQuery, [], {autoCommit:true}, function(err, result) {
-			    		if(err) {
-			    			console.log('doOrder store push err: ', err);
-			    			callback(null);
-			    		} else {
-			    			// 입고 추가
-			    			callback(true);
-			    		}
-			    	});
-				});
+								var storeListCreateQuery = "INSERT INTO STORED_PRODUCT VALUES (" + eachOrder.PRDT_CNT + ", '" + STORE_CD + "', '" + CMPNY_CD + "', '" + eachOrder.PRDT_CD + "')";
+								__oracleDB.execute(storeListCreateQuery, [], {autoCommit:true}, function(__err, __result) {
+						    		if(__err) {
+						    			console.log('doOrder store list push err: ', __err);
+						    			async_cb();
+						    		} else {
+						    			async_cb();
+						    		}
+						    	});
+							});
+						}, function(async_err) {
+							callback(true);
+						});
+		    		}
+		    	});
 		    }
 		});
 	};
@@ -519,33 +518,27 @@ exports.doOrder = function(options, callback) {
 		    		ORDER_CD += '000001';
 		    	}
 
-		    	async.map(LIST, function(eachOrder, async_cb) {
-					__oracleDB.execute("SELECT PRDT_PRICE FROM PRODUCT WHERE PRDT_CD='" + eachOrder.PRDT_CD + "'", [], function(_err, _result) {
-						if(_result.rows && _result.rows[0]) {
-							TOTAL_ORDER_PRICE += _result.rows[0].PRDT_PRICE * eachOrder.PRDT_CNT;
-						}
-
-						var orderListCreateQuery = "INSERT INTO ORDERED_PRODUCT VALUES (" + eachOrder.PRDT_CNT + ", '" + ORDER_CD + "', '" + eachOrder.PRDT_CD + "')";
-						__oracleDB.execute(orderListCreateQuery, [], {autoCommit:true}, function(__err, __result) {
-				    		if(__err) {
-				    			console.log('doOrder order list push err: ', __err);
-				    			async_cb();
-				    		} else {
-				    			async_cb();
-				    		}
-				    	});
-					});
-				}, function(async_err) {
-					var orderCreateQuery = "INSERT INTO PRODUCT_ORDER VALUES ('" + ORDER_CD + "', " + TOTAL_ORDER_PRICE + ", TO_DATE('" + timeFormat + "', 'YYYYMMDDHH24MISS'), '" + BRCH_CD + "')";
-			    	__oracleDB.execute(orderCreateQuery, [], {autoCommit:true}, function(err, result) {
-			    		if(err) {
-			    			console.log('doOrder order push err: ', err);
-			    			callback(null);
-			    		} else {
-			    			addStore();
-			    		}
-			    	});
-				});
+		    	var orderCreateQuery = "INSERT INTO PRODUCT_ORDER VALUES ('" + ORDER_CD + "', " + TOTAL_ORDER_PRICE + ", TO_DATE('" + timeFormat + "', 'YYYYMMDDHH24MISS'), '" + BRCH_CD + "')";
+		    	__oracleDB.execute(orderCreateQuery, [], {autoCommit:true}, function(err, result) {
+		    		if(err) {
+		    			console.log('doOrder order push err: ', err);
+		    			callback(null);
+		    		} else {
+		    			async.map(LIST, function(eachOrder, async_cb) {
+							var orderListCreateQuery = "INSERT INTO ORDERED_PRODUCT VALUES (" + eachOrder.PRDT_CNT + ", '" + ORDER_CD + "', '" + eachOrder.PRDT_CD + "')";
+							__oracleDB.execute(orderListCreateQuery, [], {autoCommit:true}, function(__err, __result) {
+					    		if(__err) {
+					    			console.log('doOrder order list push err: ', __err);
+					    			async_cb();
+					    		} else {
+					    			async_cb();
+					    		}
+					    	});
+						}, function(async_err) {
+							addStore();
+						});
+		    		}
+		    	});
 		    }
 		});
 	} else {
