@@ -6,6 +6,7 @@ var main = {
         order.init();
         order_status.init();
         stock.init();
+        store.init();
         employee.init();
     },
     init_events: function() {
@@ -33,6 +34,8 @@ var main = {
                 order_status.clear();
             } else if (target == 'stock'){
                 stock.clear();
+            } else if (target == 'store'){
+                store.clear();
             } else if (target == 'selllist') {
                 selllist.clear();
             } else if (target == 'employee'){

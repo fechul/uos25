@@ -46,7 +46,6 @@ var stock = {
         }).fail(function(get) {
             main.notice.show('서버에서 오류가 발생했습니다.');
         }).done(function(get) {
-            console.log(get);
             if (get.RESULT) {
                 self.table.stock_list.rows.add(get.DATA.LIST).draw();
             } else {

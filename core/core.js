@@ -662,7 +662,7 @@ exports.getOrderList = function(options, callback) {
 exports.getStoreList = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
 
-	var query = "SELECT * FROM STORE WHERE BRCH_CD='" + BRCH_CD + "'";
+	var query = "SELECT * FROM STORE";
 
 	__oracleDB.execute(query, [], function(err, result) {
 	    if (err) {
