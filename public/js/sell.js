@@ -211,19 +211,23 @@ var sell = {
                     }
                 }
 
-                json_data.LIST = LIST;
+                json_data.LIST = JSON.stringify(LIST);
 
-                $.ajax({
-                    method: 'POST',
-                    url: 'sell',
-                    dataType: 'json',
-                    data: JSON.stringify(json_data)
-                }).fail(function(get) {
-                    main.notice.show('서버에서 오류가 발생했습니다.');
-                }).done(function(get) {
-                    console.log(get);
-                    self.clear();
+                $.post('/sell', json_data, function(result) {
+                    console.log(result)
                 });
+
+                // $.ajax({
+                //     method: 'POST',
+                //     url: 'sell',
+                //     contentType: 'application/json',
+                //     data: json_data
+                // }).fail(function(get) {
+                //     main.notice.show('서버에서 오류가 발생했습니다.');
+                // }).done(function(get) {
+                //     console.log(get);
+                //     self.clear();
+                // });
             }
         });
 

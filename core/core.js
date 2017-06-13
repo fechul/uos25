@@ -62,7 +62,6 @@ var getNextSeq = function(recentSeq) {
 
 // 판매하기
 exports.doSell = function(options, callback) {
-	console.log("doSell: ", options);
 	var BRCH_CD = options.BRCH_CD;
 	var POS_CD = options.POS_CD;
 	var dateFormat = getDateFormat();
@@ -184,9 +183,28 @@ exports.doSell = function(options, callback) {
 	    // insert SELL_LIST / update STOCK
 	    function(callback) {
 	    	async.map(LIST, function(eachSell, async_cb) {
-				var query = "UPDATE STOCK SET STOCK_CNT=STOCK_CNT+" + eachStored.PRDT_CNT + " WHERE BRCH_CD='" + BRCH_CD + "' AND PRDT_CD='" + eachStored.PRDT_CD + "'";
-				__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
-					async_cb();
+	    		var insertSoldPdtQuery = "INSERT INTO SOLD_PRODUCT VALUES(";
+	    		if(eachSell.EVENT_APPLY == 'y') {
+	    			insertSoldPdtQuery += "'y', ";
+	    		} else {
+	    			insertSoldPdtQuery += "'n', ";
+	    		}
+	    		insertSoldPdtQuery += eachSell.PRDT_CNT + ", ";
+	    		insertSoldPdtQuery += eachSell.REG_PRICE + ", ";
+	    		insertSoldPdtQuery += eachSell.SELL_PRICE + ", ";
+	    		insertSoldPdtQuery += "'" + SELL_CD + "', ";
+	    		if(eachSell.EVENT_CD) {
+	    			insertSoldPdtQuery += "'" + eachSell.EVENT_CD + "', ";
+	    		} else {
+	    			insertSoldPdtQuery += "null, ";
+	    		}
+	    		insertSoldPdtQuery += "'" + eachSell.PRDT_CD + "', ";
+	    		insertSoldPdtQuery += ")";
+				__oracleDB.execute(insertSoldPdtQuery, [], {autoCommit:true}, function(err, result) {
+					var query = "UPDATE STOCK SET STOCK_CNT=STOCK_CNT-" + eachSell.PRDT_CNT + " WHERE BRCH_CD='" + BRCH_CD + "' AND PRDT_CD='" + eachSell.PRDT_CD + "'";
+					__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
+						async_cb();
+					});
 				});
 			}, function(async_err) {
 				callback(null);
