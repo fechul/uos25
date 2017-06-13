@@ -217,10 +217,11 @@ var sell = {
                     method: 'POST',
                     url: 'sell',
                     dataType: 'json',
-                    data: json_data
+                    data: JSON.stringify(json_data)
                 }).fail(function(get) {
                     main.notice.show('서버에서 오류가 발생했습니다.');
                 }).done(function(get) {
+                    console.log(get);
                     self.clear();
                 });
             }
@@ -351,7 +352,7 @@ var sell = {
                     method: 'POST',
                     url: 'sell',
                     dataType: 'json',
-                    data: json_data
+                    data: JSON.stringify(json_data)
                 }).fail(function(get) {
                     main.notice.show('서버에서 오류가 발생했습니다.');
                 }).done(function(get) {
