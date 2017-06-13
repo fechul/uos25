@@ -72,9 +72,9 @@ oracledb.getConnection({
 	//     }
 	// });
 
-	// var query = 'INSERT INTO EMPLOYEE VALUES ("00000120170609000004", "철철박사", "01000000000", "사원", 25, 25, "20170613", "000001")';
+	// var query = "INSERT INTO EMPLOYEE VALUES ('00000120170609000004', '철철박사', '01000000000', '사원', 25, 25, TO_DATE('20170613182732','YYYYMMDDHH24MISS'), '000001')";
 
-	// __oracleDB.execute(query, [], function(err, result) {  
+	// __oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {  
 	//     if (err) {  
 	//        console.log("test err: ", err);
 	//     } else {
