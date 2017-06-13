@@ -36,6 +36,7 @@ var order_status = {
                     }
                 }
             ],
+            'order': [1, 'desc'],
             'paging': false,
             'autoWidth': true,
             'searching': false,
@@ -74,7 +75,6 @@ var order_status = {
         }).fail(function(get) {
             main.notice.show('서버에서 오류가 발생했습니다.');
         }).done(function(get) {
-            console.log(get);
             if (get.RESULT) {
                 self.table.order_status.rows.add(get.DATA.LIST).draw();
             } else {
@@ -85,30 +85,43 @@ var order_status = {
     init_events: function() {
         var self = this;
 
-        $('#do_order').click(function() {
-            var rows = self.table.order.data();
-            var json_data = {
-                LIST: null
-            };
-
-            var LIST = [];
-            var TOTAL_ORDER_PRICE = 0;
-
-            for (var i = 0; i < rows.length; i++) {
-                var PRDT_CNT = parseInt($('.order_table_cnt').eq(i).val(), 10);
-                LIST.push({
-                    PRDT_CD: self.table.order.row(i).data().PRDT_CD,
-                    PRDT_CNT: PRDT_CNT
-                });
-                TOTAL_ORDER_PRICE += self.table.order.row(i).data().PRDT_PRICE * PRDT_CNT;
-            }
-
-            json_data.TOTAL_ORDER_PRICE = TOTAL_ORDER_PRICE;
-            json_data.LIST = JSON.stringify(LIST);
-
-            $.post('/order', json_data, function(order) {
-                self.clear();
-            })
+        $(document).on('click', '.view_order_status_detail', function() {
+            var ORDER_CD = self.table.order_status.row($(this).parents('tr')).data().ORDER_CD;
+            
+            $.get('/order', {
+                'ORDER_CD': ORDER_CD
+            }, function(response) {
+                if (response.RESULT) {
+                    self.table.order_detail.clear();
+                    self.table.order_detail.rows.add(response.DATA.LIST).draw();
+                }
+            });
         });
+
+        // $('#do_order').click(function() {
+        //     var rows = self.table.order.data();
+        //     var json_data = {
+        //         LIST: null
+        //     };
+        //
+        //     var LIST = [];
+        //     var TOTAL_ORDER_PRICE = 0;
+        //
+        //     for (var i = 0; i < rows.length; i++) {
+        //         var PRDT_CNT = parseInt($('.order_table_cnt').eq(i).val(), 10);
+        //         LIST.push({
+        //             PRDT_CD: self.table.order.row(i).data().PRDT_CD,
+        //             PRDT_CNT: PRDT_CNT
+        //         });
+        //         TOTAL_ORDER_PRICE += self.table.order.row(i).data().PRDT_PRICE * PRDT_CNT;
+        //     }
+        //
+        //     json_data.TOTAL_ORDER_PRICE = TOTAL_ORDER_PRICE;
+        //     json_data.LIST = JSON.stringify(LIST);
+        //
+        //     $.post('/order', json_data, function(order) {
+        //         self.clear();
+        //     })
+        // });
     }
 };
