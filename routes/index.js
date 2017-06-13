@@ -20,6 +20,7 @@ router.get('/', function(req, res, next) {
 
 // 판매하기
 router.post('/sell', function(req, res) {
+	req.body.BRCH_CD = req.session.BRCH_CD;
 	req.body.POS_CD = req.session.POS_CD;
 
     core.doSell(req.body, function(result) {
@@ -223,15 +224,15 @@ router.post('/refund', function(req, res) {
 });
 
 // 환불 취소하기
-router.delete('/refund', function(req, res) {
-	core.cancelRefund(req.body, function(result) {
-		res.json({
-    		RESULT: (result ? true : false),
-    		ERR_CD: (result ? null : 1),
-    		DATA: result
-    	});
-	});
-});
+// router.delete('/refund', function(req, res) {
+// 	core.cancelRefund(req.body, function(result) {
+// 		res.json({
+//     		RESULT: (result ? true : false),
+//     		ERR_CD: (result ? null : 1),
+//     		DATA: result
+//     	});
+// 	});
+// });
 
 // 환불기록 가져오기
 router.get('/refund/list', function(req, res) {
@@ -265,15 +266,15 @@ router.post('/return', function(req, res) {
 });
 
 // 반품 취소하기
-router.delete('/return', function(req, res) {
-	core.cancelReturn(req.body, function(result) {
-		res.json({
-    		RESULT: (result ? true : false),
-    		ERR_CD: (result ? null : 1),
-    		DATA: result
-    	});
-	});
-});
+// router.delete('/return', function(req, res) {
+// 	core.cancelReturn(req.body, function(result) {
+// 		res.json({
+//     		RESULT: (result ? true : false),
+//     		ERR_CD: (result ? null : 1),
+//     		DATA: result
+//     	});
+// 	});
+// });
 
 // 반품기록 가져오기
 router.get('/return/list', function(req, res) {
@@ -318,15 +319,15 @@ router.post('/loss', function(req, res) {
 });
 
 // 손실 취소하기
-router.delete('/loss', function(req, res) {
-	core.cancelLoss(req.body, function(result) {
-		res.json({
-    		RESULT: (result ? true : false),
-    		ERR_CD: (result ? null : 1),
-    		DATA: result
-    	});
-	});
-});
+// router.delete('/loss', function(req, res) {
+// 	core.cancelLoss(req.body, function(result) {
+// 		res.json({
+//     		RESULT: (result ? true : false),
+//     		ERR_CD: (result ? null : 1),
+//     		DATA: result
+//     	});
+// 	});
+// });
 
 // 손실목록 가져오기
 router.get('/loss/list', function(req, res) {
@@ -356,19 +357,22 @@ router.post('/discard', function(req, res) {
 });
 
 // 폐기 취소하기
-router.delete('/discard', function(req, res) {
-	core.cancelDiscard(req.body, function(result) {
-		res.json({
-    		RESULT: (result ? true : false),
-    		ERR_CD: (result ? null : 1),
-    		DATA: result
-    	});
-	});
-});
+// router.delete('/discard', function(req, res) {
+// 	core.cancelDiscard(req.body, function(result) {
+// 		res.json({
+//     		RESULT: (result ? true : false),
+//     		ERR_CD: (result ? null : 1),
+//     		DATA: result
+//     	});
+// 	});
+// });
 
 // 폐기목록 가져오기
 router.get('/discard/list', function(req, res) {
-	core.getDiscardList(function(data) {
+	var BRCH_CD = req.session.BRCH_CD;
+	core.getDiscardList({
+		BRCH_CD: BRCH_CD
+	}, function(data) {
 		res.json({
     		RESULT: (data ? true : false),
     		ERR_CD: (data ? null : 1),
@@ -443,6 +447,7 @@ router.get('/point', function(req, res) {
 
 // 생활서비스 등록하기
 router.post('/cvs', function(req, res) {
+	req.body.BRCH_CD = req.session.BRCH_CD;
 	core.addCvs(req.body, function(result) {
 		res.json({
     		RESULT: (result ? true : false),
@@ -454,6 +459,7 @@ router.post('/cvs', function(req, res) {
 
 // 생활서비스 등록 해제하기
 router.delete('/cvs', function(req, res) {
+	req.body.BRCH_CD = req.session.BRCH_CD;
 	core.deleteCvs(req.body, function(result) {
 		res.json({
     		RESULT: (result ? true : false),
@@ -496,6 +502,7 @@ router.get('/cvs/list/branch', function(req, res) {
 
 // 자금내역 가져오기
 router.get('/branch/money', function(req, res) {
+	req.query.BRCH_CD = req.session.BRCH_CD;
 	core.getBranchMoney(req.query, function(data) {
 		res.json({
     		RESULT: (data ? true : false),
@@ -584,6 +591,7 @@ router.post('/employee', function(req, res) {
 
 // 직원 삭제하기
 router.delete('/employee', function(req, res) {
+	req.body.BRCH_CD = req.session.BRCH_CD;
 	core.deleteEmployee(req.body, function(result) {
 		res.json({
     		RESULT: (result ? true : false),
