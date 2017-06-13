@@ -123,6 +123,7 @@ var selllist = {
             }, function(refund_res) {
                 if(refund_res.RESULT) {
                     self.set_table();
+                    main.notice.hide();
                 } else {
                     main.notice.show('환불을 할 수 없습니다.');
                 }
