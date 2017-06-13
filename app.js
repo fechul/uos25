@@ -62,10 +62,8 @@ oracledb.getConnection({
 	//     }
 	// });
 
-	// var query = "SELECT * FROM EMPLOYEE WHERE HIRED_DATE >= TO_DATE('20170501000000', 'YYYYMMDDHH24MISS') AND HIRED_DATE < TO_DATE('20170601000000', 'YYYYMMDDHH24MISS')";
-	// cnt = 1;
-	// var _query = "UPDATE STOCK SET STOCK_CNT=STOCK_CNT+" + cnt + " WHERE BRCH_CD='000001' AND PRDT_CD='asdfc02458'";
-	// __oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {  
+	// var query = "SELECT EMP_CD FROM (SELECT EMP_CD FROM EMPLOYEE ORDER BY HIRED_DATE DESC) WHERE ROWNUM=1";
+	// __oracleDB.execute(query, [], function(err, result) {  
 	//     if (err) {  
 	//        console.log("err: ", err);
 	//     } else {

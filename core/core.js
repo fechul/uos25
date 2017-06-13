@@ -62,6 +62,7 @@ var getNextSeq = function(recentSeq) {
 
 // 판매하기
 exports.doSell = function(options, callback) {
+	console.log("doSell: ", options);
 	var BRCH_CD = options.BRCH_CD;
 	var POS_CD = options.POS_CD;
 	var dateFormat = getDateFormat();
@@ -82,10 +83,10 @@ exports.doSell = function(options, callback) {
 	async.waterfall([
 		// make SELL_CD
 	    function(callback){
-	    	var query = "SELECT SELL_CD FROM SELL ORDER BY SELL_DATE DESC LIMIT 1";
+	    	var query = "SELECT SELL_CD FROM (SELECT SELL_CD FROM SELL ORDER BY SELL_DATE DESC) WHERE ROWNUM=1";
 	    	__oracleDB.execute(query, [], function(err, result) {
 	    		if (err) {
-			       callback(err);
+			       callback("make SELL_CD err: " + err);
 			    } else {
 			    	if(result.rows && result.rows.length) {
 			    		var recentSell = result.rows[0];
@@ -120,7 +121,7 @@ exports.doSell = function(options, callback) {
     		sellInsertQuery += ")";
 	    	__oracleDB.execute(sellInsertQuery, [], {autoCommit:true}, function(err, result) {
 	    		if(err) {
-	    			callback(err);
+	    			callback("insert SELL err: " + err);
 	    		} else {
 	    			callback(null);
 	    		}
@@ -128,9 +129,9 @@ exports.doSell = function(options, callback) {
 	    },
 	    // make MNY_HIS_CD
 	    function(callback){
-	    	__oracleDB.execute("SELECT MNY_HIS_CD FROM MONEY_HISTORY ORDER BY HISTORY_DATE DESC LIMIT 1", [], function(err, result) {
+	    	__oracleDB.execute("SELECT MNY_HIS_CD FROM (SELECT MNY_HIS_CD FROM MONEY_HISTORY ORDER BY HISTORY_DATE DESC) WHERE ROWNUM=1", [], function(err, result) {
 	    		if(err) {
-	    			callback(err);
+	    			callback("make MNY_HIS_CD err: " + err);
 	    		} else {
 					if(result.rows && result.rows.length) {
 			    		var recentHistory = result.rows[0];
@@ -148,7 +149,7 @@ exports.doSell = function(options, callback) {
 	    	var insertMnyHistoryQuery = "INSERT INTO MONEY_HISTORY VALUES('" + MNY_HIS_CD + "', 'I', " + TOTAL_SELL_PRICE + ", TO_DATE('" + dateFormat + "', 'YYYYMMDDHH24MISS'), '" + BRCH_CD + "')";
 	    	__oracleDB.execute(insertMnyHistoryQuery, [], {autoCommit:true}, function(err, result) {
 	    		if(err) {
-	    			callback(err);
+	    			callback("insert MONEY_HISTORY err: " + err);
 	    		} else {
 	    			callback(null);
 	    		}
@@ -159,7 +160,7 @@ exports.doSell = function(options, callback) {
 	    	var updateBrchMnyQuery = "UPDATE BRANCH SET MNY=MNY+" + TOTAL_SELL_PRICE + " WHERE BRCH_CD='" + BRCH_CD + "'";
 	    	__oracleDB.execute(updateBrchMnyQuery, [], {autoCommit:true}, function(err, result) {
 	    		if(err) {
-	    			callback(err);
+	    			callback("update Branch Money err: " + err);
 	    		} else {
 	    			callback(null);
 	    		}
@@ -171,7 +172,7 @@ exports.doSell = function(options, callback) {
 				var updatePosQuery = "UPDATE POS SET POSSESS_CASH=POSSESS_CASH+" + TOTAL_SELL_PRICE + " WHERE POS_CD='" + POS_CD + "'";
 				__oracleDB.execute(updatePosQuery, [], {autoCommit:true}, function(err, result) {
 					if(err) {
-						callback(err);
+						callback("update POS Cash err: " + err);
 					} else {
 						callback(null);
 					}
@@ -197,7 +198,7 @@ exports.doSell = function(options, callback) {
 	    		var updateUsePointQuery = "UPDATE MEMBER SET POINT=POINT-" + MEMBER_USE_POINT + " WHERE PHONNO='" + MEMBER_PHONNO + "'";
 	    		__oracleDB.execute(updateUsePointQuery, [], {autoCommit:true}, function(err, result) {
 					if(err) {
-						callback(err);
+						callback("update use point err: " + err);
 					} else {
 						callback(null);
 					}
@@ -212,7 +213,7 @@ exports.doSell = function(options, callback) {
 	    		var updateSavePointQuery = "UPDATE MEMBER SET POINT=POINT+" + MEMBER_SAVE_POINT + " WHERE PHONNO='" + MEMBER_PHONNO + "'";
 	    		__oracleDB.execute(updateSavePointQuery, [], {autoCommit:true}, function(err, result) {
 					if(err) {
-						callback(err);
+						callback("update save point err: " + err);
 					} else {
 						callback(null);
 					}
@@ -223,6 +224,7 @@ exports.doSell = function(options, callback) {
 	    }
 	], function (err, result) {
 	    if(err) {
+	    	console.log(err);
 	   		callback(null);
 	    } else {
 	   		callback(true);
@@ -398,7 +400,7 @@ exports.doOrder = function(options, callback) {
 	var ORDER_CD = BRCH_CD + orderDateFormat;
 
 	var addStore = function() {
-		__oracleDB.execute("SELECT STORE_CD FROM STORE ORDER BY STORE_DATE DESC LIMIT 1", [], function(err, result) {
+		__oracleDB.execute("SELECT STORE_CD FROM (SELECT STORE_CD FROM STORE ORDER BY STORE_DATE DESC) WHERE ROWNUM=1", [], function(err, result) {
 			if (err) {
 		       console.error(err.message);
 		       callback(null);
@@ -444,7 +446,7 @@ exports.doOrder = function(options, callback) {
 	};
 
 	if(LIST && LIST.length) {
-		__oracleDB.execute("SELECT ORDER_CD FROM PRODUCT_ORDER ORDER BY ORDER_DATE DESC LIMIT 1", [], function(err, result) {
+		__oracleDB.execute("SELECT ORDER_CD FROM (SELECT ORDER_CD FROM PRODUCT_ORDER ORDER BY ORDER_DATE DESC) WHERE ROWNUM=1", [], function(err, result) {
 			if (err) {
 		       console.error(err.message);
 		       callback(null);
@@ -673,7 +675,7 @@ exports.doReturn = function(options, callback) {
 	var RET_CD = BRCH_CD + returnDateFormat;
 
 	if(LIST && LIST.length) {
-		__oracleDB.execute("SELECT RET_CD FROM RETURN ORDER BY RET_DATE DESC LIMIT 1", [], function(err, result) {
+		__oracleDB.execute("SELECT RET_CD FROM (SELECT RET_CD FROM RETURN ORDER BY RET_DATE DESC) WHERE ROWNUM=1", [], function(err, result) {
 		    if (err) {
 		       console.log("doReturn select return err: ", err);
 		       callback(null);
@@ -778,7 +780,7 @@ exports.doLoss = function(options, callback) {
 	var lossCreateDate = getDateFormat();
 	var LOSS_CD = BRCH_CD + lossCreateDate;
 
-	__oracleDB.execute("SELECT LOSS_CD FROM LOSS ORDER BY LOSS_DATE DESC LIMIT 1 ", [], function(err, result) {
+	__oracleDB.execute("SELECT LOSS_CD FROM (SELECT LOSS_CD FROM LOSS ORDER BY LOSS_DATE DESC) WHERE ROWNUM=1", [], function(err, result) {
 	    if (err) {
 	       console.log("doLoss select loss err: ", err);
 	       callback(null);
@@ -838,7 +840,7 @@ exports.doDiscard = function(options, callback) {
 	var discardCreateDate = getDateFormat();
 	var DISCARD_CD = BRCH_CD + discardCreateDate;
 
-	__oracleDB.execute("SELECT DISCARD_CD FROM DISCARD ORDER BY DISCARD_DATE DESC LIMIT 1 ", [], function(err, result) {
+	__oracleDB.execute("SELECT DISCARD_CD FROM (SELECT DISCARD_CD FROM DISCARD ORDER BY DISCARD_DATE DESC) WHERE ROWNUM=1", [], function(err, result) {
 	    if (err) {
 	       console.log("doDiscard select discard err: ", err);
 	       callback(null);
@@ -1144,7 +1146,7 @@ exports.payMargin = function(options, callback) {
 	            			var PAYMENT_PRICE = parseInt(totalRevenue*(PAYMENT_RATE/100));
 
 							__oracleDB.execute("UPDATE BRANCH SET MNY=MNY+" + PAYMENT_PRICE + " WHERE BRCH_CD='" + BRCH_CD + "'", [], {autoCommit:true}, function(___err, ___result) {
-								__oracleDB.execute("SELECT MNY_HIS_CD FROM MONEY_HISTORY ORDER BY HISTORY_DATE DESC LIMIT 1", [], function(____err, ____result) {
+								__oracleDB.execute("SELECT MNY_HIS_CD FROM (SELECT MNY_HIS_CD FROM MONEY_HISTORY ORDER BY HISTORY_DATE DESC) WHERE ROWNUM=1", [], function(____err, ____result) {
 									if(result.rows && result.rows.length) {
 							    		var recentHistory = result.rows[0];
 							    		var SEQ = getNextSeq(recentHistory.MNY_HIS_CD.substring(14, 20));
@@ -1176,7 +1178,7 @@ exports.addEmployee = function(options, callback) {
 	var hiredDateFormat = getDateFormat();
 	var EMP_CD = BRCH_CD + hiredDateFormat;
 
-	__oracleDB.execute("SELECT EMP_CD FROM EMPLOYEE ORDER BY HIRED_DATE DESC LIMIT 1", [], function(err, result) {
+	__oracleDB.execute("SELECT EMP_CD FROM (SELECT EMP_CD FROM EMPLOYEE ORDER BY HIRED_DATE DESC) WHERE ROWNUM=1", [], function(err, result) {
 	    if (err) {
 	       console.error(err.message);
 	       callback(null);
