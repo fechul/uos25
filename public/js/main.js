@@ -2,6 +2,7 @@ var main = {
     init: function() {
         this.init_events();
         sell.init();
+        selllist.init();
         order.init();
         stock.init();
     },
@@ -28,6 +29,8 @@ var main = {
                 order.clear();
             } else if (target == 'stock'){
                 stock.clear();
+            } else if (target == 'selllist') {
+                selllist.clear();
             }
         });
 
