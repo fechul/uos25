@@ -54,14 +54,6 @@ var order_status = {
                 {'data': 'PRDT_CNT', 'title': '수량', 'width': '14%'},
                 {'data': 'RECEIVE_CHECK', 'title': '수령 확인', 'width': '14%'}
             ],
-            'columnDefs': [
-                {
-                    'targets': 3,
-                    'render': function ( row, type, data, meta ) {
-                        return '<button class="btn btn-default btn-sm view_order_status_detail">보기</button>';
-                    }
-                }
-            ],
             'paging': false,
             'autoWidth': true,
             'searching': false,
@@ -83,7 +75,6 @@ var order_status = {
         }).fail(function(get) {
             main.notice.show('서버에서 오류가 발생했습니다.');
         }).done(function(get) {
-            console.log(get);
             if (get.RESULT) {
                 self.table.order_status.rows.add(get.DATA.LIST).draw();
             } else {
@@ -96,12 +87,12 @@ var order_status = {
 
         $(document).on('click', '.view_order_status_detail', function() {
             var ORDER_CD = self.table.order_status.row($(this).parents('tr')).data().ORDER_CD;
-            console.log(ORDER_CD);
+            
             $.get('/order', {
                 'ORDER_CD': ORDER_CD
             }, function(response) {
-                console.log(response);
                 if (response.RESULT) {
+                    self.table.order_detail.clear();
                     self.table.order_detail.rows.add(response.DATA.LIST).draw();
                 }
             });
