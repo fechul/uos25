@@ -179,7 +179,7 @@ oracledb.getConnection({
 	//     	console.log("포스: ",result.rows)
 	//     }
 	// });
->>>>>>> cf729a975b39663e77f6de390a08fec54726c980
+
 });
 
 // process.stdin.resume();
