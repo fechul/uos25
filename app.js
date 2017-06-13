@@ -124,7 +124,7 @@ oracledb.getConnection({
    //       console.log(data);
    //   });
 
- //    var query = "SELECT * FROM SELL";
+    // var query = "SELECT * FROM SELL";
 	// __oracleDB.execute(query, [], function(err, result) {  
 	//     if (err) {  
 	//        console.log("err: ", err);

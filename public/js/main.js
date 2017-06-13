@@ -6,6 +6,7 @@ var main = {
         order.init();
         order_status.init();
         stock.init();
+        refund.init();
         store.init();
         employee.init();
         member.init();
@@ -39,6 +40,8 @@ var main = {
                 store.clear();
             } else if (target == 'selllist') {
                 selllist.clear();
+            } else if(target == 'refund') {
+                refund.clear();
             } else if (target == 'employee'){
                 employee.clear();
             } else if (target == 'member'){
@@ -51,7 +54,12 @@ var main = {
         });
     },
     notice: {
-        show: function(msg) {
+        show: function(msg, confirm) {
+            if(confirm) {
+                $('#notification_dialog_confirm').show();
+            } else {
+                $('#notification_dialog_confirm').hide();
+            }
             $('#notification_dialog_msg').html(msg);
             $('#notification_dialog').addClass('shown');
         },

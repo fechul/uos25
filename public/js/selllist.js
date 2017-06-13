@@ -19,7 +19,8 @@ var selllist = {
                 {'data': 'SELL_DATE', 'title': '일자', 'width': '14%'},
                 {'data': 'TOTAL_SELL_PRICE', 'title': '판매금액', 'width': '14%'},
                 {'data': 'PAYMENT_WAY', 'title': '지불방법', 'width': '14%'},
-                {'data': 'VIEW_DETAIL', 'title': '상세정보', 'width': '14%'}
+                {'data': 'VIEW_DETAIL', 'title': '상세정보', 'width': '14%'},
+                {'data': 'DO_REFUND', 'title': '환불하기', 'width': '14%'}
             ],
             'columnDefs': [
                 {
@@ -42,6 +43,12 @@ var selllist = {
                     'targets': 4,
                     'render': function ( row, type, data, meta ) {
                         return '<button class="btn btn-default btn-sm view_selllist_detail">보기</button>';
+                    }
+                },
+                {
+                    'targets': 5,
+                    'render': function ( row, type, data, meta ) {
+                        return '<button class="btn btn-primary btn-sm do_refund">환불</button>';
                     }
                 }
             ],
@@ -81,6 +88,7 @@ var selllist = {
         var self = this;
 
         $.get('/sell/list', {}, function(response) {
+            self.table.clear();
             self.table.rows.add(response.DATA.LIST).draw();
         })
     },
@@ -99,5 +107,43 @@ var selllist = {
                 }
             });
         });
+
+        $(document).on('click' ,'.do_refund', function() {
+            var SELL_CD = self.table.row($(this).parents('tr')).data().SELL_CD;
+            main.notice.show('<label> * 환불사유</label><br><textarea id="refundDesc" data-sell_cd="' + SELL_CD + '"></textarea>', 'confirm');
+        });
+
+        $(document).on('click', '#notification_dialog_confirm', function() {
+            var SELL_CD = $('#refundDesc').attr('data-sell_cd');
+            var REF_DESCR = $('#refundDesc').val();
+
+            $.post('/refund', {
+                'SELL_CD': SELL_CD,
+                'REF_DESCR': REF_DESCR
+            }, function(refund_res) {
+                if(refund_res.RESULT) {
+                    self.set_table();
+                } else {
+                    main.notice.show('환불을 할 수 없습니다.');
+                }
+            });
+        });
+    },
+    get_date_fortmat: function(d) {
+        var date = new Date(d);
+        var str = ''
+        str += date.getFullYear();
+        str += '-';
+        str += date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+        str += '-';
+        str += date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+        str += ' ';
+        str += date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+        str += ':';
+        str += date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+        str += ':';
+        str += date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+
+        return str;
     }
 };
