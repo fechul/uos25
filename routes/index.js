@@ -174,16 +174,16 @@ router.post('/order/list', function(req, res) {
 */
 
 // 입고 확정하기
-router.post('/store', function(req, res) {
-	req.body.BRCH_CD = req.session.BRCH_CD;
-	core.doStore(req.body, function(result) {
-		res.json({
-    		RESULT: (result ? true : false),
-    		ERR_CD: (result ? null : 1),
-    		DATA: result
-    	});
-	});
-});
+// router.post('/store', function(req, res) {
+// 	req.body.BRCH_CD = req.session.BRCH_CD;
+// 	core.doStore(req.body, function(result) {
+// 		res.json({
+//     		RESULT: (result ? true : false),
+//     		ERR_CD: (result ? null : 1),
+//     		DATA: result
+//     	});
+// 	});
+// });
 
 // 입고목록 가져오기
 router.get('/store/list', function(req, res) {

@@ -491,7 +491,21 @@ exports.doOrder = function(options, callback) {
 						    			console.log('doOrder store list push err: ', __err);
 						    			async_cb();
 						    		} else {
-						    			async_cb();
+						    			var updateOrderCheckQuery = "UPDATE ORDERED_PRODUCT SET ORDER_CHECK='y' WHERE ORDER_CD='" + ORDER_CD "' AND PRDT_CD='" + eachOrder.PRDT_CD + "'";
+										__oracleDB.execute(storeListCreateQuery, [], {autoCommit:true}, function(___err, ___result) {
+											if(___err) {
+												console.log('doOrder update order check err: ', ___err);
+												async_cb();
+											} else {
+												var updateStockCntQuery = "UPDATE STOCK SET STOCK_CNT=STOCK_CNT+" + eachOrder.PRDT_CNT + " WHERE BRCH_CD='" + BRCH_CD + "' AND PRDT_CD='" + eachOrder.PRDT_CD + "'";
+								    			__oracleDB.execute(updateStockCntQuery, [], {autoCommit:true}, function(____err, ____result) {
+								    				if(____err) {
+								    					console.log("doStore update stock cnt err: ", ____err);
+								    				}
+								    				async_cb();
+								    			});
+											}
+										});
 						    		}
 						    	});
 							});
@@ -525,7 +539,7 @@ exports.doOrder = function(options, callback) {
 		    			callback(null);
 		    		} else {
 		    			async.map(LIST, function(eachOrder, async_cb) {
-							var orderListCreateQuery = "INSERT INTO ORDERED_PRODUCT VALUES (" + eachOrder.PRDT_CNT + ", '" + ORDER_CD + "', '" + eachOrder.PRDT_CD + "')";
+							var orderListCreateQuery = "INSERT INTO ORDERED_PRODUCT VALUES (" + eachOrder.PRDT_CNT + ", '" + ORDER_CD + "', '" + eachOrder.PRDT_CD + "', 'n')";
 							__oracleDB.execute(orderListCreateQuery, [], {autoCommit:true}, function(__err, __result) {
 					    		if(__err) {
 					    			console.log('doOrder order list push err: ', __err);
@@ -607,42 +621,42 @@ exports.getOrderList = function(options, callback) {
 };
 
 // 입고 확정하기
-exports.doStore = function(options, callback) {
-	var STORE_CD = options.STORE_CD;
-	var BRCH_CD = options.BRCH_CD;
+// exports.doStore = function(options, callback) {
+// 	var STORE_CD = options.STORE_CD;
+// 	var BRCH_CD = options.BRCH_CD;
 
-	var query = "SELECT * FROM STORED_PRODUCT WHERE STORE_CD='" + STORE_CD + "'";
+// 	var query = "SELECT * FROM STORED_PRODUCT WHERE STORE_CD='" + STORE_CD + "'";
 
-	__oracleDB.execute(query, [], function(err, result) {
-	    if (err) {
-	       console.log("doStore select err: ", err);
-	       callback(null);
-	    } else {
-	    	if(result.rows && result.rows.length) {
-	    		// 재고 업데이트
-	    		async.each(result.rows, function(eachStored, async_cb) {
-	    			var _query = "UPDATE STOCK SET STOCK_CNT=STOCK_CNT+" + eachStored.PRDT_CNT + " WHERE BRCH_CD='" + BRCH_CD + "' AND PRDT_CD='" + eachStored.PRDT_CD + "'";
-	    			__oracleDB.execute(query, [], {autoCommit:true}, function(_err, _result) {
-	    				if(_err) {
-	    					console.log("doStore update stock cnt err: ", _err);
-	    				}
-	    				async_cb();
-	    			});
-	    		}, function(async_err) {
-	    			if(async_err) {
-	    				console.log("doStore async_err: ", async_err);
-	    				callback(null);
-	    			} else {
-	    				callback(true);
-	    			}
-	    		});
-	    	} else {
-	    		console.log("doStore: no stored product!");
-	    		callback(null);
-	    	}
-	    }
-	});
-};
+// 	__oracleDB.execute(query, [], function(err, result) {
+// 	    if (err) {
+// 	       console.log("doStore select err: ", err);
+// 	       callback(null);
+// 	    } else {
+// 	    	if(result.rows && result.rows.length) {
+// 	    		// 재고 업데이트
+// 	    		async.each(result.rows, function(eachStored, async_cb) {
+// 	    			var _query = "UPDATE STOCK SET STOCK_CNT=STOCK_CNT+" + eachStored.PRDT_CNT + " WHERE BRCH_CD='" + BRCH_CD + "' AND PRDT_CD='" + eachStored.PRDT_CD + "'";
+// 	    			__oracleDB.execute(query, [], {autoCommit:true}, function(_err, _result) {
+// 	    				if(_err) {
+// 	    					console.log("doStore update stock cnt err: ", _err);
+// 	    				}
+// 	    				async_cb();
+// 	    			});
+// 	    		}, function(async_err) {
+// 	    			if(async_err) {
+// 	    				console.log("doStore async_err: ", async_err);
+// 	    				callback(null);
+// 	    			} else {
+// 	    				callback(true);
+// 	    			}
+// 	    		});
+// 	    	} else {
+// 	    		console.log("doStore: no stored product!");
+// 	    		callback(null);
+// 	    	}
+// 	    }
+// 	});
+// };
 
 // 입고목록 가져오기
 exports.getStoreList = function(options, callback) {
