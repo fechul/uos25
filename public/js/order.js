@@ -55,13 +55,13 @@ var order = {
 
                     'targets': 3,
                     'render': function ( row, type, data, meta ) {
-                        return '<input class="btn btn-default btn-sm order_table_cnt" value=' + 0 + '>';
+                        return '<input class="order_table_cnt" value=' + 1 + '>';
                     }
                 },
                 {
                     'targets': 4,
                     'render': function ( row, type, data, meta ) {
-                        return '<button class="order_remove_cart">삭제</button>';
+                        return '<button class="btn btn-default btn-sm order_remove_cart">삭제</button>';
                     }
                 }
             ],
@@ -86,7 +86,6 @@ var order = {
         }).fail(function(get) {
             main.notice.show('서버에서 오류가 발생했습니다.');
         }).done(function(get) {
-            console.log(get);
             if (get.RESULT) {
                 self.table.product_list.rows.add(get.DATA.LIST).draw();
             } else {
@@ -125,14 +124,18 @@ var order = {
             };
 
             var LIST = [];
+            var TOTAL_ORDER_PRICE = 0;
 
             for (var i = 0; i < rows.length; i++) {
+                var PRDT_CNT = parseInt($('.order_table_cnt').eq(i).val(), 10);
                 LIST.push({
                     PRDT_CD: self.table.order.row(i).data().PRDT_CD,
-                    PRDT_CNT: parseInt($('.order_table_cnt').eq(i).val(), 10)
+                    PRDT_CNT: PRDT_CNT
                 });
+                TOTAL_ORDER_PRICE += self.table.order.row(i).data().PRDT_PRICE * PRDT_CNT;
             }
 
+            json_data.TOTAL_ORDER_PRICE = TOTAL_ORDER_PRICE;
             json_data.LIST = JSON.stringify(LIST);
 
             $.post('/order', json_data, function(order) {
