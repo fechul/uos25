@@ -62,11 +62,12 @@ oracledb.getConnection({
 	//     }
 	// });
 
-	// var query = "SELECT * FROM EMPLOYEE";
-
-	// __oracleDB.execute(query, [], function(err, result) {  
+	// var query = "SELECT * FROM EMPLOYEE WHERE HIRED_DATE >= TO_DATE('20170501000000', 'YYYYMMDDHH24MISS') AND HIRED_DATE < TO_DATE('20170601000000', 'YYYYMMDDHH24MISS')";
+	// cnt = 1;
+	// var _query = "UPDATE STOCK SET STOCK_CNT=STOCK_CNT+" + cnt + " WHERE BRCH_CD='000001' AND PRDT_CD='asdfc02458'";
+	// __oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {  
 	//     if (err) {  
-	//        console.log("getProductList err: ", err);
+	//        console.log("err: ", err);
 	//     } else {
 	//     	console.log(result.rows)
 	//     }
@@ -99,6 +100,60 @@ oracledb.getConnection({
 		 // function (data) {
    //       console.log(data);
    //   });
+
+ //    var query = "SELECT * FROM SELL";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("판매기록: ",result.rows)
+	//     }
+	// });
+
+	// var query = "SELECT * FROM SOLD_PRODUCT";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("판매상품들: ",result.rows)
+	//     }
+	// });
+
+	// var query = "SELECT * FROM MONEY_HISTORY";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("자금내역: ",result.rows)
+	//     }
+	// });
+
+	// var query = "SELECT MNY FROM BRANCH";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("지점의 자금: ",result.rows)
+	//     }
+	// });
+
+	// var query = "SELECT * FROM MEMBER";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("회원: ",result.rows)
+	//     }
+	// });
+
+	// var query = "SELECT * FROM POS";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("포스: ",result.rows)
+	//     }
+	// });
 });
 
 // process.stdin.resume();
