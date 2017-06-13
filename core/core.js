@@ -480,7 +480,7 @@ exports.doOrder = function(options, callback) {
 						var CMPNY_CD = _result.rows[0].CMPNY_CD;
 
 						var storeListCreateQuery = "INSERT INTO STORED_PRODUCT VALUES (" + eachOrder.PRDT_CNT + ", '" + STORE_CD + "', '" + CMPNY_CD + "', '" + eachOrder.PRDT_CD + "')";
-						__oracleDB.execute(orderCreateListQuery, [], {autoCommit:true}, function(__err, __result) {
+						__oracleDB.execute(storeListCreateQuery, [], {autoCommit:true}, function(__err, __result) {
 				    		if(__err) {
 				    			console.log('doOrder store list push err: ', __err);
 				    			async_cb();
@@ -689,7 +689,7 @@ exports.getStore = function(options, callback) {
 
 // 환불하기
 exports.doRefund = function(options, callback) {
-
+	
 };
 
 // 환불 취소하기
