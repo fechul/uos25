@@ -3,6 +3,7 @@ var main = {
         this.init_events();
         sell.init();
         order.init();
+        stock.init();
     },
     init_events: function() {
         var self = this;
@@ -25,6 +26,8 @@ var main = {
                 sell.clear();
             } else if (target == 'order') {
                 order.clear();
+            } else if (target == 'stock'){
+                stock.clear();
             }
         });
 
