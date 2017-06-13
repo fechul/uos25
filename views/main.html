@@ -21,10 +21,10 @@
                 <div class="menu active" target="sell">판매</div>
                 <div class="menu" target="selllist">판매기록</div>
                 <div class="menu" target="refund">환불</div>
+                <div class="menu" target="stock">재고</div>
                 <div class="menu" target="order">주문</div>
                 <div class="menu" target="order_status">주문현황</div>
                 <div class="menu" target="store">입고</div>
-                <div class="menu" target="stock">재고</div>
                 <div class="menu" target="return">반품</div>
                 <div class="menu" target="loss">손실</div>
                 <div class="menu" target="discard">폐기</div>
@@ -123,8 +123,12 @@
                     </div>
                 </div>
                 <div class="workspace selllist" name="selllist">
-                    <div style="height: 400px;">
+                    <div style="height: 350px;">
                         <table id="selllist_table">
+                        </table>
+                    </div>
+                    <div style="height: 300px;">
+                        <table id="selllist_detail_table">
                         </table>
                     </div>
                 </div>
@@ -144,6 +148,17 @@
                     </div>
                 </div>
                 <div class="workspace order_status" name="order_status">
+                    <div style="height: 400px;">
+                        <table id="order_status_table">
+                        </table>
+                    </div>
+                    <div class="workspace_order_status_detail_table_container">
+                        <table id="order_status_detail_table">
+                        </table>
+                    </div>
+                    <div class="workspace_order_status_right_container">
+                        <button class="btn btn-primary" id="do_order">주문하기</button>
+                    </div>
                 </div>
                 <div class="workspace store" name="store">
                 </div>
@@ -191,6 +206,7 @@
     <script src="js/sell.js"></script>
     <script src="js/selllist.js"></script>
     <script src="js/order.js"></script>
+    <script src="js/order_status.js"></script>
     <script src="js/stock.js"></script>
 	<script src="js/main.js"></script>
     <script>

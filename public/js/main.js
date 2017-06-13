@@ -4,6 +4,7 @@ var main = {
         sell.init();
         selllist.init();
         order.init();
+        order_status.init();
         stock.init();
     },
     init_events: function() {
@@ -24,9 +25,11 @@ var main = {
 
             // 페이지별 초기화
             if (target == 'sell') {
-                sell.clear();
+                // sell.clear();
             } else if (target == 'order') {
                 order.clear();
+            } else if (target == 'order_status') {
+                order_status.clear();
             } else if (target == 'stock'){
                 stock.clear();
             } else if (target == 'selllist') {
@@ -46,5 +49,22 @@ var main = {
         hide: function() {
             $('#notification_dialog').removeClass('shown');
         }
+    },
+    get_date_fortmat: function(d) {
+        var date = new Date(d);
+        var str = ''
+        str += date.getFullYear();
+        str += '-';
+        str += date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+        str += '-';
+        str += date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+        str += ' ';
+        str += date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+        str += ':';
+        str += date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+        str += ':';
+        str += date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+
+        return str;
     }
 };
