@@ -20,6 +20,7 @@ router.get('/', function(req, res, next) {
 
 // 판매하기
 router.post('/sell', function(req, res) {
+	req.body.LIST = JSON.parse(req.body.LIST);
 	req.body.BRCH_CD = req.session.BRCH_CD;
 	req.body.POS_CD = req.session.POS_CD;
 
