@@ -537,7 +537,19 @@ exports.getPoint = function(options, callback) {
 
 // 생활서비스 등록하기
 exports.addCvs = function(options, callback) {
+	var BRCH_CD = options.BRCH_CD;
+	var CVS_CD = options.CVS_CD;
 
+	var query = "INSERT INTO CVS VALUES ('" + BRCH_CD + "', '" + CVS_CD + "')";
+
+	__oracleDB.execute(query, [], function(err, result) {
+        if (err) {
+            console.log("addCvs err: ", err);
+            callback(null);
+        } else {
+            callback(true);
+        }
+    });
 };
 
 // 생활서비스 등록 해제하기

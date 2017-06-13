@@ -447,6 +447,7 @@ router.get('/point', function(req, res) {
 
 // 생활서비스 등록하기
 router.post('/cvs', function(req, res) {
+	req.body.BRCH_CD = req.session.BRCH_CD;
 	core.addCvs(req.body, function(result) {
 		res.json({
     		RESULT: (result ? true : false),
