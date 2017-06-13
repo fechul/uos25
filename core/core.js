@@ -1,13 +1,14 @@
 
 var async = require('async');
 
-
-// 판매하기
-exports.doSell = function(options, callback) {
+var getDateFormat = function() {
 	var today = new Date();
 	var year = today.getFullYear();
 	var month = today.getMonth()+1;
 	var day = today.getDate();
+	// var hour = today.getHours();
+	// var minute = today.getMinutes();
+	// var second = today.getSeconds();
 
 	if(month < 10) {
 		month = '0' + month;
@@ -17,50 +18,216 @@ exports.doSell = function(options, callback) {
 		day = '0' + day;
 	}
 
-	var codeDate = year.toString() + month.toString() + day.toString();
+	// if(hour < 10) {
+	// 	hour = '0' + hour;
+	// }
 
-	__oracleDB.execute("SELECT SELL_CD FROM SELL ORDER BY SELL_DATE DESC LIMIT 1", [], function(err, result) {
-	    if (err) {
-	       console.error(err.message);
-	       callback(null);
-	    } else {
-	    	var SELL_CD = BRCH_CD + codeDate;
-	    	if(result.rows && result.rows.length) {
-	    		var recentSell = result.rows[0];
-	    		var SEQ = recentSell.SELL_CD.substring(14, 20);
-	    		SELL_CD += SEQ;
-	    	} else {
-	    		SELL_CD += '000001';
-	    	}
+	// if(minute < 10) {
+	// 	minute = '0' + minute;
+	// }
 
-	    	var sellCreateQuery = "INSERT INTO SELL VALUES ('" + SELL_CD + "', '" + options.POS_CD + "', )";
-	    	// __oracleDB.execute("INSERT INTO SELL", [], function(err, result) {
+	// if(second < 10) {
+	// 	second = '0' + second;
+	// }
 
+	year = year.toString();
+	month = month.toString();
+	day = day.toString();
+	// hour = hour.toString();
+	// minute = minute.toString();
+	// second = second.toString();
 
-	    	callback(null);
-	    }
-	});	
+	return year + month + day;
+};
+
+var getNextSeq = function(recentSeq) {
+	recentSeq = parseInt(recentSeq);
+	var nextSeq = recentSeq + 1;
+	nextSeq = nextSeq.toString();
+
+	if(nextSeq.length == 1) {
+		nextSeq = '00000' + nextSeq;
+	} else if(nextSeq.length == 2) {
+		nextSeq = '0000' + nextSeq;
+	} else if(nextSeq.length == 3) {
+		nextSeq = '000' + nextSeq;
+	} else if(nextSeq.length == 4) {
+		nextSeq = '00' + nextSeq;
+	} else if(nextSeq.length == 5) {
+		nextSeq = '0' + nextSeq;
+	}
+
+	return nextSeq;
+};
+
+// 판매하기
+exports.doSell = function(options, callback) {
+	var BRCH_CD = options.BRCH_CD;
+	var POS_CD = options.POS_CD;
+	var dateFormat = getDateFormat();
 	
+	var LIST = options.List;
+	var AGE = options.AGE;
+	var SEX = options.SEX;
+	var TOTAL_SELL_PRICE = options.TOTAL_SELL_PRICE;
+	var PAYMENT_WAY = options.PAYMENT_WAY;
+	var MEMBER_PHONNO = options.MEMBER_PHONNO;
+	var MEMBER_USE_POINT = options.MEMBER_USE_POINT;
+	var MEMBER_SAVE_POINT = options.MEMBER_SAVE_POINT;
 
-	// LIST: [{
-	//     PRDT_CD: String,
-	//     PRDT_CNT: Number,
-	//     EVENT_APPLY: String,
-	//     EVENT_CD: String,
-	//     REG_PRICE: Number,
-	//     SELL_PRICE: Number
-	// }],
+	// CODE
+	var SELL_CD = BRCH_CD + dateFormat;
+	var MNY_HIS_CD = BRCH_CD + dateFormat;
 
-	// SELL_CD ~~
-	// POS_CD 
-	// AGE: String,
-	// SEX: String,
-	// TOTAL_SELL_PRICE: Number,
-	// PAYMENT_WAY: String,
-	// MEMBER_USE_PHONNO: String,
-	// MEMBER_SAVE_PHONNO: String,
-	// MEMBER_USE_POINT: Number,
-	// MEMBER_SAVE_POINT: Number
+	async.waterfall([
+		// make SELL_CD
+	    function(callback){
+	    	var query = "SELECT SELL_CD FROM SELL ORDER BY SELL_DATE DESC LIMIT 1";
+	    	__oracleDB.execute(query, [], function(err, result) {
+	    		if (err) {
+			       callback(err);
+			    } else {
+			    	if(result.rows && result.rows.length) {
+			    		var recentSell = result.rows[0];
+			    		var SELL_SEQ = getNextSeq(recentSell.SELL_CD.substring(14, 20));
+			    		SELL_CD += SELL_SEQ;
+			    	} else {
+			    		SELL_CD += '000001';
+			    	}
+			    	callback(null);
+			    }
+	    	});
+	    },
+	    // insert SELL
+	    function(callback){
+	    	var sellInsertQuery = "INSERT INTO SELL " + 
+	    		"VALUES ('" + SELL_CD + "', TO_DATE('" + dateFormat + "', 'YYYYMMDDHH24MISS'), " + TOTAL_SELL_PRICE + ", '" + PAYMENT_WAY + "', '" + POS_CD + "', '" + AGE + "', '" + SEX + "'";
+    		if(MEMBER_PHONNO) {
+    			sellInsertQuery += ", '" + MEMBER_PHONNO + "'";
+    		} else {
+    			sellInsertQuery += ", null";
+    		}
+    		if(MEMBER_USE_POINT) {
+    			sellInsertQuery += ", " + MEMBER_USE_POINT;
+    		} else {
+    			sellInsertQuery += ", null";	
+    		}
+    		if(MEMBER_SAVE_POINT) {
+    			sellInsertQuery += ", " + MEMBER_SAVE_POINT;
+    		} else {
+    			sellInsertQuery += ", null";
+    		}
+    		sellInsertQuery += ")";
+	    	__oracleDB.execute(sellInsertQuery, [], {autoCommit:true}, function(err, result) {
+	    		if(err) {
+	    			callback(err);
+	    		} else {
+	    			callback(null);
+	    		}
+	    	});
+	    },
+	    // make MNY_HIS_CD
+	    function(callback){
+	    	__oracleDB.execute("SELECT MNY_HIS_CD FROM MONEY_HISTORY ORDER BY HISTORY_DATE DESC LIMIT 1", [], function(err, result) {
+	    		if(err) {
+	    			callback(err);
+	    		} else {
+					if(result.rows && result.rows.length) {
+			    		var recentHistory = result.rows[0];
+			    		var MNY_HIS_SEQ = getNextSeq(recentHistory.MNY_HIS_CD.substring(14, 20));
+			    		MNY_HIS_CD += MNY_HIS_SEQ;
+			    	} else {
+			    		MNY_HIS_CD += '000001';
+			    	}
+			    	callback(null);
+			    }
+		    });
+	    },
+	    // insert MONEY_HISTORY
+	    function(callback) {
+	    	var insertMnyHistoryQuery = "INSERT INTO MONEY_HISTORY VALUES('" + MNY_HIS_CD + "', 'I', " + TOTAL_SELL_PRICE + ", TO_DATE('" + dateFormat + "', 'YYYYMMDDHH24MISS'), '" + BRCH_CD + "')";
+	    	__oracleDB.execute(insertMnyHistoryQuery, [], {autoCommit:true}, function(err, result) {
+	    		if(err) {
+	    			callback(err);
+	    		} else {
+	    			callback(null);
+	    		}
+	    	});
+	    },
+	    // update Branch Money
+	    function(callback) {
+	    	var updateBrchMnyQuery = "UPDATE BRANCH SET MNY=MNY+" + TOTAL_SELL_PRICE + " WHERE BRCH_CD='" + BRCH_CD + "'";
+	    	__oracleDB.execute(updateBrchMnyQuery, [], {autoCommit:true}, function(err, result) {
+	    		if(err) {
+	    			callback(err);
+	    		} else {
+	    			callback(null);
+	    		}
+	    	});
+	    },
+	    // update POS Cash
+	    function(callback) {
+	    	if(PAYMENT_WAY == 'CASH') {
+				var updatePosQuery = "UPDATE POS SET POSSESS_CASH=POSSESS_CASH+" + TOTAL_SELL_PRICE + " WHERE POS_CD='" + POS_CD + "'";
+				__oracleDB.execute(updatePosQuery, [], {autoCommit:true}, function(err, result) {
+					if(err) {
+						callback(err);
+					} else {
+						callback(null);
+					}
+				});
+			} else {
+				callback(null);
+			}
+	    },
+	    // insert SELL_LIST / update STOCK
+	    function(callback) {
+	    	async.map(LIST, function(eachSell, async_cb) {
+				var query = "UPDATE STOCK SET STOCK_CNT=STOCK_CNT+" + eachStored.PRDT_CNT + " WHERE BRCH_CD='" + BRCH_CD + "' AND PRDT_CD='" + eachStored.PRDT_CD + "'";
+				__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
+					async_cb();
+				});
+			}, function(async_err) {
+				callback(null);
+			});
+	    },
+	    // update USE POINT
+	    function(callback) {
+	    	if(MEMBER_PHONNO && MEMBER_USE_POINT) {
+	    		var updateUsePointQuery = "UPDATE MEMBER SET POINT=POINT-" + MEMBER_USE_POINT + " WHERE PHONNO='" + MEMBER_PHONNO + "'";
+	    		__oracleDB.execute(updateUsePointQuery, [], {autoCommit:true}, function(err, result) {
+					if(err) {
+						callback(err);
+					} else {
+						callback(null);
+					}
+				});
+	    	} else {
+	    		callback(null);
+	    	}
+	    },
+	    // update SAVE POINT
+	    function(callback) {
+	    	if(MEMBER_PHONNO && MEMBER_SAVE_POINT) {
+	    		var updateSavePointQuery = "UPDATE MEMBER SET POINT=POINT+" + MEMBER_SAVE_POINT + " WHERE PHONNO='" + MEMBER_PHONNO + "'";
+	    		__oracleDB.execute(updateSavePointQuery, [], {autoCommit:true}, function(err, result) {
+					if(err) {
+						callback(err);
+					} else {
+						callback(null);
+					}
+				});
+	    	} else {
+	    		callback(null);
+	    	}
+	    }
+	], function (err, result) {
+	    if(err) {
+	   		callback(null);
+	    } else {
+	   		callback(true);
+	    }
+	});
 };
 
 // 판매취소하기
@@ -223,7 +390,105 @@ exports.getProductList = function(callback) {
 
 // 주문하기
 exports.doOrder = function(options, callback) {
+	var BRCH_CD = options.BRCH_CD;
+	var LIST = options.LIST;
+	var TOTAL_ORDER_PRICE = 0;
 
+	var orderDateFormat = getDateFormat();
+	var ORDER_CD = BRCH_CD + orderDateFormat;
+
+	var addStore = function() {
+		__oracleDB.execute("SELECT STORE_CD FROM STORE ORDER BY STORE_DATE DESC LIMIT 1", [], function(err, result) {
+			if (err) {
+		       console.error(err.message);
+		       callback(null);
+		    } else {
+		    	var storeDateFormat = getDateFormat();
+		    	var STORE_CD = BRCH_CD + storeDateFormat;
+		    	if(result.rows && result.rows.length) {
+		    		var recentStore = result.rows[0];
+		    		var SEQ = getNextSeq(recentStore.STORE_CD.substring(14, 20));
+		    		STORE_CD += SEQ;
+		    	} else {
+		    		STORE_CD += '000001';
+		    	}
+
+		    	async.map(LIST, function(eachOrder, async_cb) {
+					__oracleDB.execute("SELECT CMPNY_CD FROM PRODUCT WHERE PRDT_CD='" + eachOrder.PRDT_CD + "'", [], function(_err, _result) {
+						var CMPNY_CD = _result.rows[0].CMPNY_CD;
+
+						var storeListCreateQuery = "INSERT INTO STORED_PRODUCT VALUES (" + eachOrder.PRDT_CNT + ", '" + STORE_CD + "', '" + CMPNY_CD + "', '" + eachOrder.PRDT_CD + "')";
+						__oracleDB.execute(orderCreateListQuery, [], {autoCommit:true}, function(__err, __result) {
+				    		if(__err) {
+				    			console.log('doOrder store list push err: ', __err);
+				    			async_cb();
+				    		} else {
+				    			async_cb();
+				    		}
+				    	});
+					});
+				}, function(async_err) {
+					var storeCreateQuery = "INSERT INTO STORE VALUES ('" + STORE_CD + "', TO_DATE('" + storeDateFormat + "', 'YYYYMMDDHH24MISS'), '" + ORDER_CD + "')";
+			    	__oracleDB.execute(orderCreateQuery, [], {autoCommit:true}, function(err, result) {
+			    		if(err) {
+			    			console.log('doOrder store push err: ', err);
+			    			callback(null);
+			    		} else {
+			    			// 입고 추가
+			    			callback(true);
+			    		}
+			    	});
+				});
+		    }
+		});
+	};
+
+	if(LIST && LIST.length) {
+		__oracleDB.execute("SELECT ORDER_CD FROM PRODUCT_ORDER ORDER BY ORDER_DATE DESC LIMIT 1", [], function(err, result) {
+			if (err) {
+		       console.error(err.message);
+		       callback(null);
+		    } else {
+		    	if(result.rows && result.rows.length) {
+		    		var recentOrder = result.rows[0];
+		    		var SEQ = getNextSeq(recentOrder.ORDER_CD.substring(14, 20));
+		    		ORDER_CD += SEQ;
+		    	} else {
+		    		ORDER_CD += '000001';
+		    	}
+
+		    	async.map(LIST, function(eachOrder, async_cb) {
+					__oracleDB.execute("SELECT PRDT_PRICE FROM PRODUCT WHERE PRDT_CD='" + eachOrder.PRDT_CD + "'", [], function(_err, _result) {
+						if(_result.rows && _result.rows[0]) {
+							TOTAL_ORDER_PRICE += _result.rows[0].PRDT_PRICE * eachOrder.PRDT_CNT;
+						}
+
+						var orderListCreateQuery = "INSERT INTO ORDERED_PRODUCT VALUES (" + eachOrder.PRDT_CNT + ", '" + ORDER_CD + "', '" + eachOrder.PRDT_CD + "')";
+						__oracleDB.execute(orderCreateListQuery, [], {autoCommit:true}, function(__err, __result) {
+				    		if(__err) {
+				    			console.log('doOrder order list push err: ', __err);
+				    			async_cb();
+				    		} else {
+				    			async_cb();
+				    		}
+				    	});
+					});
+				}, function(async_err) {
+					var orderCreateQuery = "INSERT INTO PRODUCT_ORDER VALUES ('" + ORDER_CD + "', " + TOTAL_ORDER_PRICE + ", TO_DATE('" + orderDateFormat + "', 'YYYYMMDDHH24MISS'), '" + BRCH_CD + "')";
+			    	__oracleDB.execute(orderCreateQuery, [], {autoCommit:true}, function(err, result) {
+			    		if(err) {
+			    			console.log('doOrder order push err: ', err);
+			    			callback(null);
+			    		} else {
+			    			addStore();
+			    		}
+			    	});
+				});
+		    }
+		});
+	} else {
+		callback(true);
+	}
 };
 
 // 주문 취소하기
@@ -288,7 +553,40 @@ exports.getOrderList = function(options, callback) {
 
 // 입고 확정하기
 exports.doStore = function(options, callback) {
+	var STORE_CD = options.STORE_CD;
+	var BRCH_CD = options.BRCH_CD;
 
+	var query = "SELECT * FROM STORED_PRODUCT WHERE STORE_CD='" + STORE_CD + "'";
+
+	__oracleDB.execute(query, [], function(err, result) {
+	    if (err) {
+	       console.log("doStore select err: ", err);
+	       callback(null);
+	    } else {
+	    	if(result.rows && result.rows.length) {
+	    		// 재고 업데이트
+	    		async.each(result.rows, function(eachStored, async_cb) {
+	    			var _query = "UPDATE STOCK SET STOCK_CNT=STOCK_CNT+" + eachStored.PRDT_CNT + " WHERE BRCH_CD='" + BRCH_CD + "' AND PRDT_CD='" + eachStored.PRDT_CD + "'";
+	    			__oracleDB.execute(query, [], {autoCommit:true}, function(_err, _result) {
+	    				if(_err) {
+	    					console.log("doStore update stock cnt err: ", _err);
+	    				}
+	    				async_cb();
+	    			});
+	    		}, function(async_err) {
+	    			if(async_err) {
+	    				console.log("doStore async_err: ", async_err);
+	    				callback(null);
+	    			} else {
+	    				callback(true);
+	    			}
+	    		});
+	    	} else {
+	    		console.log("doStore: no stored product!");
+	    		callback(null);
+	    	}
+	    }
+	});
 };
 
 // 입고목록 가져오기
@@ -368,7 +666,52 @@ exports.getRefundList = function(options, callback) {
 
 // 반품하기
 exports.doReturn = function(options, callback) {
+	var BRCH_CD = options.BRCH_CD;
+	var LIST = options.LIST;
 
+	var returnDateFormat = getDateFormat();
+	var RET_CD = BRCH_CD + returnDateFormat;
+
+	if(LIST && LIST.length) {
+		__oracleDB.execute("SELECT RET_CD FROM RETURN ORDER BY RET_DATE DESC LIMIT 1", [], function(err, result) {
+		    if (err) {
+		       console.log("doReturn select return err: ", err);
+		       callback(null);
+		    } else {
+		    	if(result && result.rows) {
+		    		var recentReturn = result.rows[0];
+		    		var SEQ = getNextSeq(recentReturn.RET_CD.substring(14, 20));
+		    		RET_CD += SEQ;
+		    	} else {
+		    		RET_CD += '000001';
+		    	}
+
+		    	__oracleDB.execute("INSERT INTO RETURN VALUES ('" + RET_CD + "', TO_DATE('" + returnDateFormat + "', 'YYYYMMDDHH24MISS'), '" + BRCH_CD + "')", [], {autoCommit:true}, function(_err, _result) {
+		    		if(_err) {
+		    			console.log("doReturn insert Return err: ", _err);
+		    			callback(null);
+		    		} else {
+		    			async.each(LIST, function(eachRet, async_cb) {
+		    				__oracleDB.execute("INSERT INTO RETURNED_PRODUCT VALUES (" + eachRet.PRDT_CNT + ", '" + eachRet.RET_DESCRB + "', '" + RET_CD + "', '" + eachRet.PRDT_CD + "')", [], {autoCommit:true}, function(__err, __result) {
+		    					__oracleDB.execute("UPDATE STOCK SET STOCK_CNT=STOCK_CNT-" + eachRet.PRDT_CNT + " WHERE BRCH_CD='" + BRCH_CD + "' AND PRDT_CD='" + eachRet.PRDT_CD + "'", [], {autoCommit:true}, function(___err, ___result) {
+		    						async_cb();
+		    					});
+		    				});
+		    			}, function(async_err) {
+		    				if(async_err) {
+		    					console.log("doReturn async_err: ", async_err);
+		    					callback(null);
+		    				} else {
+		    					callback(true);
+		    				}
+		    			});
+		    		}
+		    	});
+		    }
+		});
+	} else {
+		callback(true);
+	}
 };
 
 // 반품 취소하기
@@ -431,7 +774,40 @@ exports.getReturn = function(options, callback) {
 
 // 손실 등록하기
 exports.doLoss = function(options, callback) {
+	var BRCH_CD = options.BRCH_CD;
+	var lossCreateDate = getDateFormat();
+	var LOSS_CD = BRCH_CD + lossCreateDate;
 
+	__oracleDB.execute("SELECT LOSS_CD FROM LOSS ORDER BY LOSS_DATE DESC LIMIT 1 ", [], function(err, result) {
+	    if (err) {
+	       console.log("doLoss select loss err: ", err);
+	       callback(null);
+	    } else {
+	    	if(result.rows && result.rows.length) {
+	    		var recentLoss = result.rows[0];
+	    		var SEQ = getNextSeq(recentLoss.LOSS_CD.substring(14, 20));
+	    		LOSS_CD += SEQ;
+	    	} else {
+	    		LOSS_CD += '000001';
+	    	}
+
+	    	__oracleDB.execute("INSERT INTO LOSS VALUES ('" + LOSS_CD + "', " + options.LOSS_CNT + ", " + options.LOSS_PRICE + ", TO_DATE('" + lossCreateDate + "', 'YYYYMMDDHH24MISS'), '" + BRCH_CD + "', '" + options.PRDT_CD + "')", [], {autoCommit:true}, function(_err, _result) {
+	    		if(_err) {
+	    			console.log("doLoss insert loss err: ", _err);
+	    			callback(null);
+	    		} else {
+	    			__oracleDB.execute("UPDATE STOCK SET STOCK_CNT=STOCK_CNT-" + options.LOSS_CNT + " WHERE BRCH_CD='" + BRCH_CD + "' AND PRDT_CD='" + options.PRDT_CD + "'", [], {autoCommit:true}, function(__err, __result) {
+	    				if(__err) {
+	    					console.log("doLoss update stock cnt err: ", __err);
+	    					callback(null);
+	    				} else {
+	    					callback(true);
+	    				}
+	    			});
+	    		}
+	    	});
+	    }
+	});
 };
 
 // 손실 취소하기
@@ -457,7 +833,41 @@ exports.getLossList = function(options, callback) {
 
 // 폐기하기
 exports.doDiscard = function(options, callback) {
+	var BRCH_CD = options.BRCH_CD;
 
+	var discardCreateDate = getDateFormat();
+	var DISCARD_CD = BRCH_CD + discardCreateDate;
+
+	__oracleDB.execute("SELECT DISCARD_CD FROM DISCARD ORDER BY DISCARD_DATE DESC LIMIT 1 ", [], function(err, result) {
+	    if (err) {
+	       console.log("doDiscard select discard err: ", err);
+	       callback(null);
+	    } else {
+	    	if(result.rows && result.rows.length) {
+	    		var recentDiscard = result.rows[0];
+	    		var SEQ = getNextSeq(recentDiscard.DISCARD_CD.substring(14, 20));
+	    		DISCARD_CD += SEQ;
+	    	} else {
+	    		DISCARD_CD += '000001';
+	    	}
+
+	    	__oracleDB.execute("INSERT INTO DISCARD VALUES ('" + DISCARD_CD + "', TO_DATE('" + discardCreateDate + "', 'YYYYMMDDHH24MISS'), " + options.DISCARD_CNT + ", " + options.DISCARD_PRICE + ", '" + BRCH_CD + "', '" + options.PRDT_CD + "')", [], {autoCommit:true}, function(_err, _result) {
+	    		if(_err) {
+	    			console.log("doDiscard insert discard err: ", _err);
+	    			callback(null);
+	    		} else {
+	    			__oracleDB.execute("UPDATE STOCK SET STOCK_CNT=STOCK_CNT-" + options.DISCARD_CNT + " WHERE BRCH_CD='" + BRCH_CD + "' AND PRDT_CD='" + options.PRDT_CD + "'", [], {autoCommit:true}, function(__err, __result) {
+	    				if(__err) {
+	    					console.log("doDiscount update stock cnt err: ", __err);
+	    					callback(null);
+	    				} else {
+	    					callback(true);
+	    				}
+	    			});
+	    		}
+	    	});
+	    }
+	});
 };
 
 // 폐기 취소하기
@@ -485,7 +895,19 @@ exports.getDiscardList = function(options, callback) {
 
 // 회원 등록하기
 exports.addMember = function(options, callback) {
+	var BRCH_CD = options.BRCH_CD;
+	var joinDate = getDateFormat();
 
+	var query = "INSERT INTO MEMBER VALUES ('" + options.PHONNO + "', '" + options.PW + "', " + options.POINT + ", TO_DATE('" + joinDate + "', 'YYYYMMDDHH24MISS'), '" + BRCH_CD + "')";
+
+	__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
+        if (err) {
+            console.log("addMember err: ", err);
+            callback(null);
+        } else {
+            callback(true);
+        }
+    });
 };
 
 // 회원목록 가져오기
@@ -671,12 +1093,113 @@ exports.getBranch = function(options, callback) {
 
 // 마진 지불하기
 exports.payMargin = function(options, callback) {
+	var BRCH_CD = options.BRCH_CD;
+	var historyDateFormat = getDateFormat();
+	var MNY_HIS_CD = BRCH_CD + historyDateFormat;
 
+	var today = new Date();
+	var todayYear = today.getFullYear();
+	var todayMonth = today.getMonth();
+	if(todayMonth < 10) {
+		todayMonth = '0' + todayMonth;
+	}
+	var thisMonthFormat = (todayYear).toString() + (todayMonth).toString() + '01000000';
+
+	if(todayMonth == 12) {
+		var afterYear = todayYear + 1;
+		var afterMonth = '01';
+	} else {
+		var afterYear = todayYear;
+		var afterMonth = parseInt(todayMonth) + 1;
+
+		if(afterMonth < 10) {
+			afterMonth = '0' + afterMonth;
+		}
+	}
+
+	var afterMonthFormat = (afterYear).toString() + (afterMonth).toString() + '01000000';
+
+	var totalRevenue = 0;
+
+	__oracleDB.execute("SELECT * FROM MONEY_HISTORY WHERE HISTORY_DATE >= TO_DATE('" + thisMonthFormat + "', 'YYYYMMDDHH24MISS') AND HISTORY_DATE < TO_DATE('" + afterMonthFormat + "', 'YYYYMMDDHH24MISS')", [], function(err, result) {
+        if (err) {
+            console.log("payMargin select err: ", err);
+            callback(null);
+        } else {
+            if(result.rows && result.rows.length) {
+            	var rows = result.rows;
+            	for(var i = 0; i < rows.length; i++) {
+            		if(rows[i].IO_TYPE == 'I') {
+            			totalRevenue += rows[i].PRICE;
+            		} else if(rows[i].IO_TYPE == 'O') {
+            			totalRevenue -= rows[i].PRICE;
+            		}
+            	}
+
+            	if(totalRevenue > 0) {
+            		__oracleDB.execute("SELECT BRCH_TYPE_CD FROM BRANCH WHERE BRCH_CD='" + BRCH_CD + "'", [], function(_err, _result) {
+	            		var BRCH_TYPE_CD = _result.rows[0].BRCH_TYPE_CD;
+	            		__oracleDB.execute("SELECT PAYMENT_RATE FROM BRANCH_TYPE WHERE BRCH_TYPE_CD='" + BRCH_TYPE_CD + "'", [], function(__err, __result) {
+	            			var PAYMENT_RATE = __result.rows[0].PAYMENT_RATE;
+	            			var PAYMENT_PRICE = parseInt(totalRevenue*(PAYMENT_RATE/100));
+
+							__oracleDB.execute("UPDATE BRANCH SET MNY=MNY+" + PAYMENT_PRICE + " WHERE BRCH_CD='" + BRCH_CD + "'", [], {autoCommit:true}, function(___err, ___result) {
+								__oracleDB.execute("SELECT MNY_HIS_CD FROM MONEY_HISTORY ORDER BY HISTORY_DATE DESC LIMIT 1", [], function(____err, ____result) {
+									if(result.rows && result.rows.length) {
+							    		var recentHistory = result.rows[0];
+							    		var SEQ = getNextSeq(recentHistory.MNY_HIS_CD.substring(14, 20));
+							    		MNY_HIS_CD += SEQ;
+							    	} else {
+							    		MNY_HIS_CD += '000001';
+							    	}
+								});
+
+								__oracleDB.execute("INSERT INTO MONEY_HISTORY VALUES ('" + MNY_HIS_CD + "', 'O', " + PAYMENT_PRICE + ", TO_DATE('" + historyDateFormat + "', 'YYYYMMDDHH24MISS'), '" + BRCH_CD + "')", [], {autoCommit:true}, function(_____err, _____result) {
+									callback(true);
+								});
+							});
+	            		});
+	            	});
+            	} else {
+            		callback(true);
+            	}
+            } else {
+            	callback(true);
+            }
+        }
+    });
 };
 
 // 직원 등록하기
 exports.addEmployee = function(options, callback) {
+	var BRCH_CD = options.BRCH_CD;
+	var hiredDateFormat = getDateFormat();
+	var EMP_CD = BRCH_CD + hiredDateFormat;
 
+	__oracleDB.execute("SELECT EMP_CD FROM EMPLOYEE ORDER BY HIRED_DATE DESC LIMIT 1", [], function(err, result) {
+	    if (err) {
+	       console.error(err.message);
+	       callback(null);
+	    } else {
+	    	if(result.rows && result.rows.length) {
+	    		var recentHired = result.rows[0];
+	    		var SEQ = getNextSeq(recentHired.EMP_CD.substring(14, 20));
+	    		EMP_CD += SEQ;
+	    	} else {
+	    		EMP_CD += '000001';
+	    	}
+
+	    	var insertQuery = "INSERT INTO EMPLOYEE VALUES ('" + EMP_CD + "', '" + options.EMP_NAME + "', '" + options.PHONNO + "', '사원', 0, 0, TO_DATE('" + hiredDateFormat + "', 'YYYYMMDDHH24MISS'), '" + BRCH_CD + "')";
+	    	__oracleDB.execute(insertQuery, [], {autoCommit:true}, function(_err, _result) {
+		        if (_err) {
+		            console.log("addEmployee insert err: ", _err);
+		            callback(null);
+		        } else {
+		            callback(true);
+		        }
+		    });
+	    }
+	});	
 };
 
 // 직원 삭제하기
