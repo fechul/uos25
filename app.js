@@ -47,15 +47,25 @@ oracledb.getConnection({
 	//     }
 	// });
 
+	/*var query = "SELECT A.*, B.CMPNY_NAME, C.EVENT_NAME FROM PRODUCT A, COMPANY B, EVENT C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.EVENT_CD = C.EVENT_CD";
+
+	__oracleDB.execute(query, [], function(err, result) {  
+	    if (err) {  
+	       console.log("getProductList err: ", err);
+	    } else {
+	    	console.log(result.rows)
+	    }
+	});*/
+
      /*테스트*/
      core.getPoint({
 			PHONNO: '01092919986',
 		 	PW: '8520'
 		 },
 		 function (data) {
-     	 console.log("type" , typeof data[0]);
-     	 if(typeof data[0] != undefined)
-     	 	console.log("ok");
+
+         console.log(data ? true : false);
+         console.log("dd" , data ? null : 1, typeof data ? undefined :2);
          console.log(data);
      });
 });
