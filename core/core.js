@@ -526,7 +526,7 @@ exports.doOrder = function(options, callback) {
 						}
 
 						var orderListCreateQuery = "INSERT INTO ORDERED_PRODUCT VALUES (" + eachOrder.PRDT_CNT + ", '" + ORDER_CD + "', '" + eachOrder.PRDT_CD + "')";
-						__oracleDB.execute(orderCreateListQuery, [], {autoCommit:true}, function(__err, __result) {
+						__oracleDB.execute(orderListCreateQuery, [], {autoCommit:true}, function(__err, __result) {
 				    		if(__err) {
 				    			console.log('doOrder order list push err: ', __err);
 				    			async_cb();
