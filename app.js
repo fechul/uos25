@@ -72,7 +72,7 @@ oracledb.getConnection({
 	//     }
 	// });
 
-<<<<<<< HEAD
+
 	/*var query = "SELECT A.*, B.CMPNY_NAME, C.EVENT_NAME FROM PRODUCT A, COMPANY B, EVENT C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.EVENT_CD = C.EVENT_CD";
 
 	__oracleDB.execute(query, [], function(err, result) {  
@@ -84,9 +84,8 @@ oracledb.getConnection({
 	});*/
 
 	// var query = 'INSERT INTO EMPLOYEE VALUES ("00000120170609000004", "철철박사", "01000000000", "사원", 25, 25, "20170613", "000001")';
-=======
 	// var query = "INSERT INTO EMPLOYEE VALUES ('00000120170609000004', '철철박사', '01000000000', '사원', 25, 25, TO_DATE('20170613182732','YYYYMMDDHH24MISS'), '000001')";
->>>>>>> 4a31b2d0a34184195045f4d5dcae37c086bab26c
+
 
 	// __oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {  
 	//     if (err) {  
