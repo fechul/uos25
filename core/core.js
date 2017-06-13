@@ -318,7 +318,7 @@ exports.getSellList = function(options, callback) {
 exports.getSoldProduct = function(options, callback) {
 	var SELL_CD = options.SELL_CD;
 
-	var query = "SELECT A.*, B.PRDT_NAME, FROM SOLD_PRODUCT A, PRODUCT B WHERE A.PRDT_CD = B.PRDT_CD AND A.SELL_CD='" + SELL_CD + "'";
+	var query = "SELECT A.*, B.PRDT_NAME FROM SOLD_PRODUCT A, PRODUCT B WHERE A.PRDT_CD = B.PRDT_CD AND A.SELL_CD='" + SELL_CD + "'";
 
 	__oracleDB.execute(query, [], function(err, result) {
 	    if (err) {
@@ -491,7 +491,7 @@ exports.doOrder = function(options, callback) {
 					});
 				}, function(async_err) {
 					var storeCreateQuery = "INSERT INTO STORE VALUES ('" + STORE_CD + "', TO_DATE('" + timeFormat + "', 'YYYYMMDDHH24MISS'), '" + ORDER_CD + "')";
-			    	__oracleDB.execute(orderCreateQuery, [], {autoCommit:true}, function(err, result) {
+			    	__oracleDB.execute(storeCreateQuery, [], {autoCommit:true}, function(err, result) {
 			    		if(err) {
 			    			console.log('doOrder store push err: ', err);
 			    			callback(null);
@@ -689,7 +689,7 @@ exports.getStore = function(options, callback) {
 
 // 환불하기
 exports.doRefund = function(options, callback) {
-	
+
 };
 
 // 환불 취소하기

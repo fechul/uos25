@@ -161,6 +161,42 @@ oracledb.getConnection({
 	//     	console.log("포스: ",result.rows)
 	//     }
 	// });
+
+	// var query = "SELECT * FROM PRODUCT_ORDER";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("주문: ",result.rows)
+	//     }
+	// });
+
+	// var query = "SELECT * FROM STORE";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("입고: ",result.rows)
+	//     }
+	// });
+
+	// var query = "SELECT * FROM ORDERED_PRODUCT";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("주문한상품: ",result.rows)
+	//     }
+	// });
+
+	// var query = "SELECT * FROM STORED_PRODUCT";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("입고한상품: ",result.rows)
+	//     }
+	// });
 });
 
 // process.stdin.resume();
