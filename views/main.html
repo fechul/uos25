@@ -20,7 +20,7 @@
             <section class="left_container">
                 <div class="menu active" target="sell">판매</div>
                 <div class="menu" target="selllist">판매기록</div>
-                <div class="menu" target="refund">환불</div>
+                <div class="menu" target="refund">환불기록</div>
                 <div class="menu" target="order">주문</div>
                 <div class="menu" target="order_status">주문현황</div>
                 <div class="menu" target="store">입고</div>
@@ -129,6 +129,10 @@
                     </div>
                 </div>
                 <div class="workspace refund" name="refund">
+                    <div class="workspace_refund_list_container">
+                        <table id="refund_list">
+                        </table>
+                    </div>
                 </div>
                 <div class="workspace order" name="order">
                     <div class="workspace_order_product_list_container">
@@ -182,6 +186,7 @@
                 </div>
                 <div class="dialog_footer">
                     <button id="notification_dialog_close" class="btn btn-primary pull-right close_dialog">닫기</button>
+                    <button id="notification_dialog_confirm" class="btn btn-default pull-right dialog_confirm" style="display:none;">확인</button>
                 </div>
             </div>
         </div>
@@ -192,6 +197,7 @@
     <script src="js/selllist.js"></script>
     <script src="js/order.js"></script>
     <script src="js/stock.js"></script>
+    <script src="js/refund.js"></script>
 	<script src="js/main.js"></script>
     <script>
         $(document).ready(function() {

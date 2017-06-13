@@ -195,6 +195,13 @@ table tr:first-child td {
     text-align: right;
 }
 
+#refundDesc {
+    height: 80px;
+    max-height: 80px;
+    width: 280px;
+    max-width: 280px;
+}
+
 
 
 

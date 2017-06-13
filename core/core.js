@@ -758,6 +758,22 @@ exports.doRefund = function(options, callback) {
 	    		callback(null);
 	    	});
 	    },
+	    // delete sell list
+	    function(callback){
+	    	__oracleDB.execute("DELETE FROM SOLD_PRODUCT WHERE SELL_CD='" + SELL_CD + "'", [], {autoComit:true}, function(err, result) {
+	    		if(err) {
+	    			callback("delete sell list err: " + err);
+	    		} else {
+	    			__oracleDB.execute("DELETE FROM SELL WHERE SELL_CD='" + SELL_CD + "'", [], {autoComit:true}, function(_err, _result) {
+			    		if(_err) {
+			    			callback("delete sell err: " + _err);
+			    		} else {
+			    			callback(null);
+			    		};
+			    	});
+	    		};
+	    	});
+	    },
 	    // make MNY_HIS_CD
 	    function(callback){
 	    	__oracleDB.execute("SELECT MNY_HIS_CD FROM (SELECT MNY_HIS_CD FROM MONEY_HISTORY ORDER BY HISTORY_DATE DESC) WHERE ROWNUM=1", [], function(err, result) {
@@ -834,8 +850,15 @@ exports.getRefundList = function(options, callback) {
 	       console.log("getRefundList err: ", err);
 	       callback(null);
 	    } else {
-	    	callback({
-	    		LIST: result.rows
+	    	async.mapSeries(result.rows, function(row, async_cb) {
+	    		__oracleDB.execute("SELECT PRDT_NAME FROM PRODUCT WHERE PRDT_CD='" + row.PRDT_CD + "'", [], function(_err, _result) {
+	    			row.PRDT_NAME = _result.rows[0].PRDT_NAME;
+	    			async_cb();
+	    		});
+	    	}, function(async_err) {
+	    		callback({
+		    		LIST: result.rows
+		    	});
 	    	});
 	    }
 	});

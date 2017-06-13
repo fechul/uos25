@@ -5,6 +5,7 @@ var main = {
         selllist.init();
         order.init();
         stock.init();
+        refund.init();
     },
     init_events: function() {
         var self = this;
@@ -31,6 +32,8 @@ var main = {
                 stock.clear();
             } else if (target == 'selllist') {
                 selllist.clear();
+            } else if(target == 'refund') {
+                refund.clear();
             }
         });
 
@@ -39,7 +42,12 @@ var main = {
         });
     },
     notice: {
-        show: function(msg) {
+        show: function(msg, confirm) {
+            if(confirm) {
+                $('#notification_dialog_confirm').show();
+            } else {
+                $('#notification_dialog_confirm').hide();
+            }
             $('#notification_dialog_msg').html(msg);
             $('#notification_dialog').addClass('shown');
         },
