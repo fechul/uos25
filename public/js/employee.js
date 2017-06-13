@@ -19,6 +19,7 @@ var employee = {
 
         this.table.employee_list = $('#employee_list').DataTable({
             'columns': [
+                {'data': 'EMP_CD', 'title': '직원코드', 'width': '20%'},
                 {'data': 'EMP_NAME', 'title': '직원이름', 'width': '20%'},
                 {'data': 'PHONNO', 'title': '전화번호', 'width': '20%'},
                 {'data': 'DAY_WORK_HOUR', 'title': '주간근무시간', 'width': '20%'},
@@ -30,9 +31,16 @@ var employee = {
                 {
                     'targets': 5,
                     'render': function ( row, type, data, meta ) {
+                        return main.get_date_fortmat(row);
+                    }
+                },
+                {
+                    'targets': 6,
+                    'render': function ( row, type, data, meta ) {
                         return '<button class="btn btn-default btn-sm delete_employee">해고</button>';
                     }
                 }],
+
             'paging': false,
             'autoWidth': true,
             'searching': false,
@@ -57,6 +65,7 @@ var employee = {
         }).done(function(get) {
             console.log(get);
             if (get.RESULT) {
+                self.table.employee_list.clear();
                 self.table.employee_list.rows.add(get.DATA.LIST).draw();
             } else {
                 main.notice.show('서버에서 오류가 발생했습니다.');
@@ -67,7 +76,29 @@ var employee = {
         var self = this;
 
         $(document).on('click' ,'.delete_employee', function() {
-            self.table.employee_list.row($(this).parents('tr')).remove().draw();
+            var data = self.table.employee_list.row($(this).parents('tr')).data();
+            // self.table.employee_list.row($(this).parents('tr')).remove().draw();
+
+            $.ajax({
+                method: 'DELETE',
+                url: 'employee',
+                dataType: 'json',
+                data: {
+                    'EMP_CD': data.EMP_CD
+                }
+            }).fail(function(get) {
+                main.notice.show('서버에서 오류가 발생했습니다.');
+            }).done(function (get) {
+                console.log(get);
+                if (get.RESULT) {
+
+                } else {
+
+                }
+
+                self.set_table();
+            })
+
         });
 
         $('#employee_hire').click(function() {
@@ -78,8 +109,8 @@ var employee = {
                 PHONNO: emp_phonno
             };
 
-            $.post('/employee', json_data, function(order) {
-                console.log(order);
+            $.post('/employee', json_data, function(hire) {
+                console.log(hire);
                 self.clear();
             })
         });
