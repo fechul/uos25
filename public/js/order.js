@@ -61,8 +61,7 @@ var order = {
                 {
                     'targets': 4,
                     'render': function ( row, type, data, meta ) {
-                        data.REMOVE_CART = '<button class="order_remove_cart">삭제</button>';
-                        return data.REMOVE_CART;
+                        return '<button class="order_remove_cart">삭제</button>';
                     }
                 }
             ],
@@ -121,6 +120,7 @@ var order = {
 
         $('#do_order').click(function() {
             console.log(self.table.order.data());
+
             // $.ajax({
             //     method: 'POST',
             //     url: 'order',
