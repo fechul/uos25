@@ -148,8 +148,10 @@
                 <div class="workspace store" name="store">
                 </div>
                 <div class="workspace stock" name="stock">
-                    <table id="sell_list">
-                    </table>
+                    <div class="workspace_stock_container">
+                        <table id="stock_list">
+                        </table>
+                    </div>
                 </div>
                 <div class="workspace return" name="return">
                 </div>
@@ -160,6 +162,14 @@
                 <div class="workspace member" name="member">
                 </div>
                 <div class="workspace employee" name="employee">
+                    <div class="workspace_employee_container">
+                        <table id="employee_list">
+                        </table>
+                    </div>
+                    <div class="workspace_employee_table_container">
+                        <table id="employee_table">
+                        </table>
+                    </div>
                 </div>
             </section>
         </div>
@@ -181,6 +191,7 @@
     <script src="js/sell.js"></script>
     <script src="js/selllist.js"></script>
     <script src="js/order.js"></script>
+    <script src="js/stock.js"></script>
 	<script src="js/main.js"></script>
     <script>
         $(document).ready(function() {

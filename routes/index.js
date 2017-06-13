@@ -440,11 +440,13 @@ router.get('/point', function(req, res) {
 		PHONNO: PHONNO,
 		PW: PW
 	}, function(data) {
+
 		res.json({
     		RESULT: (data ? true : false),
     		ERR_CD: (data ? null : 1),
     		DATA: data
     	});
+
 	});
 });
 
@@ -529,6 +531,7 @@ router.get('/branch/money', function(req, res) {
 router.get('/event', function(req, res) {
 	var EVENT_CD = req.query.EVENT_CD;
     core.getEvent({
+
         EVENT_CD: EVENT_CD
     }, function(data) {
         res.json({
@@ -537,6 +540,7 @@ router.get('/event', function(req, res) {
     		DATA: data
     	});
     });
+
 });
 
 // 이벤트목록 가져오기
@@ -562,6 +566,7 @@ router.get('/branch', function(req, res) {
 	core.getBranch({
 		BRCH_CD: BRCH_CD
 	}, function(data) {
+
 		res.json({
     		RESULT: (data ? true : false),
     		ERR_CD: (data ? null : 1),

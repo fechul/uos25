@@ -71,7 +71,20 @@ oracledb.getConnection({
 	//     }
 	// });
 
+
+	/*var query = "SELECT A.*, B.CMPNY_NAME, C.EVENT_NAME FROM PRODUCT A, COMPANY B, EVENT C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.EVENT_CD = C.EVENT_CD";
+
+	__oracleDB.execute(query, [], function(err, result) {  
+	    if (err) {  
+	       console.log("getProductList err: ", err);
+	    } else {
+	    	console.log(result.rows)
+	    }
+	});*/
+
+	// var query = 'INSERT INTO EMPLOYEE VALUES ("00000120170609000004", "철철박사", "01000000000", "사원", 25, 25, "20170613", "000001")';
 	// var query = "INSERT INTO EMPLOYEE VALUES ('00000120170609000004', '철철박사', '01000000000', '사원', 25, 25, TO_DATE('20170613182732','YYYYMMDDHH24MISS'), '000001')";
+
 
 	// __oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {  
 	//     if (err) {  
@@ -92,6 +105,18 @@ oracledb.getConnection({
 	// });
 
      /*테스트*/
+
+//      core.getPoint({
+// 			PHONNO: '01092919986',
+// 		 	PW: '8520'
+// 		 },
+// 		 function (data) {
+//
+//          console.log(data ? true : false);
+//          console.log("dd" , data ? null : 1, typeof data ? undefined :2);
+//          console.log(data);
+//      });
+
    //   core.getEmployeeList({
 			// BRCH_CD: '000001'
 		 // },
@@ -152,6 +177,7 @@ oracledb.getConnection({
 	//     	console.log("포스: ",result.rows)
 	//     }
 	// });
+
 
 	// var query = "SELECT * FROM STOCK";
 	// __oracleDB.execute(query, [], function(err, result) {  
