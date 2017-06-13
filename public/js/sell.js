@@ -115,8 +115,8 @@ var sell = {
 
                 if (self.member_check) {
                     json_data.MEMBER_USE_POINT = parseInt($('#sell_use_point_price').val() || 0, 10);
-                    json_data.MEMBER_PHONNO = $('#sell_member_code');
-                    json_data.MEMBER_SAVE_POINT = parseInt($('#save_point_dialog_saving_point').val(), 10);
+                    json_data.MEMBER_PHONNO = $('#sell_member_code').val();
+                    json_data.MEMBER_SAVE_POINT = parseInt($('#sell_save_point_price').val(), 10);
                 }
 
                 var LIST = [];
@@ -216,18 +216,6 @@ var sell = {
                 $.post('/sell', json_data, function(result) {
                     console.log(result)
                 });
-
-                // $.ajax({
-                //     method: 'POST',
-                //     url: 'sell',
-                //     contentType: 'application/json',
-                //     data: json_data
-                // }).fail(function(get) {
-                //     main.notice.show('서버에서 오류가 발생했습니다.');
-                // }).done(function(get) {
-                //     console.log(get);
-                //     self.clear();
-                // });
             }
         });
 
@@ -253,9 +241,9 @@ var sell = {
                 };
 
                 if (self.member_check) {
-                    json_data.MEMBER_USE_POINT = praseInt($('#sell_use_point_price').val() || 0, 10);
-                    json_data.MEMBER_PHONNO = $('#sell_member_code');
-                    json_data.MEMBER_SAVE_POINT = praseInt($('#save_point_dialog_saving_point').val(), 10);
+                    json_data.MEMBER_USE_POINT = parseInt($('#sell_use_point_price').val() || 0, 10);
+                    json_data.MEMBER_PHONNO = $('#sell_member_code').val();
+                    json_data.MEMBER_SAVE_POINT = parseInt($('#sell_save_point_price').val(), 10);
                 }
 
                 var LIST = [];
@@ -350,16 +338,9 @@ var sell = {
                     }
                 }
 
-                json_data.LIST = LIST;
+                json_data.LIST = JSON.stringify(LIST);
 
-                $.ajax({
-                    method: 'POST',
-                    url: 'sell',
-                    dataType: 'json',
-                    data: JSON.stringify(json_data)
-                }).fail(function(get) {
-                    main.notice.show('서버에서 오류가 발생했습니다.');
-                }).done(function(get) {
+                $.post('/sell', json_data, function(result) {
                     self.clear();
                 });
             }
