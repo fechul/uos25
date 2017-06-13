@@ -23,6 +23,7 @@ var oracleRelease = function (connection) {
 	});
 };
 
+var async = require('async');
 
 oracledb.getConnection({
      user: "uosconv",
@@ -38,10 +39,34 @@ oracledb.getConnection({
 
      global.__oracleDB = oracleConnection;
 
- //     var query = "SELECT A.*, B.CMPNY_NAME FROM PRODUCT A, COMPANY B";
+ //     var query = "SELECT PRDT_CD FROM PRODUCT";
  //     __oracleDB.execute(query, [], function(err, result) {  
 	//     if (err) {  
 	//        console.log("err: ", err);
+	//     } else {
+	//     	var BRCH_CD = '000001';
+	//     	async.mapSeries(result.rows, function(product, async_cb) {
+	//     		var _query = "INSERT INTO STOCK VALUES (To_number(100), '" + product.PRDT_CD + "', '" + BRCH_CD +"')";
+
+	//     		__oracleDB.execute(_query, [], function(err, _result) {  
+	// 			    if (err) {  
+	// 			       console.log("err: ", err);
+	// 			    } else {
+	// 			    	console.log("!!!!: ",_result);
+	// 			    }
+	// 			    async_cb();
+	// 			});
+	//     	}, function(async_err) {
+	//     		console.log("done!!");
+	//     	});
+	//     }
+	// });
+
+	// var query = "SELECT * FROM EMPLOYEE";
+
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("getProductList err: ", err);
 	//     } else {
 	//     	console.log(result.rows)
 	//     }
@@ -56,6 +81,27 @@ oracledb.getConnection({
 	    	console.log(result.rows)
 	    }
 	});*/
+
+	// var query = 'INSERT INTO EMPLOYEE VALUES ("00000120170609000004", "철철박사", "01000000000", "사원", 25, 25, "20170613", "000001")';
+
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("test err: ", err);
+	//     } else {
+	//     	console.log(result)
+	//     }
+	// });
+
+	// var query = "SELECT A.*, B.CMPNY_NAME, C.EVENT_NAME FROM PRODUCT A, COMPANY B, EVENT C WHERE A.CMPNY_CD = B.CMPNY_CD AND A.EVENT_CD = C.EVENT_CD";
+
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("getProductList err: ", err);
+	//     } else {
+	//     	console.log(result.rows)
+	//     }
+	// });
+>>>>>>> 999adc7f7cb6f1e2787c4f9113603be6fd376c5a
 
      /*테스트*/
      core.getPoint({

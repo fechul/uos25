@@ -78,6 +78,7 @@ table tr:first-child td {
 .workspace {
     width: 100%;
     height: 100%;
+    padding: 15px;
 }
 
 .workspace:not(.active) {
@@ -85,21 +86,106 @@ table tr:first-child td {
 }
 
 .workspace.sell {
-    display: grid;
+    /*display: grid;
     grid-template-columns: 500px auto;
     grid-template-rows: auto;
     grid-template-areas:
-        "sell-left sell-right";
+        "sell-left sell-right";*/
+}
+
+.workspace_sell_table_container {
+    height: 400px
+}
+
+.workspace_sell_addon_container input {
+    text-align: right;
 }
 
 .workspace.sell .left {
-    grid-area: sell-left;
+    /*grid-area: sell-left;*/
     padding: 15px;
 }
 .workspace.sell .right {
-    grid-area: sell-right;
+    /*grid-area: sell-right;*/
 }
 
 .workspace.stock {
     padding: 15px;
+}
+
+.div_row {
+    height: 40px;
+}
+
+.div_row > .float_left {
+    float: left;
+    margin-right: 10px;
+}
+
+.div_row > .float_right {
+    float: right;
+    margin-left: 10px;
+}
+
+.dialog_header {
+    height: 35px;
+    background-color: #333;
+    color: white;
+    font-size: 18px;
+    padding: 5px 10px;
+    font-weight: bold;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.dialog_footer {
+    height: 40px;
+    padding: 5px;
+}
+
+.close_dialog {
+    margin-left: 5px;
+}
+
+#notification_dialog {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none;
+}
+
+#notification_dialog.shown {
+    display: inline-flex;
+}
+
+.notification_dialog_container {
+    background-color: white;
+    height: 200px;
+    width: 300px;
+    margin: auto;
+    border-radius: 5px;
+}
+
+#notification_dialog_msg {
+    height: 120px;
+    padding: 10px;
+}
+
+.point_dialog_member_check_msg {
+    display: none;
+}
+
+.sell_radio_button_label {
+    margin-left: 5px;
+    font-weight: normal
+}
+
+#sell_member_code,
+#sell_member_pw,
+#sell_member_before_point,
+#sell_member_after_point {
+    width: 100px
 }

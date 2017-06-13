@@ -32,14 +32,93 @@
             </section>
             <section class="right_container">
                 <div class="workspace sell active" name="sell">
-                    <div class="left">
+                    <div class="workspace_sell_table_container">
                         <table id="sell_list">
                         </table>
-                        <div>
-                            총 판매 금액 : 1111111;
-                        </div>
                     </div>
-                    <div class="right">
+                    <div class="workspace_sell_addon_container">
+                        <div class="div_row">
+                            <div class="float_left">
+                                <label>상품코드</label>
+                                <input id="sell_product_id">
+                            </div>
+                            <div class="float_right">
+                                <label>판매금액</label>
+                                <input id="sell_price_sum" value=0 disabled>
+                            </div>
+                        </div>
+                        <div class="div_row">
+                            <div class="float_left">
+                                <label>성별</label>
+                                <label class="sell_radio_button_label"><input type="radio" name="sell_radio_sex" value="M">남성</label>
+                                <label class="sell_radio_button_label"><input type="radio" name="sell_radio_sex" value="W">여성</label>
+                            </div>
+                            <div class="float_right">
+                                <label>사용 포인트</label>
+                                <input id="sell_use_point_price" value=0 disabled>
+                            </div>
+                        </div>
+                        <div class="div_row">
+                            <div class="float_left">
+                                <label>연령</label>
+                                <label class="sell_radio_button_label"><input type="radio" name="sell_radio_age" value="10대">10대</label>
+                                <label class="sell_radio_button_label"><input type="radio" name="sell_radio_age" value="20대">20대</label>
+                                <label class="sell_radio_button_label"><input type="radio" name="sell_radio_age" value="30대">30대</label>
+                                <label class="sell_radio_button_label"><input type="radio" name="sell_radio_age" value="40대">40대</label>
+                                <label class="sell_radio_button_label"><input type="radio" name="sell_radio_age" value="50대">50대</label>
+                                <label class="sell_radio_button_label"><input type="radio" name="sell_radio_age" value="60대">60대</label>
+                                <label class="sell_radio_button_label"><input type="radio" name="sell_radio_age" value="기타">기타</label>
+                            </div>
+                            <div class="float_right">
+                                <label>결제하실 금액</label>
+                                <input id="sell_need_pay_price" value=0 disabled>
+                            </div>
+                        </div>
+                        <div class="div_row">
+                            <div class="float_right">
+                                <label>결제하신 금액</label>
+                                <input id="sell_paid_price" value=0>
+                            </div>
+                        </div>
+                        <div class="div_row">
+                            <div class="float_left">
+                                <label>회원번호</label>
+                                <input id="sell_member_code">
+                            </div>
+                            <div class="float_left">
+                                <label>비밀번호</label>
+                                <input type="password" id="sell_member_pw">
+                            </div>
+                            <div class="float_right">
+                                <label>거스름돈</label>
+                                <input id="sell_change" value=0 disabled>
+                            </div>
+                        </div>
+                        <div class="div_row">
+                            <div class="float_left">
+                                <button id="sell_member_check_button" class="btn btn-primary btn-sm">회원 확인</button>
+                                <label id="sell_member_check_complete" class="point_dialog_member_check_msg">확인완료</label>
+                                <label id="sell_member_check_fail" class="point_dialog_member_check_msg">등록되지 않은 회원입니다.</label>
+                            </div>
+                            <div class="float_right">
+                                <label>적립 포인트</label>
+                                <input id="sell_save_point_price" value=0 disabled>
+                            </div>
+                        </div>
+                        <div class="div_row">
+                            <div class="float_left">
+                                <label>현재 포인트</label>
+                                <input id="sell_member_before_point" val=0 disabled>
+                            </div>
+                            <div class="float_left">
+                                <label>결제 후 포인트</label>
+                                <input id="sell_member_after_point" val=0 disabled>
+                            </div>
+                            <div class="float_right">
+                                <button id="sell_by_cash" class="btn btn-primary">현금 결제</button>
+                                <button id="sell_by_card" class="btn btn-primary">카드 결제</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="workspace refund" name="refund">
@@ -65,6 +144,18 @@
                 <div class="workspace employee" name="employee">
                 </div>
             </section>
+        </div>
+        <div id="notification_dialog" class="dialog">
+            <dic class="notification_dialog_container">
+                <div class="dialog_header">
+                    알림
+                </div>
+                <div id="notification_dialog_msg">
+                </div>
+                <div class="dialog_footer">
+                    <button id="notification_dialog_close" class="btn btn-primary pull-right close_dialog">닫기</button>
+                </div>
+            </div>
         </div>
     </body>
 	<script src="lib/jquery.js"></script>
