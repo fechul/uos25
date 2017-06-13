@@ -194,3 +194,29 @@ table tr:first-child td {
     width: 100%;
     text-align: right;
 }
+
+
+
+
+
+
+
+
+
+/* order */
+.workspace_order_product_list_container {
+    height: 400px;
+}
+
+.workspace_order_table_container {
+    width: 70%;
+    float: left;
+    height: 250px;
+}
+
+.workspace_order_right_container {
+    height: 250px;
+    width: 25%;
+    background-color: black;
+    float: right;
+}

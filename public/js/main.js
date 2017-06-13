@@ -2,6 +2,7 @@ var main = {
     init: function() {
         this.init_events();
         sell.init();
+        order.init();
     },
     init_events: function() {
         var self = this;
@@ -22,6 +23,8 @@ var main = {
             // 페이지별 초기화
             if (target == 'sell') {
                 sell.clear();
+            } else if (target == 'order') {
+                order.clear();
             }
         });
 

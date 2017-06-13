@@ -8,8 +8,7 @@ var sell = {
     member_point: 0,
     init: function() {
         this.init_table();
-        this.clear();
-        this.init_sell_events();
+        this.init_events();
     },
     clear: function() {
         var self = this;
@@ -26,7 +25,7 @@ var sell = {
         $('.workspace.sell input#sell_member_pw').val('');
         $('.point_dialog_member_check_msg').hide();
     },
-    init_sell_events: function() {
+    init_events: function() {
         var self = this;
 
         $('#sell_product_id').keyup(function(e) {
@@ -345,7 +344,7 @@ var sell = {
                         });
                     }
                 }
-                
+
                 json_data.LIST = LIST;
 
                 $.ajax({
