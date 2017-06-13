@@ -7,6 +7,7 @@ var main = {
         order_status.init();
         stock.init();
         employee.init();
+        member.init();
     },
     init_events: function() {
         var self = this;
@@ -37,6 +38,8 @@ var main = {
                 selllist.clear();
             } else if (target == 'employee'){
                 employee.clear();
+            } else if (target == 'member'){
+                member.clear();
             }
         });
 

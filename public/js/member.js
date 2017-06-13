@@ -1,9 +1,10 @@
 /**
  * Created by Seo on 2017-06-14.
  */
-var employee = {
+
+var member = {
     table: {
-        employee_list: null
+        member_list: null
     },
     init: function () {
         this.init_table();
@@ -11,32 +12,29 @@ var employee = {
     },
     clear: function() {
         this.set_table();
-        this.table.employee_list.clear().draw();
+        this.table.member_list.clear().draw();
     },
     init_table: function() {
         var self = this;
 
-        this.table.employee_list = $('#employee_list').DataTable({
+        this.table.member_list = $('#member_list').DataTable({
             'columns': [
-                {'data': 'EMP_CD', 'title': '직원코드', 'width': '20%'},
-                {'data': 'EMP_NAME', 'title': '직원이름', 'width': '20%'},
                 {'data': 'PHONNO', 'title': '전화번호', 'width': '20%'},
-                {'data': 'DAY_WORK_HOUR', 'title': '주간근무시간', 'width': '20%'},
-                {'data': 'NIGHT_WORK_HOUR', 'title': '야간근무시간', 'width': '20%'},
-                {'data': 'HIRED_DATE', 'title': '고용날짜', 'width': '20%'},
-                {'data': 'DELETE_EMP', 'title': '해고', 'width': '14%'},
+                {'data': 'POINT', 'title': '마일리지', 'width': '20%'},
+                {'data': 'JOIN_DATE', 'title': '가입날짜', 'width': '20%'},
+                {'data': 'DELETE_MEMBER', 'title': '회원삭제', 'width': '14%'},
             ],
             'columnDefs': [
                 {
-                    'targets': 5,
+                    'targets': 2,
                     'render': function ( row, type, data, meta ) {
                         return main.get_date_fortmat(row);
                     }
                 },
                 {
-                    'targets': 6,
+                    'targets': 3,
                     'render': function ( row, type, data, meta ) {
-                        return '<button class="btn btn-default btn-sm delete_employee">해고</button>';
+                        return '<button class="btn btn-default btn-sm delete_member">회원삭제</button>';
                     }
                 }],
 
@@ -56,7 +54,7 @@ var employee = {
 
         $.ajax({
             method: 'GET',
-            url: 'employee/list',
+            url: 'member/list',
             dataType: 'json',
             data: ''
         }).fail(function(get) {
@@ -64,8 +62,8 @@ var employee = {
         }).done(function(get) {
             console.log(get);
             if (get.RESULT) {
-                self.table.employee_list.clear();
-                self.table.employee_list.rows.add(get.DATA.LIST).draw();
+                self.table.member_list.clear();
+                self.table.member_list.rows.add(get.DATA.LIST).draw();
             } else {
                 main.notice.show('서버에서 오류가 발생했습니다.');
             }
@@ -74,16 +72,16 @@ var employee = {
     init_events: function () {
         var self = this;
 
-        $(document).on('click' ,'.delete_employee', function() {
-            var data = self.table.employee_list.row($(this).parents('tr')).data();
+        $(document).on('click' ,'.delete_member', function() {
+            var data = self.table.member_list.row($(this).parents('tr')).data();
             // self.table.employee_list.row($(this).parents('tr')).remove().draw();
 
             $.ajax({
                 method: 'DELETE',
-                url: 'employee',
+                url: 'member',
                 dataType: 'json',
                 data: {
-                    'EMP_CD': data.EMP_CD
+                    'PHONNO': data.PHONNO
                 }
             }).fail(function(get) {
                 main.notice.show('서버에서 오류가 발생했습니다.');
@@ -100,16 +98,16 @@ var employee = {
 
         });
 
-        $('#employee_hire').click(function() {
-            var emp_name = $('#employee_name').val();
-            var emp_phonno = $('#employee_phonno').val();
+        $('#member_register').click(function() {
+            var member_phonno = $('#member_phonno').val();
+            var member_pw = $('#member_pw').val();
             var json_data = {
-                EMP_NAME: emp_name,
-                PHONNO: emp_phonno
+                PHONNO: member_phonno,
+                PW: member_pw
             };
 
-            $.post('/employee', json_data, function(hire) {
-                console.log(hire);
+            $.post('/member', json_data, function(register) {
+                console.log(register);
                 self.clear();
             })
         });
