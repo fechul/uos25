@@ -189,6 +189,25 @@
                 </div>
 
                 <div class="workspace member" name="member">
+                    <div class="workspace_member_container">
+                        <table id="member_list">
+                        </table>
+                    </div>
+                    <div class="workspace_member_manage_container" style="margin-top: 20px">
+                        <div class = "div_row">
+                            <label>전화번호</label>
+                            <input id="member_phonno">
+                        </div>
+                        <div class = "div_row">
+                            <label>패스워드</label>
+                            <input id="member_pw">
+                        </div>
+                        <div class = "div_row">
+                            <button id = "member_register" class = "btn btn-primary">
+                                <label>회원등록</label>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="workspace employee" name="employee">
@@ -210,6 +229,7 @@
                                 <label>직원등록</label>
                             </button>
                         </div>
+                    </div>
                 </div>
             </section>
         </div>
@@ -235,6 +255,7 @@
     <script src="js/stock.js"></script>
     <script src="js/store.js"></script>
     <script src="js/employee.js"></script>
+    <script src="js/member.js"></script>
 	<script src="js/main.js"></script>
     <script>
         $(document).ready(function() {
