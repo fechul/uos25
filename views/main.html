@@ -44,18 +44,18 @@
                             </div>
                             <div class="float_right">
                                 <label>판매금액</label>
-                                <input id="sell_price_sum" value=0 disabled>
+                                <input id="sell_price_sum" class="sell_price_input" value=0 disabled>
                             </div>
                         </div>
                         <div class="div_row">
                             <div class="float_left">
                                 <label>성별</label>
-                                <label class="sell_radio_button_label"><input type="radio" name="sell_radio_sex" value="M">남성</label>
-                                <label class="sell_radio_button_label"><input type="radio" name="sell_radio_sex" value="W">여성</label>
+                                <label class="sell_radio_button_label"><input type="radio" name="sell_radio_sex" value="m">남성</label>
+                                <label class="sell_radio_button_label"><input type="radio" name="sell_radio_sex" value="f">여성</label>
                             </div>
                             <div class="float_right">
                                 <label>사용 포인트</label>
-                                <input id="sell_use_point_price" value=0 disabled>
+                                <input id="sell_use_point_price" class="sell_price_input" value=0 disabled>
                             </div>
                         </div>
                         <div class="div_row">
@@ -71,13 +71,13 @@
                             </div>
                             <div class="float_right">
                                 <label>결제하실 금액</label>
-                                <input id="sell_need_pay_price" value=0 disabled>
+                                <input id="sell_need_pay_price" class="sell_price_input" value=0 disabled>
                             </div>
                         </div>
                         <div class="div_row">
                             <div class="float_right">
                                 <label>결제하신 금액</label>
-                                <input id="sell_paid_price" value=0>
+                                <input id="sell_paid_price" class="sell_price_input" value=0>
                             </div>
                         </div>
                         <div class="div_row">
@@ -91,7 +91,7 @@
                             </div>
                             <div class="float_right">
                                 <label>거스름돈</label>
-                                <input id="sell_change" value=0 disabled>
+                                <input id="sell_change" class="sell_price_input" value=0 disabled>
                             </div>
                         </div>
                         <div class="div_row">
@@ -107,7 +107,7 @@
                         </div>
                         <div class="div_row">
                             <div class="float_left">
-                                <label>현재 포인트</label>
+                                <label>보유 포인트</label>
                                 <input id="sell_member_before_point" val=0 disabled>
                             </div>
                             <div class="float_left">
@@ -160,6 +160,7 @@
     </body>
 	<script src="lib/jquery.js"></script>
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+    <script src="js/sell.js"></script>
 	<script src="js/main.js"></script>
     <script>
         $(document).ready(function() {

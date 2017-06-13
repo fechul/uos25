@@ -62,11 +62,12 @@ oracledb.getConnection({
 	//     }
 	// });
 
-	// var query = "SELECT * FROM EMPLOYEE";
-
-	// __oracleDB.execute(query, [], function(err, result) {  
+	// var query = "SELECT * FROM EMPLOYEE WHERE HIRED_DATE >= TO_DATE('20170501000000', 'YYYYMMDDHH24MISS') AND HIRED_DATE < TO_DATE('20170601000000', 'YYYYMMDDHH24MISS')";
+	// cnt = 1;
+	// var _query = "UPDATE STOCK SET STOCK_CNT=STOCK_CNT+" + cnt + " WHERE BRCH_CD='000001' AND PRDT_CD='asdfc02458'";
+	// __oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {  
 	//     if (err) {  
-	//        console.log("getProductList err: ", err);
+	//        console.log("err: ", err);
 	//     } else {
 	//     	console.log(result.rows)
 	//     }
@@ -106,16 +107,79 @@ oracledb.getConnection({
 	// });
 
      /*테스트*/
-     core.getPoint({
-			PHONNO: '01092919986',
-		 	PW: '8520'
-		 },
-		 function (data) {
+// <<<<<<< HEAD
+//      core.getPoint({
+// 			PHONNO: '01092919986',
+// 		 	PW: '8520'
+// 		 },
+// 		 function (data) {
+//
+//          console.log(data ? true : false);
+//          console.log("dd" , data ? null : 1, typeof data ? undefined :2);
+//          console.log(data);
+//      });
+// =======
+   //   core.getEmployeeList({
+			// BRCH_CD: '000001'
+		 // },
+		 // function (data) {
+   //       console.log(data);
+   //   });
 
-         console.log(data ? true : false);
-         console.log("dd" , data ? null : 1, typeof data ? undefined :2);
-         console.log(data);
-     });
+ //    var query = "SELECT * FROM SELL";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("판매기록: ",result.rows)
+	//     }
+	// });
+
+	// var query = "SELECT * FROM SOLD_PRODUCT";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("판매상품들: ",result.rows)
+	//     }
+	// });
+
+	// var query = "SELECT * FROM MONEY_HISTORY";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("자금내역: ",result.rows)
+	//     }
+	// });
+
+	// var query = "SELECT MNY FROM BRANCH";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("지점의 자금: ",result.rows)
+	//     }
+	// });
+
+	// var query = "SELECT * FROM MEMBER";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("회원: ",result.rows)
+	//     }
+	// });
+
+	// var query = "SELECT * FROM POS";
+	// __oracleDB.execute(query, [], function(err, result) {  
+	//     if (err) {  
+	//        console.log("err: ", err);
+	//     } else {
+	//     	console.log("포스: ",result.rows)
+	//     }
+	// });
+>>>>>>> cf729a975b39663e77f6de390a08fec54726c980
 });
 
 // process.stdin.resume();

@@ -119,6 +119,7 @@ router.get('/product/list', function(req, res) {
 
 // 주문하기
 router.post('/order', function(req, res) {
+	req.body.BRCH_CD = req.session.BRCH_CD;
 	core.doOrder(req.body, function(result) {
 		res.json({
     		RESULT: (result ? true : false),
@@ -172,6 +173,7 @@ router.post('/order/list', function(req, res) {
 
 // 입고 확정하기
 router.post('/store', function(req, res) {
+	req.body.BRCH_CD = req.session.BRCH_CD;
 	core.doStore(req.body, function(result) {
 		res.json({
     		RESULT: (result ? true : false),
@@ -256,6 +258,7 @@ router.get('/refund/list', function(req, res) {
 
 // 반품하기
 router.post('/return', function(req, res) {
+	req.body.BRCH_CD = req.session.BRCH_CD;
 	core.doReturn(req.body, function(result) {
 		res.json({
     		RESULT: (result ? true : false),
@@ -309,6 +312,7 @@ router.get('/return', function(req, res) {
 
 // 손실 등록하기
 router.post('/loss', function(req, res) {
+	req.body.BRCH_CD = req.session.BRCH_CD;
 	core.doLoss(req.body, function(result) {
 		res.json({
     		RESULT: (result ? true : false),
@@ -347,6 +351,7 @@ router.get('/loss/list', function(req, res) {
 
 // 폐기하기
 router.post('/discard', function(req, res) {
+	req.body.BRCH_CD = req.session.BRCH_CD;
 	core.doDiscard(req.body, function(result) {
 		res.json({
     		RESULT: (result ? true : false),
@@ -388,6 +393,7 @@ router.get('/discard/list', function(req, res) {
 
 // 회원 등록하기
 router.post('/member', function(req, res) {
+	req.body.BRCH_CD = req.session.BRCH_CD;
 	core.addMember(req.body, function(result) {
 		res.json({
     		RESULT: (result ? true : false),
@@ -569,7 +575,10 @@ router.get('/branch', function(req, res) {
 
 // 마진 지불하기
 router.post('/margin', function(req, res) {
-	core.payMargin(function(result) {
+	var BRCH_CD = req.session.BRCH_CD;
+	core.payMargin({
+		BRCH_CD: BRCH_CD
+	}, function(result) {
 		res.json({
     		RESULT: (result ? true : false),
     		ERR_CD: (result ? null : 1),
@@ -585,6 +594,7 @@ router.post('/margin', function(req, res) {
 
 // 직원 등록하기
 router.post('/employee', function(req, res) {
+	req.body.BRCH_CD = req.session.BRCH_CD;
 	core.addEmployee(req.body, function(result) {
 		res.json({
     		RESULT: (result ? true : false),
