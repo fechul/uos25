@@ -218,6 +218,8 @@ router.get('/store', function(req, res) {
 
 // 환불하기
 router.post('/refund', function(req, res) {
+	req.body.BRCH_CD = req.session.BRCH_CD;
+	req.body.POS_CD = req.session.POS_CD;
 	core.doRefund(req.body, function(result) {
 		res.json({
     		RESULT: (result ? true : false),
@@ -260,6 +262,7 @@ router.get('/refund/list', function(req, res) {
 
 // 반품하기
 router.post('/return', function(req, res) {
+	req.body.LIST = JSON.parse(req.body.LIST);
 	req.body.BRCH_CD = req.session.BRCH_CD;
 	core.doReturn(req.body, function(result) {
 		res.json({

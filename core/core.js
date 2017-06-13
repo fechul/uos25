@@ -682,7 +682,115 @@ exports.getStore = function(options, callback) {
 
 // 환불하기
 exports.doRefund = function(options, callback) {
+	var BRCH_CD = options.BRCH_CD;
+	var POS_CD = options.POS_CD;
 
+	var SELL_CD = options.SELL_CD;
+	var REF_DESCR = options.REF_DESCR;
+
+	var refundDateFormat = getDateFormat();
+	var timeFormat = getTimeFormat();
+
+	// CODE
+	var REF_CD = BRCH_CD + refundDateFormat;
+	var MNY_HIS_CD = BRCH_CD + refundDateFormat;
+
+	var productList = null;
+	var TOTAL_REFUND_PRICE = 0;
+
+	async.waterfall([
+		// make REF_CD
+	    function(callback){
+	    	var query = "SELECT REF_CD FROM (SELECT REF_CD FROM REFUND ORDER BY REF_DATE DESC) WHERE ROWNUM=1";
+	    	__oracleDB.execute(query, [], function(err, result) {
+	    		if (err) {
+			       callback("make REF_CD err: " + err);
+			    } else {
+			    	if(result.rows && result.rows.length) {
+			    		var recentRef = result.rows[0];
+			    		var REF_SEQ = getNextSeq(recentRef.REF_CD.substring(14, 20));
+			    		REF_CD += REF_SEQ;
+			    	} else {
+			    		REF_CD += '000001';
+			    	}
+			    	callback(null);
+			    }
+	    	});
+	    },
+	    // get PRODUCT LIST
+	    function(callback){
+	    	var query = "SELECT * FROM SOLD_PRODUCT WHERE SELL_CD='" + SELL_CD + "'";
+	    	__oracleDB.execute(query, [], function(err, result) {
+	    		if (err) {
+			       callback("get PRODUCT LIST err: " + err);
+			    } else {
+			    	productList = result.rows;
+			    	callback(null);
+			    }
+	    	});
+	    },
+	    // make REFUND / update STOCK
+	    function(callback){
+	    	async.map(productList, function(eachRefund, async_cb) {
+	    		TOTAL_REFUND_PRICE += eachRefund.SELL_PRICE;
+	    		var query = "INSERT INTO REFUND VALUES ('" + REF_CD + "', TO_DATE('" + timeFormat + "', 'YYYYMMDDHH24MISS'), '" + REF_DESCR + "', " + eachRefund.PRDT_CNT + ", " + eachRefund.SELL_PRICE + ", '" + eachRefund.PRDT_CD + "', '" + POS_CD + "')";
+		    	__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
+		    		var stockQuery = "UPDATE STOCK SET STOCK_CNT=STOCK_CNT+" + eachRefund.PRDT_CNT + " WHERE BRCH_CD='" + BRCH_CD + "' AND PRDT_CD='" + eachRefund.PRDT_CD + "'";
+					__oracleDB.execute(stockQuery, [], {autoCommit:true}, function(err, result) {
+						async_cb();
+					});
+		    	});
+	    	}, function(async_err) {
+	    		callback(null);
+	    	});
+	    },
+	    // make MNY_HIS_CD
+	    function(callback){
+	    	__oracleDB.execute("SELECT MNY_HIS_CD FROM (SELECT MNY_HIS_CD FROM MONEY_HISTORY ORDER BY HISTORY_DATE DESC) WHERE ROWNUM=1", [], function(err, result) {
+	    		if(err) {
+	    			callback("make MNY_HIS_CD err: " + err);
+	    		} else {
+					if(result.rows && result.rows.length) {
+			    		var recentHistory = result.rows[0];
+			    		var MNY_HIS_SEQ = getNextSeq(recentHistory.MNY_HIS_CD.substring(14, 20));
+			    		MNY_HIS_CD += MNY_HIS_SEQ;
+			    	} else {
+			    		MNY_HIS_CD += '000001';
+			    	}
+			    	callback(null);
+			    }
+		    });
+	    },
+	    // insert MONEY HISTORY
+	    function(callback) {
+	    	var insertMnyHistoryQuery = "INSERT INTO MONEY_HISTORY VALUES('" + MNY_HIS_CD + "', 'O', " + TOTAL_REFUND_PRICE + ", TO_DATE('" + timeFormat + "', 'YYYYMMDDHH24MISS'), '" + BRCH_CD + "')";
+	    	__oracleDB.execute(insertMnyHistoryQuery, [], {autoCommit:true}, function(err, result) {
+	    		if(err) {
+	    			callback("insert MONEY_HISTORY err: " + err);
+	    		} else {
+	    			callback(null);
+	    		}
+	    	});
+	    },
+	    // update Branch Money
+	    function(callback) {
+	    	var updateBrchMnyQuery = "UPDATE BRANCH SET MNY=MNY-" + TOTAL_REFUND_PRICE + " WHERE BRCH_CD='" + BRCH_CD + "'";
+	    	__oracleDB.execute(updateBrchMnyQuery, [], {autoCommit:true}, function(err, result) {
+	    		if(err) {
+	    			callback("update Branch Money err: " + err);
+	    		} else {
+	    			callback(null);
+	    		}
+	    	});
+	    }
+	], function (err, result) {
+		if(err) {
+			console.log(err);
+			callback(null);
+		} else {
+			callback(true);
+		}
+	});
 };
 
 // 환불 취소하기
@@ -957,7 +1065,9 @@ exports.addMember = function(options, callback) {
 	var joinDate = getDateFormat();
 	var timeFormat = getTimeFormat();
 
-	var query = "INSERT INTO MEMBER VALUES ('" + options.PHONNO + "', '" + options.PW + "', " + options.POINT + ", TO_DATE('" + timeFormat + "', 'YYYYMMDDHH24MISS'), '" + BRCH_CD + "')";
+	var POINT = options.POINT || 0;
+
+	var query = "INSERT INTO MEMBER VALUES ('" + options.PHONNO + "', '" + options.PW + "', " + POINT + ", TO_DATE('" + timeFormat + "', 'YYYYMMDDHH24MISS'), '" + BRCH_CD + "')";
 
 	__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
         if (err) {
