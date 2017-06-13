@@ -232,13 +232,13 @@ exports.cancelOrder = function(options, callback) {
 
 	var query = "DELETE FROM PRODUCT_ORDER WHERE ORDER_CD='" + ORDER_CD + "'";
 
-	__oracleDB.execute(query, [], function(err, result) {
+	__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
 	    if (err) {
 	       console.log("cancelOrder err: ", err);
 	       callback(null);
 	    } else {
 	    	var _query = "DELETE FROM ORDERED_PRODUCT WHERE ORDER_CD='" + ORDER_CD + "'";
-	    	__oracleDB.execute(_query, [], function(_err, _result) {
+	    	__oracleDB.execute(_query, [], {autoCommit:true}, function(_err, _result) {
 			    if (_err) {
 			       console.log("cancelOrder2 err: ", _err);
 			       callback(null);
@@ -510,7 +510,7 @@ exports.deleteMember = function(options, callback) {
 	var PHONNO = options.PHONNO;
 	var query = "DELETE FROM MEMBER WHERE PHONNO='" + PHONNO + "'";
 
-	__oracleDB.execute(query, [], function(err, result) {
+	__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
         if (err) {
             console.log("delteMember err: ", err);
             callback(null);
@@ -542,7 +542,7 @@ exports.addCvs = function(options, callback) {
 
 	var query = "INSERT INTO CVS VALUES ('" + BRCH_CD + "', '" + CVS_CD + "')";
 
-	__oracleDB.execute(query, [], function(err, result) {
+	__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
         if (err) {
             console.log("addCvs err: ", err);
             callback(null);
@@ -558,7 +558,7 @@ exports.deleteCvs = function(options, callback) {
 	var CVS_CD = options.CVS_CD;
 
 	var query = "DELETE FROM CVS WHERE BRCH_CD='" + BRCH_CD + "' AND CVS_CD='" + CVS_CD + "'";
-	__oracleDB.execute(query, [], function(err, result) {
+	__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
         if (err) {
             console.log("deleteCvs err: ", err);
             callback(null);
@@ -686,7 +686,7 @@ exports.deleteEmployee = function(options, callback) {
 
 	var query = "DELETE FROM EMPLOYEE WHERE BRCH_CD = '" + BRCH_CD + "' AND EMP_CD = '" + EMP_CD + "'";
 
-	__oracleDB.execute(query, [], function(err, result) {
+	__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
         if (err) {
             console.log("deleteEmployee err: ", err);
             callback(null);
