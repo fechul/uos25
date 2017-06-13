@@ -20,14 +20,13 @@ var order = {
                 {'data': 'PRDT_CD', 'title': '상품코드', 'width': '15%'},
                 {'data': 'PRDT_NAME', 'title': '상품명', 'width': '20%'},
                 {'data': 'PRDT_PRICE', 'title': '정가', 'width': '14%'},
-                {'data': 'CMPNY_CD', 'title': '업체코드', 'width': '14%'},
                 {'data': 'CMPNY_NAME', 'title': '업체명', 'width': '14%'},
                 {'data': 'ONLY_PRDT', 'title': '전용상품', 'width': '14%'},
                 {'data': 'ADD_CART', 'title': '추가', 'width': '14%'},
             ],
             'columnDefs': [
                 {
-                'targets': 6,
+                'targets': 5,
                 'render': function ( row, type, data, meta ) {
                     return '<button class="btn btn-default btn-sm order_add_cart">추가</button>';
                 }
@@ -139,7 +138,6 @@ var order = {
             json_data.LIST = JSON.stringify(LIST);
 
             $.post('/order', json_data, function(order) {
-                console.log(order);
                 self.clear();
             })
         });

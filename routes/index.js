@@ -154,7 +154,7 @@ router.get('/order', function(req, res) {
 });
 
 // 주문목록 가져오기
-router.post('/order/list', function(req, res) {
+router.get('/order/list', function(req, res) {
 	var BRCH_CD = req.session.BRCH_CD;
 
 	core.getOrderList({

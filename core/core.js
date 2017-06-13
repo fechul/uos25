@@ -105,7 +105,7 @@ exports.doSell = function(options, callback) {
 	var POS_CD = options.POS_CD;
 	var dateFormat = getDateFormat();
 	var timeFormat = getTimeFormat();
-	
+
 	var LIST = options.LIST;
 	var AGE = options.AGE;
 	var SEX = options.SEX;
@@ -140,7 +140,7 @@ exports.doSell = function(options, callback) {
 	    },
 	    // insert SELL
 	    function(callback){
-	    	var sellInsertQuery = "INSERT INTO SELL " + 
+	    	var sellInsertQuery = "INSERT INTO SELL " +
 	    		"VALUES ('" + SELL_CD + "', TO_DATE('" + timeFormat + "', 'YYYYMMDDHH24MISS'), " + TOTAL_SELL_PRICE + ", '" + PAYMENT_WAY + "', '" + POS_CD + "', '" + AGE + "', '" + SEX + "'";
     		if(MEMBER_PHONNO) {
     			sellInsertQuery += ", '" + MEMBER_PHONNO + "'";
@@ -150,7 +150,7 @@ exports.doSell = function(options, callback) {
     		if(MEMBER_USE_POINT) {
     			sellInsertQuery += ", " + MEMBER_USE_POINT;
     		} else {
-    			sellInsertQuery += ", null";	
+    			sellInsertQuery += ", null";
     		}
     		if(MEMBER_SAVE_POINT) {
     			sellInsertQuery += ", " + MEMBER_SAVE_POINT;
@@ -240,7 +240,7 @@ exports.doSell = function(options, callback) {
 	    		}
 	    		insertSoldPdtQuery += "'" + eachSell.PRDT_CD + "'";
 	    		insertSoldPdtQuery += ")";
-	    		
+
 				__oracleDB.execute(insertSoldPdtQuery, [], {autoCommit:true}, function(err, result) {
 					var query = "UPDATE STOCK SET STOCK_CNT=STOCK_CNT-" + eachSell.PRDT_CNT + " WHERE BRCH_CD='" + BRCH_CD + "' AND PRDT_CD='" + eachSell.PRDT_CD + "'";
 					__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
@@ -588,7 +588,7 @@ exports.cancelOrder = function(options, callback) {
 exports.getOrder = function(options, callback) {
 	var ORDER_CD = options.ORDER_CD;
 
-	var query = "SELECT A.PRDT_CD AS PRDT_CD, B.PRDT_NAME AS PRDT_NAME, A.PRDT_CNT AS PRDT_CNT FROM ORDERED_PRODUCT A, PRODUCT B WHERE A.PRDT_CD = B.PRDT_CD AND A.ORDER_CD='" + ORDER_CD + "'";
+	var query = "SELECT A.PRDT_CD AS PRDT_CD, B.PRDT_NAME AS PRDT_NAME, A.PRDT_CNT AS PRDT_CNT, A.RECEIVE_CHECK AS RECEIVE_CHECK FROM ORDERED_PRODUCT A, PRODUCT B WHERE A.PRDT_CD = B.PRDT_CD AND A.ORDER_CD='" + ORDER_CD + "'";
 
 	__oracleDB.execute(query, [], function(err, result) {
 	    if (err) {
@@ -662,7 +662,7 @@ exports.getOrderList = function(options, callback) {
 exports.getStoreList = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
 
-	var query = "SELECT * FROM STORE WHERE BRCH_CD='" + BRCH_CD + "'";
+	var query = "SELECT * FROM STORE";
 
 	__oracleDB.execute(query, [], function(err, result) {
 	    if (err) {
@@ -1407,7 +1407,7 @@ exports.addEmployee = function(options, callback) {
 		        }
 		    });
 	    }
-	});	
+	});
 };
 
 // 직원 삭제하기
