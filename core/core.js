@@ -491,7 +491,7 @@ exports.doOrder = function(options, callback) {
 						    			console.log('doOrder store list push err: ', __err);
 						    			async_cb();
 						    		} else {
-						    			var updateOrderCheckQuery = "UPDATE ORDERED_PRODUCT SET ORDER_CHECK='y' WHERE ORDER_CD='" + ORDER_CD "' AND PRDT_CD='" + eachOrder.PRDT_CD + "'";
+						    			var updateOrderCheckQuery = "UPDATE ORDERED_PRODUCT SET RECEIVE_CHECK='y' WHERE ORDER_CD='" + ORDER_CD "' AND PRDT_CD='" + eachOrder.PRDT_CD + "'";
 										__oracleDB.execute(storeListCreateQuery, [], {autoCommit:true}, function(___err, ___result) {
 											if(___err) {
 												console.log('doOrder update order check err: ', ___err);
