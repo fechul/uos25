@@ -139,7 +139,6 @@ var order = {
             json_data.LIST = JSON.stringify(LIST);
 
             $.post('/order', json_data, function(order) {
-                console.log(order);
                 self.clear();
             })
         });

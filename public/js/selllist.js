@@ -58,7 +58,6 @@ var selllist = {
 
         $.get('/sell/list', {}, function(response) {
             self.table.rows.add(response.DATA.LIST).draw();
-            console.log(response);
         })
     },
     init_events: function() {
