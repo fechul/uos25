@@ -135,7 +135,7 @@
                         <table id="order_product_list">
                         </table>
                     </div>
-                    <div class="workspace_order_table_container">
+                    <div class="workspace_order_table_container" >
                         <table id="order_table">
                         </table>
                     </div>
@@ -166,10 +166,20 @@
                         <table id="employee_list">
                         </table>
                     </div>
-                    <div class="workspace_employee_table_container">
-                        <table id="employee_table">
-                        </table>
-                    </div>
+                    <div class="workspace_employee_manage_container" style="margin-top: 20px">
+                        <div class = "div_row">
+                            <label>직원이름</label>
+                            <input id="employee_name">
+                        </div>
+                        <div class = "div_row">
+                            <label>전화번호</label>
+                            <input id="employee_phonno">
+                        </div>
+                        <div class = "div_row">
+                            <button id = "employee_hire" class = "btn btn-primary">
+                                <label>직원등록</label>
+                            </button>
+                        </div>
                 </div>
             </section>
         </div>
@@ -192,6 +202,7 @@
     <script src="js/selllist.js"></script>
     <script src="js/order.js"></script>
     <script src="js/stock.js"></script>
+    <script src="js/employee.js"></script>
 	<script src="js/main.js"></script>
     <script>
         $(document).ready(function() {

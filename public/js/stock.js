@@ -17,11 +17,11 @@ var stock = {
 
         this.table.stock_list = $('#stock_list').DataTable({
             'columns': [
-                {'data': 'PRDT_CD', 'title': '상품코드', 'width': '15%'},
-                {'data': 'PRDT_NAME', 'title': '상품명', 'width': '20%'},
-                {'data': 'PRDT_PRICE', 'title': '정가', 'width': '14%'},
-                {'data': 'CMPNY_NAME', 'title': '업체명', 'width': '14%'},
-                {'data': 'STOCK_CNT', 'title': '수량', 'width': '14%'},
+                {'data': 'PRDT_CD', 'title': '상품코드', 'width': '20%'},
+                {'data': 'PRDT_NAME', 'title': '상품명', 'width': '30%'},
+                {'data': 'PRDT_PRICE', 'title': '정가', 'width': '20%'},
+                {'data': 'CMPNY_NAME', 'title': '업체명', 'width': '20%'},
+                {'data': 'STOCK_CNT', 'title': '수량', 'width': '10%'},
             ],
 
             'paging': false,
