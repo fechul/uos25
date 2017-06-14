@@ -10,6 +10,7 @@ var main = {
         store.init();
         employee.init();
         member.init();
+        cvs.init();
         _return.init();
         return_status.init();
         loss.init();
@@ -55,6 +56,8 @@ var main = {
                 return_status.clear();
             } else if (target == 'loss') {
                 loss.clear();
+            } else if (target == 'cvs') {
+                cvs.clear();
             }
         });
 

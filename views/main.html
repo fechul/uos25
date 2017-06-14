@@ -31,10 +31,12 @@
                 <div class="menu" target="discard">폐기</div>
                 <div class="menu" target="member">회원관리</div>
                 <div class="menu" target="employee">직원관리</div>
+                <div class="menu" target="cvs">생활서비스</div>
             </section>
             <section class="right_container">
                 <div class="workspace sell active" name="sell">
                     <div class="workspace_sell_table_container">
+                        <label>판매 대상</label>
                         <table id="sell_list">
                         </table>
                     </div>
@@ -126,10 +128,12 @@
 
                 <div class="workspace selllist" name="selllist">
                     <div style="height: 350px;">
+                        <label>판매 목록</label>
                         <table id="selllist_table">
                         </table>
                     </div>
                     <div style="height: 300px;">
+                        <label>판매 상세</label>
                         <table id="selllist_detail_table">
                         </table>
                     </div>
@@ -137,6 +141,7 @@
 
                 <div class="workspace refund" name="refund">
                     <div class="workspace_refund_list_container">
+                        <label>환불 목록</label>
                         <table id="refund_list">
                         </table>
                     </div>
@@ -144,10 +149,12 @@
 
                 <div class="workspace order" name="order">
                     <div class="workspace_order_product_list_container">
+                        <label>상품 목록</label>
                         <table id="order_product_list">
                         </table>
                     </div>
                     <div class="workspace_order_table_container" >
+                        <label>주문 대상</label>
                         <table id="order_table">
                         </table>
                     </div>
@@ -158,20 +165,24 @@
 
                 <div class="workspace order_status" name="order_status">
                     <div style="height: 400px;">
+                        <label>주문 목록</label>
                         <table id="order_status_table">
                         </table>
                     </div>
                     <div class="workspace_order_status_detail_table_container">
+                        <label>주문 상세</label>
                         <table id="order_status_detail_table">
                         </table>
                     </div>
                 </div>
                 <div class="workspace store" name="store">
                     <div style="height: 350px;">
+                        <label>입고 목록</label>
                         <table id="store_table">
                         </table>
                     </div>
                     <div style="height: 300px;">
+                        <label>입고 상세</label>
                         <table id="store_detail_table">
                         </table>
                     </div>
@@ -179,6 +190,7 @@
 
                 <div class="workspace stock" name="stock">
                     <div class="workspace_stock_container">
+                        <label>재고 목록</label>
                         <table id="stock_list">
                         </table>
                     </div>
@@ -186,10 +198,12 @@
 
                 <div class="workspace return" name="return">
                     <div class="workspace_return_product_list_container">
+                        <label>재고</label>
                         <table id="return_product_list">
                         </table>
                     </div>
                     <div class="workspace_return_table_container" >
+                        <label>반품 대상</label>
                         <table id="return_table">
                         </table>
                     </div>
@@ -200,10 +214,12 @@
 
                 <div class="workspace return_status" name="return_status">
                     <div style="height: 400px;">
+                        <label>반품 목록</label>
                         <table id="return_status_table">
                         </table>
                     </div>
                     <div class="workspace_return_status_detail_table_container">
+                        <label>반품 상세 정보</label>
                         <table id="return_status_detail_table">
                         </table>
                     </div>
@@ -236,6 +252,7 @@
 
                 <div class="workspace member" name="member">
                     <div class="workspace_member_container">
+                        <label>회원 목록</label>
                         <table id="member_list">
                         </table>
                     </div>
@@ -258,6 +275,7 @@
 
                 <div class="workspace employee" name="employee">
                     <div class="workspace_employee_container">
+                        <label>직원 목록</label>
                         <table id="employee_list">
                         </table>
                     </div>
@@ -274,6 +292,27 @@
                             <button id = "employee_hire" class = "btn btn-primary">
                                 <label>직원등록</label>
                             </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="workspace cvs" name="cvs">
+                    <div style="height: 300px;">
+                        <label>생활서비스 목록</label>
+                        <table id="cvs_all_table">
+                        </table>
+                    </div>
+                    <div class="workspace_cvs_branch_table_container">
+                        <label>우리 지점에서 시행중인 생활서비스</label>
+                        <table id="cvs_branch_table">
+                        </table>
+                    </div>
+
+                    <div class="workspace_cvs_manage_container" style="margin-top: 20px">
+                        <div class = "div_row">
+                            <label>생활서비스코드</label>
+                            <input type="input" id="enroll_cvs_code"></input>
+                            <button id="enroll_cvs" class="btn btn-primary">등록</button>
                         </div>
                     </div>
                 </div>
@@ -307,6 +346,7 @@
     <script src="js/employee.js"></script>
     <script src="js/member.js"></script>
     <script src="js/loss.js"></script>
+    <script src="js/cvs.js"></script>
 	<script src="js/main.js"></script>
     <script>
         $(document).ready(function() {

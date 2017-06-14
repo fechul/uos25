@@ -745,10 +745,13 @@ exports.doRefund = function(options, callback) {
 	    },
 	    // make REFUND / update STOCK
 	    function(callback){
-	    	async.map(productList, function(eachRefund, async_cb) {
+	    	async.mapSeries(productList, function(eachRefund, async_cb) {
 	    		TOTAL_REFUND_PRICE += eachRefund.SELL_PRICE;
 	    		var query = "INSERT INTO REFUND VALUES ('" + REF_CD + "', TO_DATE('" + timeFormat + "', 'YYYYMMDDHH24MISS'), '" + REF_DESCR + "', " + eachRefund.PRDT_CNT + ", " + eachRefund.SELL_PRICE + ", '" + eachRefund.PRDT_CD + "', '" + POS_CD + "')";
 		    	__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
+		    		REF_CD = parseInt(REF_CD);
+		    		REF_CD += 1;
+		    		REF_CD = REF_CD.toString();
 		    		var stockQuery = "UPDATE STOCK SET STOCK_CNT=STOCK_CNT+" + eachRefund.PRDT_CNT + " WHERE BRCH_CD='" + BRCH_CD + "' AND PRDT_CD='" + eachRefund.PRDT_CD + "'";
 					__oracleDB.execute(stockQuery, [], {autoCommit:true}, function(err, result) {
 						async_cb();
@@ -1170,16 +1173,29 @@ exports.addCvs = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
 	var CVS_CD = options.CVS_CD;
 
-	var query = "INSERT INTO CVS VALUES ('" + BRCH_CD + "', '" + CVS_CD + "')";
+	__oracleDB.execute("SELECT * FROM CVS_TYPE WHERE CVS_CD='" + CVS_CD + "'", [], function(err, result) {
+		if(!result.rows || !result.rows.length) {
+			callback(null);
+		} else {
+			__oracleDB.execute("SELECT * FROM CVS WHERE CVS_CD='" + CVS_CD + "' AND BRCH_CD='" + BRCH_CD + "'", [], function(__err, __result) {
+				if(__result.rows && __result.rows.length) {
+					callback(null);
+				} else {
+					var query = "INSERT INTO CVS VALUES ('" + BRCH_CD + "', '" + CVS_CD + "')";
 
-	__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
-        if (err) {
-            console.log("addCvs err: ", err);
-            callback(null);
-        } else {
-            callback(true);
-        }
-    });
+					__oracleDB.execute(query, [], {autoCommit:true}, function(_err, _result) {
+				        if (_err) {
+				            console.log("addCvs err: ", _err);
+				            callback(null);
+				        } else {
+				            callback(true);
+				        }
+				    });
+				}
+			});
+
+		}
+	});
 };
 
 // 생활서비스 등록 해제하기
@@ -1199,7 +1215,7 @@ exports.deleteCvs = function(options, callback) {
 };
 
 // 전체 생활서비스 목록 가져오기
-exports.getCvsList = function(options, callback) {
+exports.getCvsList = function(callback) {
 
 	var query = "SELECT * FROM CVS_TYPE";
 
