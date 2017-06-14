@@ -9,6 +9,8 @@ var branch = {
                 for (var key in get.DATA) {
                     if (key == 'PAYMENT_RATE') {
                         $('.branch_info[name=' + key + ']').html(get.DATA[key] + '%');
+                    } else if (key == 'MNY') {
+                        $('.branch_info[name=' + key + ']').html(get.DATA[key].formatMoney(0, '', ','));
                     } else {
                         $('.branch_info[name=' + key + ']').html(get.DATA[key]);
                     }
@@ -47,7 +49,15 @@ var branch = {
                             return '출';
                         }
                     }
-                }],
+                },
+                {
+                    'targets': 2,
+                    'className': 'branch_info_mny_td',
+                    'render': function ( row, type, data, meta ) {
+                        return row.formatMoney(0, '', ',');
+                    }
+                }
+            ],
             'order': [0, 'desc'],
             'paging': false,
             'autoWidth': true,
@@ -81,8 +91,8 @@ var branch = {
                     }
                 }
 
-                $('.branch_info[name="REVENUE"]').html(revenue);
-                $('.branch_info[name="MARGIN_TO_PAY"]').html(revenue * self.data.PAYMENT_RATE / 100);
+                $('.branch_info[name="REVENUE"]').html(revenue.formatMoney(0, '', ','));
+                $('.branch_info[name="MARGIN_TO_PAY"]').html((revenue * self.data.PAYMENT_RATE / 100).formatMoney(0, '', ','));
             } else {
                 main.notice.show('서버에서 오류가 발생했습니다.');
             }
