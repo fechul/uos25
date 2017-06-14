@@ -629,7 +629,7 @@ var sell = {
             'searching': false,
             'lengthChange': false,
             'info': false,
-            'scrollY': '321px',
+            'scrollY': '295px',
             'scrollCollapse': false,
             'autoFill': true
         });
