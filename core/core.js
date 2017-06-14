@@ -1174,7 +1174,7 @@ exports.addCvs = function(options, callback) {
 	var CVS_CD = options.CVS_CD;
 
 	__oracleDB.execute("SELECT * FROM CVS_TYPE WHERE CVS_CD='" + CVS_CD + "'", [], function(err, result) {
-		if(result.rows && result.rows.length) {
+		if(!result.rows || !result.rows.length) {
 			callback(null);
 		} else {
 			__oracleDB.execute("SELECT * FROM CVS WHERE CVS_CD='" + CVS_CD + "' AND BRCH_CD='" + BRCH_CD + "'", [], function(__err, __result) {

@@ -473,6 +473,7 @@ router.post('/cvs', function(req, res) {
 // 생활서비스 등록 해제하기
 router.delete('/cvs', function(req, res) {
 	req.body.BRCH_CD = req.session.BRCH_CD;
+	console.log(req.body)
 	core.deleteCvs(req.body, function(result) {
 		res.json({
     		RESULT: (result ? true : false),

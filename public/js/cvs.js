@@ -117,7 +117,7 @@ var cvs = {
                 method: 'DELETE',
                 url: 'cvs',
                 dataType: 'json',
-                data: ''
+                data: {CVS_CD: CVS_CD}
             }).fail(function(get) {
                 main.notice.show('서버에서 오류가 발생했습니다.');
             }).done(function(get) {
