@@ -636,4 +636,16 @@ router.get('/employee/list', function(req, res) {
     });
 });
 
+
+// 업체정보 가져오기
+router.get('/company', function(req, res) {
+	core.getCompany(req.query, function(data) {
+		res.json({
+    		RESULT: (data ? true : false),
+    		ERR_CD: (data ? null : 1),
+    		DATA: data
+    	});
+	});
+});
+
 module.exports = router;

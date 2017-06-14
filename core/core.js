@@ -1329,7 +1329,7 @@ exports.payMargin = function(options, callback) {
 
 	var today = new Date();
 	var todayYear = today.getFullYear();
-	var todayMonth = today.getMonth();
+	var todayMonth = today.getMonth()+1;
 	if(todayMonth < 10) {
 		todayMonth = '0' + todayMonth;
 	}
@@ -1350,7 +1350,6 @@ exports.payMargin = function(options, callback) {
 	var afterMonthFormat = (afterYear).toString() + (afterMonth).toString() + '01000000';
 
 	var totalRevenue = 0;
-
 	__oracleDB.execute("SELECT * FROM MONEY_HISTORY WHERE HISTORY_DATE >= TO_DATE('" + thisMonthFormat + "', 'YYYYMMDDHH24MISS') AND HISTORY_DATE < TO_DATE('" + afterMonthFormat + "', 'YYYYMMDDHH24MISS')", [], function(err, result) {
         if (err) {
             console.log("payMargin select err: ", err);
@@ -1463,6 +1462,24 @@ exports.getEmployeeList = function(options, callback) {
             callback({
 	    		LIST: result.rows
 	    	});
+        }
+    });
+};
+
+exports.getCompany = function(options, callback) {
+	var CMPNY_CD = options.CMPNY_CD;
+
+	var query = "SELECT * FROM COMPANY WHERE CMPNY_CD='" + CMPNY_CD + "'";
+	__oracleDB.execute(query, [], function(err, result) {
+        if (err) {
+            console.log("getCompany err: ", err);
+            callback(null);
+        } else {
+        	if(result.rows && result.rows.length) {
+        		callback(result.rows[0]);
+        	} else {
+        		callback(null);
+        	}
         }
     });
 };

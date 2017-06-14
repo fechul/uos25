@@ -218,7 +218,13 @@ table tr:first-child td {
     margin-right: 5px;
 }
 
+.viewCompany {
+    cursor: pointer;
+}
 
+.compLabel {
+    font-weight: bold;
+}
 
 
 
