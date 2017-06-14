@@ -142,6 +142,7 @@ exports.doSell = function(options, callback) {
 	    function(callback){
 	    	var sellInsertQuery = "INSERT INTO SELL " +
 	    		"VALUES ('" + SELL_CD + "', TO_DATE('" + timeFormat + "', 'YYYYMMDDHH24MISS'), " + TOTAL_SELL_PRICE + ", '" + PAYMENT_WAY + "', '" + POS_CD + "', '" + AGE + "', '" + SEX + "'";
+	    		
     		if(MEMBER_PHONNO) {
     			sellInsertQuery += ", '" + MEMBER_PHONNO + "'";
     		} else {
@@ -158,6 +159,7 @@ exports.doSell = function(options, callback) {
     			sellInsertQuery += ", null";
     		}
     		sellInsertQuery += ")";
+    		console.log(sellInsertQuery)
 	    	__oracleDB.execute(sellInsertQuery, [], {autoCommit:true}, function(err, result) {
 	    		if(err) {
 	    			callback("insert SELL err: " + err);
