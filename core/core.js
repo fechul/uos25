@@ -1087,7 +1087,7 @@ exports.doDiscard = function(options, callback) {
 exports.getDiscardList = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
 
-	var query = "SELECT * FROM DISCARD WHERE BRCH_CD='" + BRCH_CD + "'";
+	var query = "SELECT A.*, B.PRDT_NAME FROM DISCARD A, PRODUCT B WHERE A.PRDT_CD = B.PRDT_CD AND BRCH_CD='" + BRCH_CD + "'";
 
 	__oracleDB.execute(query, [], function(err, result) {
         if (err) {

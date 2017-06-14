@@ -227,10 +227,12 @@
 
                 <div class="workspace loss" name="loss">
                     <div class="workspace_loss_table_container">
+                        <label>손실 기록</label>
                         <table id="loss_table">
                         </table>
                     </div>
                     <div class="workspace_loss_store_table_container" >
+                        <label>재고</label>
                         <table id="loss_store_table">
                         </table>
                     </div>
@@ -248,6 +250,27 @@
                 </div>
 
                 <div class="workspace discard" name="discard">
+                    <div class="workspace_discard_table_container">
+                        <label>폐기 기록</label>
+                        <table id="discard_table">
+                        </table>
+                    </div>
+                    <div class="workspace_discard_store_table_container" >
+                        <label>재고</label>
+                        <table id="discard_store_table">
+                        </table>
+                    </div>
+                    <div class="workspace_discard_right_container">
+                        <label>상품코드</label>
+                        <input id="discard_prdt_cd" class="discard_input" disabled>
+                        <label>상품명</label>
+                        <input id="discard_prdt_name" class="discard_input" disabled>
+                        <label>폐기수량</label>
+                        <input id="discard_cnt" class="discard_input">
+                        <label>폐기금액</label>
+                        <input id="discard_price" class="discard_input" disabled>
+                        <button class="btn btn-primary" id="add_discard">폐기 등록</button>
+                    </div>
                 </div>
 
                 <div class="workspace member" name="member">
@@ -346,6 +369,7 @@
     <script src="js/employee.js"></script>
     <script src="js/member.js"></script>
     <script src="js/loss.js"></script>
+    <script src="js/discard.js"></script>
     <script src="js/cvs.js"></script>
 	<script src="js/main.js"></script>
     <script>

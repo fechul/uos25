@@ -224,6 +224,7 @@ table tr:first-child td {
 /* order, return */
 .workspace_order_product_list_container,
 .workspace_loss_table_container,
+.workspace_discard_table_container,
 .workspace_return_product_list_container {
     height: 400px;
 }
@@ -271,10 +272,30 @@ table tr:first-child td {
     height: 250px;
     width: 29%;
     float: right;
-    padding: 0px 15px;
+    padding: 18px 15px 0px 15px;
 }
 
 .loss_input {
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 11px;
+}
+
+/* discard */
+
+.workspace_discard_store_table_container {
+    width: 70%;
+    float: left;
+    height: 250px;
+}
+
+.workspace_discard_right_container {
+    height: 250px;
+    width: 29%;
+    float: right;
+    padding: 18px 15px 0px 15px;
+}
+
+.discard_input {
+    width: 100%;
+    margin-bottom: 11px;
 }
