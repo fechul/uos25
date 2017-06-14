@@ -325,3 +325,7 @@ table tr:first-child td {
 .branch_info.guseok {
     width: 250px;
 }
+
+.branch_info_mny_td {
+    text-align: right;
+}
