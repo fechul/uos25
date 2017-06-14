@@ -340,7 +340,7 @@ router.post('/loss', function(req, res) {
 
 // 손실목록 가져오기
 router.get('/loss/list', function(req, res) {
-	core.getLossList(function(data) {
+	core.getLossList({}, function(data) {
 		res.json({
     		RESULT: (data ? true : false),
     		ERR_CD: (data ? null : 1),

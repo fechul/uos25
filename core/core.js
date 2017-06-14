@@ -1021,7 +1021,7 @@ exports.doLoss = function(options, callback) {
 
 // 손실목록 가져오기
 exports.getLossList = function(options, callback) {
-	var query = "SELECT * FROM LOSS";
+	var query = "SELECT A.*, B.PRDT_NAME FROM LOSS A, PRODUCT B WHERE A.PRDT_CD = B.PRDT_CD";
 
     __oracleDB.execute(query, [], function(err, result) {
         if (err) {

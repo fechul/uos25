@@ -218,7 +218,7 @@ var sell = {
                 json_data.LIST = JSON.stringify(LIST);
 
                 $.post('/sell', json_data, function(result) {
-                    console.log(result)
+                    self.clear();
                 });
             }
         });

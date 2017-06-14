@@ -12,6 +12,7 @@ var main = {
         member.init();
         _return.init();
         return_status.init();
+        loss.init();
     },
     init_events: function() {
         var self = this;
@@ -52,6 +53,8 @@ var main = {
                 _return.clear();
             } else if (target == 'return_status') {
                 return_status.clear();
+            } else if (target == 'loss') {
+                loss.clear();
             }
         });
 

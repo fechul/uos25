@@ -223,6 +223,7 @@ table tr:first-child td {
 
 /* order, return */
 .workspace_order_product_list_container,
+.workspace_loss_table_container,
 .workspace_return_product_list_container {
     height: 400px;
 }
@@ -256,4 +257,24 @@ table tr:first-child td {
 .workspace_order_status_detail_table_container,
 .workspace_return_status_detail_table_container {
     height: 250px;
+}
+
+/* loss */
+
+.workspace_loss_store_table_container {
+    width: 70%;
+    float: left;
+    height: 250px;
+}
+
+.workspace_loss_right_container {
+    height: 250px;
+    width: 29%;
+    float: right;
+    padding: 0px 15px;
+}
+
+.loss_input {
+    width: 100%;
+    margin-bottom: 10px;
 }

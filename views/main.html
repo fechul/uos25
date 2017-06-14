@@ -210,6 +210,25 @@
                 </div>
 
                 <div class="workspace loss" name="loss">
+                    <div class="workspace_loss_table_container">
+                        <table id="loss_table">
+                        </table>
+                    </div>
+                    <div class="workspace_loss_store_table_container" >
+                        <table id="loss_store_table">
+                        </table>
+                    </div>
+                    <div class="workspace_loss_right_container">
+                        <label>상품코드</label>
+                        <input id="loss_prdt_cd" class="loss_input" disabled>
+                        <label>상품명</label>
+                        <input id="loss_prdt_name" class="loss_input" disabled>
+                        <label>손실수량</label>
+                        <input id="loss_cnt" class="loss_input">
+                        <label>손실금액</label>
+                        <input id="loss_price" class="loss_input" disabled>
+                        <button class="btn btn-primary" id="add_loss">손실 등록</button>
+                    </div>
                 </div>
 
                 <div class="workspace discard" name="discard">
@@ -287,6 +306,7 @@
     <script src="js/store.js"></script>
     <script src="js/employee.js"></script>
     <script src="js/member.js"></script>
+    <script src="js/loss.js"></script>
 	<script src="js/main.js"></script>
     <script>
         $(document).ready(function() {
