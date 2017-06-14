@@ -33,7 +33,7 @@ var refund = {
             'searching': false,
             'lengthChange': false,
             'info': false,
-            'scrollY': '321px',
+            'scrollY': '500px',
             'scrollCollapse': false,
             'autoFill': true
         });
