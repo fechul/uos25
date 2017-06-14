@@ -12,6 +12,7 @@ var employee = {
     clear: function() {
         this.set_table();
         this.table.employee_list.clear().draw();
+        $('.workspace_employee_manage_container input').val('');
     },
     init_table: function() {
         var self = this;
@@ -118,12 +119,15 @@ var employee = {
             var employee_work_time = parseInt($('#employee_work_time').val(), 10);
             var employee_work_type = $('#employee_work_type').val();
 
+            console.log(employee_code, employee_work_time, employee_work_type);
+
             $.post('/employee/time', {
                 'EMP_CD': employee_code,
                 'TIME': employee_work_time,
                 'TYPE': employee_work_type
             }, function(post) {
                 console.log(post);
+                self.clear();
             })
         })
 
@@ -134,6 +138,7 @@ var employee = {
                 'EMP_CD': employee_code
             }, function(post) {
                 console.log(post);
+                self.clear();
             })
         });
     }

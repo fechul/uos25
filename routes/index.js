@@ -638,7 +638,7 @@ router.get('/employee/list', function(req, res) {
 
 // 근무시간 추가
 router.post('/employee/time', function(req, res) {
-	core.getEmployeeList(req.body, function(data) {
+	core.addTime(req.body, function(data) {
         res.json({
     		RESULT: (data ? true : false),
     		ERR_CD: (data ? null : 1),
@@ -649,14 +649,14 @@ router.post('/employee/time', function(req, res) {
 
 // 근무시간 초기화
 router.post('/employee/time/empty', function(req, res) {
-	core.getEmployeeList(req.body, function(data) {
+	core.emptyTime(req.body, function(data) {
         res.json({
     		RESULT: (data ? true : false),
     		ERR_CD: (data ? null : 1),
     		DATA: data
     	});
     });
-});원
+});
 
 
 // 업체정보 가져오기

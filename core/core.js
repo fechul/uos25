@@ -142,7 +142,7 @@ exports.doSell = function(options, callback) {
 	    function(callback){
 	    	var sellInsertQuery = "INSERT INTO SELL " +
 	    		"VALUES ('" + SELL_CD + "', TO_DATE('" + timeFormat + "', 'YYYYMMDDHH24MISS'), " + TOTAL_SELL_PRICE + ", '" + PAYMENT_WAY + "', '" + POS_CD + "', '" + AGE + "', '" + SEX + "'";
-	    		
+
     		if(MEMBER_PHONNO) {
     			sellInsertQuery += ", '" + MEMBER_PHONNO + "'";
     		} else {
@@ -1479,7 +1479,7 @@ exports.addTime = function(options, callback) {
 	} else {
 		query = "UPDATE EMPLOYEE SET NIGHT_WORK_HOUR=NIGHT_WORK_HOUR+" + TIME + " WHERE EMP_CD='" + EMP_CD + "'";
 	}
-	
+
 	__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
 		if(err) {
 			callback("addTime err: " + err);
@@ -1492,6 +1492,7 @@ exports.addTime = function(options, callback) {
 //근무시간 초기화
 exports.emptyTime = function(options, callback) {
 	var EMP_CD = options.EMP_CD;
+	console.log(options);
 
 	var query = "UPDATE EMPLOYEE SET DAY_WORK_HOUR=0 AND NIGHT_WORK_HOUR=0 WHERE EMP_CD='" + EMP_CD + "'";
 	__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
