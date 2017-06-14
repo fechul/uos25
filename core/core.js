@@ -879,7 +879,7 @@ exports.doReturn = function(options, callback) {
 		       console.log("doReturn select return err: ", err);
 		       callback(null);
 		    } else {
-		    	if(result && result.rows) {
+		    	if(result.rows && result.rows.length) {
 		    		var recentReturn = result.rows[0];
 		    		var SEQ = getNextSeq(recentReturn.RET_CD.substring(14, 20));
 		    		RET_CD += SEQ;
@@ -941,7 +941,7 @@ exports.doReturn = function(options, callback) {
 
 // 반품기록 가져오기
 exports.getReturnList = function(options, callback) {
-	var BRCH_CD = BRCH_CD;
+	var BRCH_CD = options.BRCH_CD;
 
 	var query = "SELECT * FROM RETURN WHERE BRCH_CD='" + BRCH_CD + "'";
 
@@ -968,7 +968,9 @@ exports.getReturn = function(options, callback) {
 	       console.log("getReturn err: ", err);
 	       callback(null);
 	    } else {
-	    	callback(result.rows[0]);
+	    	callback({
+	    		LIST: result.rows
+	    	});
 	    }
 	});
 };

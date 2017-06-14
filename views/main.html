@@ -26,6 +26,7 @@
                 <div class="menu" target="order_status">주문현황</div>
                 <div class="menu" target="store">입고</div>
                 <div class="menu" target="return">반품</div>
+                <div class="menu" target="return_status">반품현황</div>
                 <div class="menu" target="loss">손실</div>
                 <div class="menu" target="discard">폐기</div>
                 <div class="menu" target="member">회원관리</div>
@@ -184,6 +185,28 @@
                 </div>
 
                 <div class="workspace return" name="return">
+                    <div class="workspace_return_product_list_container">
+                        <table id="return_product_list">
+                        </table>
+                    </div>
+                    <div class="workspace_return_table_container" >
+                        <table id="return_table">
+                        </table>
+                    </div>
+                    <div class="workspace_return_right_container">
+                        <button class="btn btn-primary" id="do_return">반품하기</button>
+                    </div>
+                </div>
+
+                <div class="workspace return_status" name="return_status">
+                    <div style="height: 400px;">
+                        <table id="return_status_table">
+                        </table>
+                    </div>
+                    <div class="workspace_return_status_detail_table_container">
+                        <table id="return_status_detail_table">
+                        </table>
+                    </div>
                 </div>
 
                 <div class="workspace loss" name="loss">
@@ -258,6 +281,8 @@
     <script src="js/order.js"></script>
     <script src="js/order_status.js"></script>
     <script src="js/stock.js"></script>
+    <script src="js/_return.js"></script>
+    <script src="js/return_status.js"></script>
     <script src="js/refund.js"></script>
     <script src="js/store.js"></script>
     <script src="js/employee.js"></script>

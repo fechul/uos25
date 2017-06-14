@@ -10,6 +10,8 @@ var main = {
         store.init();
         employee.init();
         member.init();
+        _return.init();
+        return_status.init();
     },
     init_events: function() {
         var self = this;
@@ -46,6 +48,10 @@ var main = {
                 employee.clear();
             } else if (target == 'member'){
                 member.clear();
+            } else if (target == 'return') {
+                _return.clear();
+            } else if (target == 'return_status') {
+                return_status.clear();
             }
         });
 

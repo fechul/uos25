@@ -210,6 +210,9 @@ table tr:first-child td {
     max-width: 280px;
 }
 
+.ret_describe {
+    width: 80%;
+}
 
 
 
@@ -218,33 +221,39 @@ table tr:first-child td {
 
 
 
-/* order */
-.workspace_order_product_list_container {
+/* order, return */
+.workspace_order_product_list_container,
+.workspace_return_product_list_container {
     height: 400px;
 }
 
-.workspace_order_table_container {
+.workspace_order_table_container,
+.workspace_return_table_container {
     width: 85%;
     float: left;
     height: 250px;
 }
 
-.workspace_order_right_container {
+.workspace_order_right_container,
+.workspace_return_right_container {
     height: 250px;
     width: 15%;
     float: right;
 }
 
-.workspace_order_right_container button {
+.workspace_order_right_container button,
+.workspace_return_right_container button {
     margin-top: 215px;
     float: right;
 }
 
-.order_table_cnt {
+.order_table_cnt,
+.return_table_cnt {
     width: 35px;
     text-align: right;
 }
 
-.workspace_order_status_detail_table_container {
+.workspace_order_status_detail_table_container,
+.workspace_return_status_detail_table_container {
     height: 250px;
 }
