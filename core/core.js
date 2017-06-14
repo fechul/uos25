@@ -1329,7 +1329,7 @@ exports.payMargin = function(options, callback) {
 
 	var today = new Date();
 	var todayYear = today.getFullYear();
-	var todayMonth = today.getMonth();
+	var todayMonth = today.getMonth()+1;
 	if(todayMonth < 10) {
 		todayMonth = '0' + todayMonth;
 	}
@@ -1350,7 +1350,6 @@ exports.payMargin = function(options, callback) {
 	var afterMonthFormat = (afterYear).toString() + (afterMonth).toString() + '01000000';
 
 	var totalRevenue = 0;
-
 	__oracleDB.execute("SELECT * FROM MONEY_HISTORY WHERE HISTORY_DATE >= TO_DATE('" + thisMonthFormat + "', 'YYYYMMDDHH24MISS') AND HISTORY_DATE < TO_DATE('" + afterMonthFormat + "', 'YYYYMMDDHH24MISS')", [], function(err, result) {
         if (err) {
             console.log("payMargin select err: ", err);
