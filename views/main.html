@@ -29,9 +29,10 @@
                 <div class="menu" target="return_status">반품현황</div>
                 <div class="menu" target="loss">손실</div>
                 <div class="menu" target="discard">폐기</div>
+                <div class="menu" target="cvs">생활서비스</div>
                 <div class="menu" target="member">회원관리</div>
                 <div class="menu" target="employee">직원관리</div>
-                <div class="menu" target="cvs">생활서비스</div>
+                <div class="menu" target="branch">지점관리</div>
             </section>
             <section class="right_container">
                 <div class="workspace sell active" name="sell">
@@ -331,6 +332,55 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="workspace branch" name="branch">
+                    <div style="height: 300px;">
+                        <div>
+                            <label>지점 정보</label>
+                        </div>
+                        <div style="float: left; width: 49%; padding-top: 30px;">
+                            <div class="div_row">
+                                <label>지점코드</label><span class="branch_info" id="branch_info" name="BRCH_CD"></span>
+                            </div>
+                            <div class="div_row">
+                                <label>지점명</label><span class="branch_info" id="branch_info" name="BRCH_NAME"></span>
+                            </div>
+                            <div class="div_row">
+                                <label>지점 유형</label><span class="branch_info" id="branch_info" name="BRCH_TYPE_NAME"></span>
+                            </div>
+                        </div>
+                        <div style="float: right; width: 49%; padding-top: 30px;">
+                            <div class="div_row">
+                                <label>주소</label><span class="branch_info" id="branch_info" name="ADDR"></span>
+                            </div>
+                            <div class="div_row">
+                                <label>전화번호</label><span class="branch_info" id="branch_info" name="PHONNO"></span>
+                            </div>
+                            <div class="div_row">
+                                <label>자금</label><span class="branch_info" id="branch_info" name="MNY"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="workspace_brach_money_table_container" style="margin-top: 20px">
+                        <label>자금 내역</label>
+                        <table id="branch_money_table"></table>
+                    </div>
+                    <div class="workspace_branch_right_container">
+                        <label>정산</label>
+                        <div class="div_row" style="margin-top: 30px;">
+                            <label>지불률</label><span class="branch_info guseok" name="PAYMENT_RATE"></span><span></span>
+                        </div>
+                        <div class="div_row">
+                            <label>당월 수익</label><span class="branch_info guseok" name="REVENUE"></span>
+                        </div>
+                        <div class="div_row">
+                            <label>지불할 마진</label><span class="branch_info guseok" name="MARGIN_TO_PAY"></span>
+                        </div>
+                        <div class="div_row">
+                            <button class="btn btn-primary" id="pay_margin">마진 지불하기</button>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
         <div id="notification_dialog" class="dialog">
@@ -363,7 +413,8 @@
     <script src="js/loss.js"></script>
     <script src="js/discard.js"></script>
     <script src="js/cvs.js"></script>
-	<script src="js/main.js"></script>
+    <script src="js/branch.js"></script>
+    <script src="js/main.js"></script>
     <script>
         $(document).ready(function() {
             main.init();

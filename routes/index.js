@@ -565,7 +565,7 @@ router.get('/event/list', function(req, res) {
 
 // 지점 정보 가져오기
 router.get('/branch', function(req, res) {
-	var BRCH_CD = req.sesion.BRCH_CD;
+	var BRCH_CD = req.session.BRCH_CD;
 
 	core.getBranch({
 		BRCH_CD: BRCH_CD
