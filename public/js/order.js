@@ -26,6 +26,11 @@ var order = {
             ],
             'columnDefs': [
                 {
+                'targets': 3,
+                'render': function ( row, type, data, meta ) {
+                    return '<a class="viewCompany">' + row + '</a>';
+                }
+            }, {
                 'targets': 5,
                 'render': function ( row, type, data, meta ) {
                     return '<button class="btn btn-default btn-sm order_add_cart">추가</button>';
@@ -140,6 +145,20 @@ var order = {
             $.post('/order', json_data, function(order) {
                 self.clear();
             })
+        });
+
+        $(document).on('click', '.viewCompany', function() {
+            var CMPNY_CD = self.table.product_list.row($(this).parents('tr')).data().CMPNY_CD;
+
+            $.get('/company', {
+                CMPNY_CD: CMPNY_CD
+            }, function(company) {
+                if(company.RESULT) {
+                    var comp = company.DATA;
+                    var msg = '<span class="compLabel">업체명:</span> ' + comp.CMPNY_NAME + '<br><br><span class="compLabel">업체주소:</span> ' + comp.ADDR + '<br><br><span class="compLabel">업체 전화번호:</span> ' + comp.PHONNO + '<br><br><span class="compLabel">업체 이메일:</span> ' + comp.EMAIL;
+                    main.notice.show(msg);
+                }
+            });
         });
     }
 };

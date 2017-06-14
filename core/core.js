@@ -1463,3 +1463,21 @@ exports.getEmployeeList = function(options, callback) {
         }
     });
 };
+
+exports.getCompany = function(options, callback) {
+	var CMPNY_CD = options.CMPNY_CD;
+
+	var query = "SELECT * FROM COMPANY WHERE CMPNY_CD='" + CMPNY_CD + "'";
+	__oracleDB.execute(query, [], function(err, result) {
+        if (err) {
+            console.log("getCompany err: ", err);
+            callback(null);
+        } else {
+        	if(result.rows && result.rows.length) {
+        		callback(result.rows[0]);
+        	} else {
+        		callback(null);
+        	}
+        }
+    });
+};
