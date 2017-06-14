@@ -10,6 +10,7 @@ var main = {
         store.init();
         employee.init();
         member.init();
+        cvs.init();
         _return.init();
         return_status.init();
     },
@@ -52,6 +53,8 @@ var main = {
                 _return.clear();
             } else if (target == 'return_status') {
                 return_status.clear();
+            } else if (target == 'cvs') {
+                cvs.clear();
             }
         });
 

@@ -31,6 +31,7 @@
                 <div class="menu" target="discard">폐기</div>
                 <div class="menu" target="member">회원관리</div>
                 <div class="menu" target="employee">직원관리</div>
+                <div class="menu" target="cvs">생활서비스</div>
             </section>
             <section class="right_container">
                 <div class="workspace sell active" name="sell">
@@ -258,6 +259,27 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="workspace cvs" name="cvs">
+                    <div style="height: 300px;">
+                        <label>생활서비스 목록</label>
+                        <table id="cvs_all_table">
+                        </table>
+                    </div>
+                    <div class="workspace_cvs_branch_table_container">
+                        <label>우리 지점에서 시행중인 생활서비스</label>
+                        <table id="cvs_branch_table">
+                        </table>
+                    </div>
+
+                    <div class="workspace_cvs_manage_container" style="margin-top: 20px">
+                        <div class = "div_row">
+                            <label>생활서비스코드</label>
+                            <input type="input" id="enroll_cvs_code"></input>
+                            <button id="enroll_cvs" class="btn btn-primary">등록</button>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
         <div id="notification_dialog" class="dialog">
@@ -287,6 +309,7 @@
     <script src="js/store.js"></script>
     <script src="js/employee.js"></script>
     <script src="js/member.js"></script>
+    <script src="js/cvs.js"></script>
 	<script src="js/main.js"></script>
     <script>
         $(document).ready(function() {
