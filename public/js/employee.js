@@ -109,8 +109,31 @@ var employee = {
             };
 
             $.post('/employee', json_data, function(hire) {
-                console.log(hire);
                 self.clear();
+            })
+        });
+
+        $('#update_work_time').click(function() {
+            var employee_code = $('#employee_code').val();
+            var employee_work_time = parseInt($('#employee_work_time').val(), 10);
+            var employee_work_type = $('#employee_work_type').val();
+
+            $.post('/employee/time', {
+                'EMP_CD': employee_code,
+                'TIME': employee_work_time,
+                'TYPE': employee_work_type
+            }, function(post) {
+                console.log(post);
+            })
+        })
+
+        $('#reset_work_time').click(function() {
+            var employee_code = $('#employee_code').val();
+
+            $.post('/employee/time/empty', {
+                'EMP_CD': employee_code
+            }, function(post) {
+                console.log(post);
             })
         });
     }

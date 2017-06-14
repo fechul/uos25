@@ -297,8 +297,9 @@
                         <table id="employee_list">
                         </table>
                     </div>
-                    <div class="workspace_employee_manage_container" style="margin-top: 20px">
-                        <div class = "div_row">
+                    <div class="workspace_employee_manage_container" style="margin-top: 20px; width: 49%; float: left;">
+                        <label>직원 등록</label>
+                        <div class = "div_row" style="margin-top: 30px;">
                             <label>직원이름</label>
                             <input id="employee_name">
                         </div>
@@ -306,6 +307,28 @@
                             <label>전화번호</label>
                             <input id="employee_phonno">
                             <button id = "employee_hire" class = "btn btn-primary" style="margin-left: 15px;margin-top:-15px;">직원등록</button>
+                        </div>
+                    </div>
+                    <div class="workspace_employee_manage_container" style="margin-top: 20px; width: 49%; float: right;">
+                        <label>근무시간 관리</label>
+                        <div class = "div_row" style="margin-top: 30px;">
+                            <label>직원코드</label>
+                            <input id="employee_code">
+                        </div>
+                        <div class = "div_row">
+                            <label>근무시간</label>
+                            <input id="employee_work_time">
+                        </div>
+                        <div class = "div_row">
+                            <label>근무시간대</label>
+                            <select id="employee_work_type">
+                                <option value="day">주간</option>
+                                <option value="night">야간</option>
+                            </select>
+                        </div>
+                        <div class = "div_row">
+                            <button id = "update_work_time" class = "btn btn-primary" style="">근무시간 갱신</button>
+                            <button class="btn btn-primary" id="reset_work_time" style="margin-left: 20px;">근무시간 초기화</button>
                         </div>
                     </div>
                 </div>
