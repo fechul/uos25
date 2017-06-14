@@ -1466,6 +1466,43 @@ exports.getEmployeeList = function(options, callback) {
     });
 };
 
+//근무시간 추가
+exports.addTime = function(options, callback) {
+	var EMP_CD = options.EMP_CD;
+	var TIME = options.TIME;
+	var TYPE = options.TYPE;
+
+	var query = "";
+
+	if (TYPE == 'day') {
+		query = "UPDATE EMPLOYEE SET DAY_WORK_HOUR=DAY_WORK_HOUR+" + TIME + " WHERE EMP_CD='" + EMP_CD + "'";
+	} else {
+		query = "UPDATE EMPLOYEE SET NIGHT_WORK_HOUR=NIGHT_WORK_HOUR+" + TIME + " WHERE EMP_CD='" + EMP_CD + "'";
+	}
+	
+	__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
+		if(err) {
+			callback("addTime err: " + err);
+		} else {
+			callback(true);
+		}
+	});
+};
+
+//근무시간 초기화
+exports.emptyTime = function(options, callback) {
+	var EMP_CD = options.EMP_CD;
+
+	var query = "UPDATE EMPLOYEE SET DAY_WORK_HOUR=0 AND NIGHT_WORK_HOUR=0 WHERE EMP_CD='" + EMP_CD + "'";
+	__oracleDB.execute(query, [], {autoCommit:true}, function(err, result) {
+		if(err) {
+			callback("emptyTime err: " + err);
+		} else {
+			callback(true);
+		}
+	});
+};
+
 exports.getCompany = function(options, callback) {
 	var CMPNY_CD = options.CMPNY_CD;
 
