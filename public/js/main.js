@@ -15,6 +15,7 @@ var main = {
         return_status.init();
         loss.init();
         discard.init();
+        branch.init();
     },
     init_events: function() {
         var self = this;
@@ -61,6 +62,8 @@ var main = {
                 discard.clear();
             } else if (target == 'cvs') {
                 cvs.clear();
+            } else if (target == 'branch') {
+                branch.clear();
             }
         });
 

@@ -1254,7 +1254,10 @@ exports.getBranchMoney = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
 	var IO_TYPE = options.IO_TYPE;
 
-	var query = "SELECT * FROM MONEY_HISTORY WHERE BRCH_CD='" + BRCH_CD + "' AND IO_TYPE='" + IO_TYPE + "'";
+	var query = "SELECT * FROM MONEY_HISTORY WHERE BRCH_CD='" + BRCH_CD + "'";
+	if (IO_TYPE) {
+		query += " AND IO_TYPE='" + IO_TYPE + "'";
+	}
 
 	__oracleDB.execute(query, [], function(err, result) {
         if (err) {
@@ -1303,7 +1306,7 @@ exports.getEventList = function(options, callback) {
 // 지점 정보 가져오기
 exports.getBranch = function(options, callback) {
 	var BRCH_CD = options.BRCH_CD;
-	var query = "SELECT * FROM BRANCH WHERE BRCH_CD = '" + BRCH_CD + "'";
+	var query = "SELECT A.*, B.BRCH_TYPE_NAME, B.PAYMENT_RATE FROM BRANCH A, BRANCH_TYPE B WHERE A.BRCH_TYPE_CD = B.BRCH_TYPE_CD AND BRCH_CD = '" + BRCH_CD + "'";
 
     __oracleDB.execute(query, [], function(err, result) {
         if (err) {

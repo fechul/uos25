@@ -299,3 +299,27 @@ table tr:first-child td {
     width: 100%;
     margin-bottom: 11px;
 }
+
+.workspace_brach_money_table_container {
+    width: 50%;
+    float: left;
+    height: 250px;
+}
+
+.workspace_branch_right_container {
+    height: 250px;
+    width: 49%;
+    float: right;
+    padding: 15px;
+}
+
+.branch_info {
+    float: right;
+    margin-right: 20px;
+    width: 300px;
+    text-align: left;
+}
+
+.branch_info.guseok {
+    width: 250px;
+}
