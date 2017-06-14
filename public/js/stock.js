@@ -29,7 +29,7 @@ var stock = {
             'searching': false,
             'lengthChange': false,
             'info': false,
-            'scrollY': '630px',
+            'scrollY': '600px',
             'scrollCollapse': false,
             'autoFill': true
         });

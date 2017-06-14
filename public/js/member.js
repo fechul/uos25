@@ -43,7 +43,7 @@ var member = {
             'searching': false,
             'lengthChange': false,
             'info': false,
-            'scrollY': '321px',
+            'scrollY': '450px',
             'scrollCollapse': false,
             'autoFill': true
         });
